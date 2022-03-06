@@ -155,8 +155,11 @@ auto main(int argc, char* argv[]) -> int {
         }
     } catch (std::exception const& e) {
         int const local_errno = errno;
+        using namespace fmt::literals;
         pretty_print_err(
-            "failed {} generation with error '{}'", input_param, e.what()
+            "failed {primitive} generation with error '{err}'",
+            "primitive"_a = input_param,
+            "err"_a = e.what()
         );
         if (local_errno != 0) {
             fmt::print(stderr, ": '{}'", std::strerror(local_errno));

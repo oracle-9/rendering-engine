@@ -2,6 +2,8 @@
 #include "rapidxml.hpp"
 #include "rapidxml_utils.hpp"
 
+#include <cstdlib>
+
 namespace xml = rapidxml;
 
 auto main() -> int {
@@ -9,9 +11,9 @@ auto main() -> int {
     auto xml_doc = xml::xml_document{};
     xml_doc.parse<xml::parse_default>(input_file.data());
 
-    auto* const root = xml_doc.first_node("catalog");
+    auto* const root = xml_doc.first_node();
     if (not root) {
-        return 1;
+        return EXIT_FAILURE;
     }
 
     fmt::print("root name: {}\n", root->name());

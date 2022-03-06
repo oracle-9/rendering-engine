@@ -52,7 +52,7 @@ list(                                                                          #
     "src/generator/primitives/sphere.cpp"                                      #
 )                                                                              #
                                                                                #
-add_executable(generator ${GENERATOR_HEADERS} ${GENERATOR_SOURCES})                                                                              #
+add_executable(generator ${GENERATOR_HEADERS} ${GENERATOR_SOURCES})            #
                                                                                #
 target_include_directories(generator PRIVATE ${INCLUDE_PATH})                  #
                                                                                #
