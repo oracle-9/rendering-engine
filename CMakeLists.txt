@@ -25,7 +25,7 @@ set(INCLUDE_PATH "${PROJECT_SOURCE_DIR}/include")                              #
 ################################################################################
 # Libraries Path                                                               #
 ################################################################################
-set(LIB_DIR "${PROJECT_SOURCE_DIR}/lib")                                       #
+set(LIB_PATH "${PROJECT_SOURCE_DIR}/lib")                                      #
 ################################################################################
 
 
@@ -77,14 +77,14 @@ target_include_directories(engine PRIVATE ${INCLUDE_PATH})                     #
 # 3rd Party Libraries                                                          #
 ################################################################################
 # brief_int                                                                    #
-set(BRIEF_INT_DIR "${LIB_DIR}/brief_int")                                      #
+set(BRIEF_INT_DIR "${LIB_PATH}/brief_int")                                     #
                                                                                #
 # {fmt}                                                                        #
-set(FMT_DIR "${LIB_DIR}/fmt")                                                  #
+set(FMT_DIR "${LIB_PATH}/fmt")                                                 #
 add_subdirectory(${FMT_DIR})                                                   #
                                                                                #
 # rapidxml                                                                     #
-set(RAPIDXML_DIR "${LIB_DIR}/rapidxml")                                        #
+set(RAPIDXML_DIR "${LIB_PATH}/rapidxml")                                       #
                                                                                #
                                                                                #
 # Generator include directories                                                #
