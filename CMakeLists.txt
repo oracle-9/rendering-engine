@@ -23,6 +23,13 @@ set(INCLUDE_PATH "${PROJECT_SOURCE_DIR}/include")                              #
 
 
 ################################################################################
+# Libraries Path                                                               #
+################################################################################
+set(LIB_DIR "${PROJECT_SOURCE_DIR}/lib")                                       #
+################################################################################
+
+
+################################################################################
 # Targets                                                                      #
 ################################################################################
 # Generator                                                                    #
@@ -45,35 +52,56 @@ list(                                                                          #
     "src/generator/primitives/sphere.cpp"                                      #
 )                                                                              #
                                                                                #
-add_executable(                                                                #
-    generator                                                                  #
-    ${GENERATOR_HEADERS}                                                       #
-    ${GENERATOR_SOURCES}                                                       #
-)                                                                              #
+add_executable(generator ${GENERATOR_HEADERS} ${GENERATOR_SOURCES})                                                                              #
                                                                                #
 target_include_directories(generator PRIVATE ${INCLUDE_PATH})                  #
                                                                                #
                                                                                #
 # Engine                                                                       #
-add_executable(engine "src/engine/main.cpp")                                   #
+list(                                                                          #
+    APPEND ENGINE_HEADERS                                                      #
+)                                                                              #
+                                                                               #
+list(                                                                          #
+    APPEND ENGINE_SOURCES                                                      #
+    "src/engine/main.cpp"                                                      #
+)                                                                              #
+                                                                               #
+add_executable(engine ${ENGINE_HEADERS} ${ENGINE_SOURCES})                     #
+                                                                               #
+target_include_directories(engine PRIVATE ${INCLUDE_PATH})                     #
 ################################################################################
 
 
 ################################################################################
 # 3rd Party Libraries                                                          #
 ################################################################################
-add_subdirectory("lib/brief_int")                                              #
-add_subdirectory("lib/fmt")                                                    #
+# brief_int                                                                    #
+set(BRIEF_INT_DIR "${LIB_DIR}/brief_int")                                      #
                                                                                #
-list(                                                                          #
-    APPEND LIBS                                                                #
-    brief_int                                                                  #
-    fmt::fmt                                                                   #
+# {fmt}                                                                        #
+set(FMT_DIR "${LIB_DIR}/fmt")                                                  #
+add_subdirectory(${FMT_DIR})                                                   #
+                                                                               #
+# rapidxml                                                                     #
+set(RAPIDXML_DIR "${LIB_DIR}/rapidxml")                                        #
+                                                                               #
+                                                                               #
+# Generator include directories                                                #
+target_include_directories(                                                    #
+    generator                                                                  #
+    PRIVATE SYSTEM ${FMT_DIR} ${BRIEF_INT_DIR}                                 #
 )                                                                              #
                                                                                #
-foreach(TARGET generator engine)                                               #
-    target_link_libraries(${TARGET} PUBLIC ${LIBS})                            #
-endforeach()                                                                   #
+# Generator linked libraries                                                   #
+target_link_libraries(generator fmt::fmt)                                      #
+                                                                               #
+                                                                               #
+# Engine include directories                                                   #
+target_include_directories(engine SYSTEM PRIVATE ${RAPIDXML_DIR})              #
+                                                                               #
+# Engine linked libraries                                                      #
+target_link_libraries(engine fmt::fmt)                                         #
 ################################################################################
 
 
