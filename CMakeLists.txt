@@ -11,7 +11,7 @@ project("CG-2021-22" VERSION 1.0 LANGUAGES CXX)                                #
 ################################################################################
 set(CMAKE_CXX_STANDARD 20) # C++20                                             #
 set(CMAKE_CXX_STANDARD_REQUIRED True)                                          #
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON) # compile_commands.json for IntelliSense.#
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON) # compile_commands.json for IntelliSense #
 ################################################################################
 
 
