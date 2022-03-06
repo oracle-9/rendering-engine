@@ -94,7 +94,6 @@ auto display_help() -> void {
     );
 }
 
-
 auto main(int argc, char* argv[]) -> int {
     if (argc < 2) {
         pretty_print_err("no option provided.\n");
