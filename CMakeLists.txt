@@ -16,10 +16,46 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON) # compile_commands.json for IntelliSense.#
 
 
 ################################################################################
+# Include Path                                                                 #
+################################################################################
+set(INCLUDE_PATH "${PROJECT_SOURCE_DIR}/include")                              #
+################################################################################
+
+
+################################################################################
 # Targets                                                                      #
 ################################################################################
-add_executable(generator "src/generator/main.cpp") # generator                 #
-add_executable(engine "src/engine/main.cpp")       # engine                    #
+# Generator                                                                    #
+list(                                                                          #
+    APPEND GENERATOR_HEADERS                                                   #
+    "${INCLUDE_PATH}/generator/util/pretty_print.hpp"                          #
+    "${INCLUDE_PATH}/generator/primitives/module.hpp"                          #
+    "${INCLUDE_PATH}/generator/primitives/box.hpp"                             #
+    "${INCLUDE_PATH}/generator/primitives/cone.hpp"                            #
+    "${INCLUDE_PATH}/generator/primitives/plane.hpp"                           #
+    "${INCLUDE_PATH}/generator/primitives/sphere.hpp"                          #
+)                                                                              #
+                                                                               #
+list(                                                                          #
+    APPEND GENERATOR_SOURCES                                                   #
+    "src/generator/main.cpp"                                                   #
+    "src/generator/primitives/box.cpp"                                         #
+    "src/generator/primitives/cone.cpp"                                        #
+    "src/generator/primitives/plane.cpp"                                       #
+    "src/generator/primitives/sphere.cpp"                                      #
+)                                                                              #
+                                                                               #
+add_executable(                                                                #
+    generator                                                                  #
+    ${GENERATOR_HEADERS}                                                       #
+    ${GENERATOR_SOURCES}                                                       #
+)                                                                              #
+                                                                               #
+target_include_directories(generator PRIVATE ${INCLUDE_PATH})                  #
+                                                                               #
+                                                                               #
+# Engine                                                                       #
+add_executable(engine "src/engine/main.cpp")                                   #
 ################################################################################
 
 
@@ -28,11 +64,13 @@ add_executable(engine "src/engine/main.cpp")       # engine                    #
 ################################################################################
 add_subdirectory("lib/brief_int")                                              #
 add_subdirectory("lib/fmt")                                                    #
+                                                                               #
 list(                                                                          #
     APPEND LIBS                                                                #
     brief_int                                                                  #
     fmt::fmt                                                                   #
 )                                                                              #
+                                                                               #
 foreach(TARGET generator engine)                                               #
     target_link_libraries(${TARGET} PUBLIC ${LIBS})                            #
 endforeach()                                                                   #
@@ -53,6 +91,7 @@ else()                                                                         #
         "-Wconversion" "-Wsign-conversion"                                     #
     )                                                                          #
 endif()                                                                        #
+                                                                               #
 foreach(TARGET generator engine)                                               #
     target_compile_options(                                                    #
         ${TARGET}                                                              #
@@ -66,7 +105,9 @@ endforeach()                                                                   #
 # Link-Time-Optimization                                                       #
 ################################################################################
 include(CheckIPOSupported)                                                     #
+                                                                               #
 check_ipo_supported(RESULT LTO_SUPPORTED OUTPUT USE_LTO_ERROR)                 #
+                                                                               #
 if(LTO_SUPPORTED)                                                              #
     message(STATUS "LTO enabled")                                              #
     foreach(TARGET generator engine)                                           #
