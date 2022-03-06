@@ -15,7 +15,7 @@
 #define pretty_print_err(format_string, ...) do {                              \
     fmt::print(                                                                \
         stderr,                                                                \
-        fmt::emphasis::bold | fg(fmt::terminal_color::bright_white),           \
+        fmt::emphasis::bold | fg(fmt::terminal_color::white),                  \
         "{}: ",                                                                \
         ::prog_name                                                            \
     );                                                                         \
