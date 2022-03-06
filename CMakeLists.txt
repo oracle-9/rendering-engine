@@ -1,7 +1,7 @@
 ################################################################################
 # Header                                                                       #
 ################################################################################
-cmake_minimum_required(VERSION 3.16) # 3.16 required for Link-Time Optmizatoin #
+cmake_minimum_required(VERSION 3.16) # 3.16 required for Link-Time Optimization#
 project("CG-2021-22" VERSION 1.0 LANGUAGES CXX)                                #
 ################################################################################
 
