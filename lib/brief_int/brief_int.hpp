@@ -108,6 +108,7 @@ auto constexpr operator ""_byte(unsigned long long int const n) noexcept -> byte
     return static_cast<byte>(n);
 }
 
+// Signed.
 auto constexpr operator ""_i8(unsigned long long int const n) noexcept -> i8 {
     return static_cast<i8>(n);
 }
