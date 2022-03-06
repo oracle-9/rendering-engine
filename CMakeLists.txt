@@ -24,6 +24,22 @@ add_executable(engine "src/engine/main.cpp")       # engine                    #
 
 
 ################################################################################
+# 3rd Party Libraries                                                          #
+################################################################################
+add_subdirectory("lib/brief_int")                                              #
+add_subdirectory("lib/fmt")                                                    #
+list(                                                                          #
+    APPEND LIBS                                                                #
+    brief_int                                                                  #
+    fmt::fmt                                                                   #
+)                                                                              #
+foreach(TARGET generator engine)                                               #
+    target_link_libraries(${TARGET} PUBLIC ${LIBS})                            #
+endforeach()                                                                   #
+################################################################################
+
+
+################################################################################
 # Compiler flags                                                               #
 ################################################################################
 if(MSVC)                                                                       #
@@ -62,20 +78,4 @@ if(LTO_SUPPORTED)                                                              #
 else()                                                                         #
     message(STATUS "LTO not supported: <${USE_LTO_ERROR}>")                    #
 endif()                                                                        #
-################################################################################
-
-
-################################################################################
-# 3rd Party Libraries                                                          #
-################################################################################
-add_subdirectory("lib/brief_int")                                              #
-add_subdirectory("lib/fmt")                                                    #
-list(                                                                          #
-    APPEND LIBS                                                                #
-    brief_int                                                                  #
-    fmt::fmt                                                                   #
-)                                                                              #
-foreach(TARGET generator engine)                                               #
-    target_link_libraries(${TARGET} PUBLIC ${LIBS})                            #
-endforeach()                                                                   #
 ################################################################################
