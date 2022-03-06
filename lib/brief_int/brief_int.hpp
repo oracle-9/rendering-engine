@@ -55,6 +55,8 @@ using ptrdiff = std::ptrdiff_t;
 // USER DEFINED INTEGER LITERALS //
 ///////////////////////////////////
 
+namespace literals {
+
 // Unsigned.
 auto constexpr operator ""_u8(unsigned long long int const n) noexcept -> u8 {
     return static_cast<u8>(n);
@@ -157,6 +159,8 @@ auto constexpr operator ""_iptr(unsigned long long int const n) noexcept -> iptr
 auto constexpr operator ""_ptrdiff(unsigned long long int const n) noexcept -> ptrdiff {
     return static_cast<ptrdiff>(n);
 }
+
+} // namespace literals
 
 } // namespace brief_int
 
