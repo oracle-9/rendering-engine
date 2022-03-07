@@ -129,7 +129,10 @@ auto parse_u32(char const* const s) -> u32 {
     return uninit;
 }
 
-auto check_num_args(std::size_t const expected, std::size_t const actual) -> void {
+auto check_num_args(
+    std::size_t const expected,
+    std::size_t const actual
+) -> void {
     if (expected != actual) {
         throw std::invalid_argument {
             fmt::format("expected {} arguments, but got {}", expected, actual)
