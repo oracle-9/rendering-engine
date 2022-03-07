@@ -1,6 +1,7 @@
 #include "brief_int.hpp"
 #include "fmt/core.h"
 #include "fmt/format.h"
+#include "fmt/os.h"
 #include "generator/primitives/module.hpp"
 #include "generator/util/pretty_print.hpp"
 
@@ -8,7 +9,6 @@
 #include <charconv>
 #include <cstdlib>
 #include <cstring>
-#include <fstream>
 #include <functional>
 #include <span>
 #include <stdexcept>
@@ -21,7 +21,6 @@ using namespace std::string_view_literals;
 auto display_help() -> void;
 auto parse_u32(char const*) -> u32;
 auto check_num_args(std::size_t expected, std::size_t actual) -> void;
-auto open_output_file(char const* filename) -> std::ofstream;
 
 auto constexpr prog_name = "generator"sv;
 
@@ -48,7 +47,7 @@ auto const cli_actions = std::unordered_map<
             u32 const radius = parse_u32(args[0]);
             u32 const num_slices = parse_u32(args[1]);
             u32 const num_stacks = parse_u32(args[2]);
-            auto output_file = open_output_file(args[3]);
+            auto output_file = fmt::output_file(args[3]);
             generate_sphere(radius, num_slices, num_stacks, output_file);
         }
     },
@@ -58,7 +57,7 @@ auto const cli_actions = std::unordered_map<
             check_num_args(3, args.size());
             u32 const num_units = parse_u32(args[0]);
             u32 const grid_len = parse_u32(args[1]);
-            auto output_file = open_output_file(args[2]);
+            auto output_file = fmt::output_file(args[2]);
             generate_box(num_units, grid_len, output_file);
         }
     },
@@ -70,7 +69,7 @@ auto const cli_actions = std::unordered_map<
             u32 const height = parse_u32(args[1]);
             u32 const num_slices = parse_u32(args[2]);
             u32 const num_stacks = parse_u32(args[3]);
-            auto output_file = open_output_file(args[4]);
+            auto output_file = fmt::output_file(args[4]);
             generate_cone(radius, height, num_slices, num_stacks, output_file);
         },
     },
@@ -80,7 +79,7 @@ auto const cli_actions = std::unordered_map<
             check_num_args(3, args.size());
             u32 const len = parse_u32(args[0]);
             u32 const num_divs = parse_u32(args[1]);
-            auto output_file = open_output_file(args[2]);
+            auto output_file = fmt::output_file(args[2]);
             generate_plane(len, num_divs, output_file);
         }
     },
@@ -137,12 +136,6 @@ auto check_num_args(std::size_t const expected, std::size_t const actual) -> voi
             fmt::format("expected {} arguments, but got {}", expected, actual)
         };
     }
-}
-
-auto open_output_file(char const* const filename) -> std::ofstream {
-    auto output_file = std::ofstream(filename);
-    output_file.exceptions(output_file.failbit);
-    return output_file;
 }
 
 auto main(int argc, char* argv[]) -> int {
