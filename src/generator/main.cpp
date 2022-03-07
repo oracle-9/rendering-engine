@@ -9,7 +9,6 @@
 #include <charconv>
 #include <cstdlib>
 #include <cstring>
-#include <functional>
 #include <span>
 #include <stdexcept>
 #include <string_view>
@@ -26,7 +25,7 @@ auto constexpr prog_name = "generator"sv;
 
 auto const cli_actions = std::unordered_map<
     std::string_view,
-    std::function<void(std::span<char const*>)>
+    auto (*)(std::span<char const*>) -> void
 >{
     {
         "-h",
