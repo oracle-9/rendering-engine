@@ -9,6 +9,8 @@
 #include <cstdlib>
 #include <cstring>
 #include <fstream>
+#include <functional>
+#include <span>
 #include <stdexcept>
 #include <string_view>
 #include <unordered_map>
@@ -16,52 +18,73 @@
 using namespace brief_int;
 using namespace std::string_view_literals;
 
-enum class cli_option {
-    help,
-    sphere,
-    box,
-    cone,
-    plane,
-};
+auto display_help() -> void;
+auto parse_u32(char const*) -> u32;
+auto check_num_args(std::size_t expected, std::size_t actual) -> void;
+auto open_output_file(char const* filename) -> std::ofstream;
 
 auto constexpr prog_name = "generator"sv;
 
-auto const options = std::unordered_map<std::string_view, cli_option>{
-    {"-h",     cli_option::help},
-    {"--help", cli_option::help},
-    {"sphere", cli_option::sphere},
-    {"box",    cli_option::box},
-    {"cone",   cli_option::cone},
-    {"plane",  cli_option::plane},
+auto const cli_actions = std::unordered_map<
+    std::string_view,
+    std::function<void(std::span<char const*>)>
+>{
+    {
+        "-h",
+        [](std::span<char const*>) {
+            display_help();
+        }
+    },
+    {
+        "--help",
+        [](std::span<char const*>) {
+            display_help();
+        }
+    },
+    {
+        "sphere",
+        [](std::span<char const*> const args) {
+            check_num_args(4, args.size());
+            u32 const radius = parse_u32(args[0]);
+            u32 const num_slices = parse_u32(args[1]);
+            u32 const num_stacks = parse_u32(args[2]);
+            auto output_file = open_output_file(args[3]);
+            generate_sphere(radius, num_slices, num_stacks, output_file);
+        }
+    },
+    {
+        "box",
+        [](std::span<char const*> const args) {
+            check_num_args(3, args.size());
+            u32 const num_units = parse_u32(args[0]);
+            u32 const grid_len = parse_u32(args[1]);
+            auto output_file = open_output_file(args[2]);
+            generate_box(num_units, grid_len, output_file);
+        }
+    },
+    {
+        "cone",
+        [](std::span<char const*> const args) {
+            check_num_args(5, args.size());
+            u32 const radius = parse_u32(args[0]);
+            u32 const height = parse_u32(args[1]);
+            u32 const num_slices = parse_u32(args[2]);
+            u32 const num_stacks = parse_u32(args[3]);
+            auto output_file = open_output_file(args[4]);
+            generate_cone(radius, height, num_slices, num_stacks, output_file);
+        },
+    },
+    {
+        "plane",
+        [](std::span<char const*> const args) {
+            check_num_args(3, args.size());
+            u32 const len = parse_u32(args[0]);
+            u32 const num_divs = parse_u32(args[1]);
+            auto output_file = open_output_file(args[2]);
+            generate_plane(len, num_divs, output_file);
+        }
+    },
 };
-
-auto parse_u32(char const* const s) -> u32 {
-    u32 uninit;
-    char const* const end = s + std::strlen(s);
-    auto const [parse_end, err] = std::from_chars(s, end, uninit);
-    if (parse_end != end || err != std::errc()) {
-        throw std::invalid_argument{
-            fmt::format(
-                "failed parsing '{}' into u32", std::string_view{s, end}
-            )
-        };
-    }
-    return uninit;
-}
-
-auto check_num_args(int const expected, int const actual) -> void {
-    if (expected != actual) {
-        throw std::invalid_argument{
-            fmt::format("expected {} arguments, but got {}", expected, actual)
-        };
-    }
-}
-
-auto open_output_file(char const* const output_filename) -> std::ofstream {
-    auto output_file = std::ofstream(output_filename);
-    output_file.exceptions(output_file.failbit);
-    return output_file;
-}
 
 auto display_help() -> void {
     using namespace fmt::literals;
@@ -75,23 +98,51 @@ auto display_help() -> void {
         "        Draw the specified primitive and store the resulting\n"
         "        vertices in a file named <output_file>.\n"
         "\n"
-        "    sphere <radius> <num_slices> <num_stacks>\n"
-        "        Generate a sphere with radius <radius>, <num_slices> slices\n"
-        "        and <num_stacks> stacks.\n"
+        "        sphere <radius> <num_slices> <num_stacks>\n"
+        "            Generate a sphere with radius <radius>, <num_slices>\n"
+        "            slices and <num_stacks> stacks.\n"
         "\n"
-        "    box <num_units> <grid_len>\n"
-        "        Generate a box with <num_units> units, where each side is\n"
-        "        divided in a <grid_len>x<grid_len> grid.\n"
+        "        box <num_units> <grid_len>\n"
+        "            Generate a box with <num_units> units, where each side\n"
+        "            is divided in a <grid_len>x<grid_len> grid.\n"
         "\n"
-        "    cone <radius> <height> <num_slices> <num_stacks>\n"
-        "        Generate a cone with radius <radius>, height <height>,\n"
-        "        <num_slices> slices and <num_stacks> stacks.\n"
+        "        cone <radius> <height> <num_slices> <num_stacks>\n"
+        "            Generate a cone with radius <radius>, height <height>,\n"
+        "            <num_slices> slices and <num_stacks> stacks.\n"
         "\n"
-        "    plane <len> <num_divs>\n"
-        "        Generate a plane with <len> units in length, and <num_divs>\n"
-        "        divisions along each axis.\n",
+        "        plane <len> <num_divs>\n"
+        "            Generate a plane with <len> units in length, and\n"
+        "            <num_divs> divisions along each axis.\n",
         "prog"_a = ::prog_name
     );
+}
+
+auto parse_u32(char const* const s) -> u32 {
+    u32 uninit;
+    char const* const end = s + std::strlen(s);
+    auto const [parse_end, err] = std::from_chars(s, end, uninit);
+    if (parse_end != end || err != std::errc()) {
+        throw std::invalid_argument {
+            fmt::format(
+                "failed parsing '{}' into u32", std::string_view{s, end}
+            )
+        };
+    }
+    return uninit;
+}
+
+auto check_num_args(std::size_t const expected, std::size_t const actual) -> void {
+    if (expected != actual) {
+        throw std::invalid_argument {
+            fmt::format("expected {} arguments, but got {}", expected, actual)
+        };
+    }
+}
+
+auto open_output_file(char const* const filename) -> std::ofstream {
+    auto output_file = std::ofstream(filename);
+    output_file.exceptions(output_file.failbit);
+    return output_file;
 }
 
 auto main(int argc, char* argv[]) -> int {
@@ -100,65 +151,26 @@ auto main(int argc, char* argv[]) -> int {
         return EXIT_FAILURE;
     }
 
-    auto const input_param = std::string_view{argv[1]};
-    auto const maybe_option = ::options.find(input_param);
-    if (maybe_option == ::options.end()) {
-        pretty_print_err("unrecognized option '{}'.\n", input_param);
+    auto const cmd = std::string_view{argv[1]};
+    auto const maybe_action = ::cli_actions.find(cmd);
+    if (maybe_action == ::cli_actions.end()) {
+        pretty_print_err("unrecognized command '{}'.\n", cmd);
         return EXIT_FAILURE;
     }
 
-    errno = 0;
     try {
-        switch (int const num_args = argc - 2; maybe_option->second) {
-            using enum cli_option;
-            case help: {
-                display_help();
-                return EXIT_SUCCESS;
-            }
-            case sphere: {
-                check_num_args(4, num_args);
-                u32 const radius = parse_u32(argv[2]);
-                u32 const num_slices = parse_u32(argv[3]);
-                u32 const num_stacks = parse_u32(argv[4]);
-                auto output_file = open_output_file(argv[5]);
-                generate_sphere(radius, num_slices, num_stacks, output_file);
-                break;
-            }
-            case box: {
-                check_num_args(3, num_args);
-                u32 const num_units = parse_u32(argv[2]);
-                u32 const grid_len = parse_u32(argv[3]);
-                auto output_file = open_output_file(argv[4]);
-                generate_box(num_units, grid_len, output_file);
-                break;
-            }
-            case cone: {
-                check_num_args(5, num_args);
-                u32 const radius = parse_u32(argv[2]);
-                u32 const height = parse_u32(argv[3]);
-                u32 const num_slices = parse_u32(argv[4]);
-                u32 const num_stacks = parse_u32(argv[5]);
-                auto output_file = open_output_file(argv[6]);
-                generate_cone(
-                    radius, height, num_slices, num_stacks, output_file
-                );
-                break;
-            }
-            case plane: {
-                check_num_args(3, num_args);
-                u32 const len = parse_u32(argv[2]);
-                u32 const num_divs = parse_u32(argv[3]);
-                auto output_file = open_output_file(argv[4]);
-                generate_plane(len, num_divs, output_file);
-                break;
-            }
-        }
+        auto const args = std::span {
+            const_cast<char const**>(argv + 2),
+            static_cast<std::size_t>(argc - 2)
+        };
+        errno = 0;
+        maybe_action->second(args);
     } catch (std::exception const& e) {
         int const local_errno = errno;
         using namespace fmt::literals;
         pretty_print_err(
             "failed {primitive} generation with error '{err}'",
-            "primitive"_a = input_param,
+            "primitive"_a = cmd,
             "err"_a = e.what()
         );
         if (local_errno != 0) {
