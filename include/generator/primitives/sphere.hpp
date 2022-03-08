@@ -1,8 +1,8 @@
 #ifndef GENERATOR_PRIMITIVES_SPHERE_HPP
 #define GENERATOR_PRIMITIVES_SPHERE_HPP
 
-#include "brief_int.hpp"
-#include "fmt/os.h"
+#include <brief_int.hpp>
+#include <fmt/os.h>
 
 auto generate_sphere(
     brief_int::u32 radius,

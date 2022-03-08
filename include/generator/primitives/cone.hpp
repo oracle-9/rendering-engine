@@ -1,8 +1,8 @@
 #ifndef GENERATOR_PRIMITIVES_CONE_HPP
 #define GENERATOR_PRIMITIVES_CONE_HPP
 
-#include "brief_int.hpp"
-#include "fmt/os.h"
+#include <brief_int.hpp>
+#include <fmt/os.h>
 
 auto generate_cone(
     brief_int::u32 radius,
