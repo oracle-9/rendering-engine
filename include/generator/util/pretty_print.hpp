@@ -1,7 +1,7 @@
 #ifndef GENERATOR_UTIL_PRETTY_PRINT_HPP
 #define GENERATOR_UTIL_PRETTY_PRINT_HPP
 
-#include "fmt/color.h"
+#include <fmt/color.h>
 
 #define pretty_print(format_string, ...) do {                                  \
     fmt::print(                                                                \
