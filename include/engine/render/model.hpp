@@ -1,0 +1,6 @@
+#ifndef ENGINE_RENDER_MODEL_HPP
+#define ENGINE_RENDER_MODEL_HPP
+
+struct model {};
+
+#endif // ENGINE_RENDER_MODEL_HPP
