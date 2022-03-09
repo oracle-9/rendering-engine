@@ -123,7 +123,7 @@ foreach(TARGET generator engine)
     target_include_directories(
         ${TARGET}
         SYSTEM
-        PRIVATE ${PROJECT_SOURCE_DIR} ${LIB_INCLUDE_PATHS}
+        PRIVATE ${LIB_INCLUDE_PATHS}
     )
 endforeach()
 
