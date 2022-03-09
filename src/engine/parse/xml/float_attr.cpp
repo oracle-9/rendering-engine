@@ -22,7 +22,7 @@ auto parse_float_attr(
             util::parse_float(
                 std::string_view {
                     attr->value(),
-                    attr->value_size()
+                    attr->value_size(),
                 }
             ),
             return cpp::failure(parse_err::malformed_num)
