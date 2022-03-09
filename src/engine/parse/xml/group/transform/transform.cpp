@@ -26,17 +26,17 @@ auto parse_transform(rapidxml::xml_node<> const* const node) noexcept
 
     if (transform_name == translate_str) {
         return render::transform {
-            .type = translate,
+            .kind = translate,
             .translate = TRY_RESULT(parse_xyz(node)),
         };
     } else if (transform_name == rotate_str) {
         return render::transform {
-            .type = rotate,
+            .kind = rotate,
             .rotate = TRY_RESULT(parse_rotate(node)),
         };
     } else if (transform_name == scale_str) {
         return render::transform {
-            .type = scale,
+            .kind = scale,
             .scale = TRY_RESULT(parse_xyz(node)),
         };
     } else {
