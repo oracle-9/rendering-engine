@@ -1,6 +1,8 @@
 #ifndef GENERATOR_PRIMITIVES_SPHERE_HPP
 #define GENERATOR_PRIMITIVES_SPHERE_HPP
+#define _USE_MATH_DEFINES
 
+#include <cmath>
 #include "brief_int.hpp"
 #include "fmt/os.h"
 
