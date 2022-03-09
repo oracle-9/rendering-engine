@@ -11,6 +11,7 @@ struct camera {
     glm::vec3 up;
     glm::vec3 projection;
 };
+
 } // namespace engine::render
 
 #endif // ENGINE_RENDER_CAMERA_HPP
