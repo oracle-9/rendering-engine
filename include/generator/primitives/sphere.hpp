@@ -1,4 +1,5 @@
 #pragma once
+#define _USE_MATH_DEFINES
 
 #include <brief_int.hpp>
 #include <fmt/os.h>
