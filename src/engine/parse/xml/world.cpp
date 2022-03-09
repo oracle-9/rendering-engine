@@ -33,17 +33,17 @@ auto parse_world(char const* const xml_filepath) noexcept
     try {
         xml_doc.parse<rapidxml::parse_default>(input_file.data());
     } catch (rapidxml::parse_error const& xml_parse_err) {
-        return cpp::failure(parse_err::syntax_err);
+        return cpp::failure{parse_err::syntax_err};
     }
 
     auto const* const world_node = TRY_NULLABLE_OR(
         xml_doc.first_node("world"),
-        return cpp::failure(parse_err::no_world_node)
+        return cpp::failure{parse_err::no_world_node}
     );
 
     auto const* const camera_node = TRY_NULLABLE_OR(
         world_node->first_node("camera"),
-        return cpp::failure(parse_err::no_camera_node);
+        return cpp::failure{parse_err::no_camera_node};
     );
 
     return render::world {
