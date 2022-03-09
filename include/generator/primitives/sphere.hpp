@@ -2,6 +2,7 @@
 
 #include <brief_int.hpp>
 #include <fmt/os.h>
+#include <cmath>
 
 auto generate_sphere(
     brief_int::u32 radius,
