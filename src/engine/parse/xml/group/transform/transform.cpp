@@ -13,7 +13,7 @@ auto parse_transform(rapidxml::xml_node<> const* const node) noexcept
     -> cpp::result<render::transform, parse_err>
 {
     using namespace std::string_view_literals;
-    using type = enum engine::render::transform::type;
+    using enum decltype(engine::render::transform::type); // disambiguate.
 
     auto static constexpr translate_str = "translate"sv;
     auto static constexpr rotate_str = "rotate"sv;
@@ -26,21 +26,21 @@ auto parse_transform(rapidxml::xml_node<> const* const node) noexcept
 
     if (transform_name == translate_str) {
         return render::transform {
-            .type = type::translate,
+            .type = translate,
             .translate = TRY_RESULT(parse_xyz(node)),
         };
     } else if (transform_name == rotate_str) {
         return render::transform {
-            .type = type::rotate,
+            .type = rotate,
             .rotate = TRY_RESULT(parse_rotate(node)),
         };
     } else if (transform_name == scale_str) {
         return render::transform {
-            .type = type::scale,
+            .type = scale,
             .scale = TRY_RESULT(parse_xyz(node)),
         };
     } else {
-        return cpp::failure(parse_err::unknown_transform);
+        return cpp::failure{parse_err::unknown_transform};
     }
 }
 
