@@ -1,5 +1,4 @@
-#ifndef ENGINE_UTIL_TRY_HPP
-#define ENGINE_UTIL_TRY_HPP
+#pragma once
 
 #define TRY_NULLABLE(nullable_expr) ({                                         \
     auto _nullable_val = nullable_expr;                                        \
@@ -48,5 +47,3 @@
     }                                                                          \
     _result_val.value();                                                       \
 })
-
-#endif // ENGINE_UTIL_TRY_HPP

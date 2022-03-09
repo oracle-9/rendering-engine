@@ -1,8 +1,7 @@
-#ifndef ENGINE_PARSE_XML_TRANSFORM_HPP
-#define ENGINE_PARSE_XML_TRANSFORM_HPP
+#pragma once
 
 #include "engine/parse/xml/err.hpp"
-#include "engine/render/transform.hpp"
+#include "engine/render/group/transform.hpp"
 
 #include <rapidxml.hpp>
 #include <result.hpp>
@@ -13,5 +12,3 @@ auto parse_transform(rapidxml::xml_node<> const* node) noexcept
     -> cpp::result<render::transform, parse_err>;
 
 } // namespace engine::parse::xml
-
-#endif // ENGINE_PARSE_XML_TRANSFORM_HPP

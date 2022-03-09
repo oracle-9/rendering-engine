@@ -1,7 +1,8 @@
-#include "engine/parse/xml/transform.hpp"
+#include "engine/parse/xml/group/transform/transform.hpp"
 
-#include "engine/parse/xml/rotate.hpp"
-#include "engine/parse/xml/xyz.hpp"
+#include "engine/parse/xml/group/transform/rotate.hpp"
+#include "engine/parse/xml/util/xyz.hpp"
+#include "engine/render/group/transform.hpp"
 #include "engine/util/try.hpp"
 
 #include <string_view>
@@ -11,8 +12,8 @@ namespace engine::parse::xml {
 auto parse_transform(rapidxml::xml_node<> const* const node) noexcept
     -> cpp::result<render::transform, parse_err>
 {
-    using enum render::transform::type;
     using namespace std::string_view_literals;
+    using type = enum engine::render::transform::type;
 
     auto static constexpr translate_str = "translate"sv;
     auto static constexpr rotate_str = "rotate"sv;
@@ -25,17 +26,17 @@ auto parse_transform(rapidxml::xml_node<> const* const node) noexcept
 
     if (transform_name == translate_str) {
         return render::transform {
-            .type = translate,
+            .type = type::translate,
             .translate = TRY_RESULT(parse_xyz(node)),
         };
     } else if (transform_name == rotate_str) {
         return render::transform {
-            .type = rotate,
+            .type = type::rotate,
             .rotate = TRY_RESULT(parse_rotate(node)),
         };
     } else if (transform_name == scale_str) {
         return render::transform {
-            .type = scale,
+            .type = type::scale,
             .scale = TRY_RESULT(parse_xyz(node)),
         };
     } else {

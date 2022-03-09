@@ -1,5 +1,4 @@
-#ifndef ENGINE_RENDER_CAMERA_HPP
-#define ENGINE_RENDER_CAMERA_HPP
+#pragma once
 
 #include <glm/vec3.hpp>
 
@@ -13,5 +12,3 @@ struct camera {
 };
 
 } // namespace engine::render
-
-#endif // ENGINE_RENDER_CAMERA_HPP

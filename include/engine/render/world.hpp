@@ -1,8 +1,7 @@
-#ifndef ENGINE_RENDER_WORLD_HPP
-#define ENGINE_RENDER_WORLD_HPP
+#pragma once
 
 #include "engine/render/camera.hpp"
-#include "engine/render/group.hpp"
+#include "engine/render/group/group.hpp"
 
 namespace engine::render {
 
@@ -12,5 +11,3 @@ struct world {
 };
 
 } // namespace engine::render
-
-#endif // ENGINE_RENDER_WORLD_HPP

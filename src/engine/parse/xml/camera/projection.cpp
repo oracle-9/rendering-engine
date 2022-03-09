@@ -1,6 +1,6 @@
-#include "engine/parse/xml/projection.hpp"
+#include "engine/parse/xml/camera/projection.hpp"
 
-#include "engine/parse/xml/float_attr.hpp"
+#include "engine/parse/xml/util/float_attr.hpp"
 #include "engine/util/try.hpp"
 
 namespace engine::parse::xml {

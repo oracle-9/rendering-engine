@@ -1,7 +1,7 @@
-#include "engine/parse/xml/camera.hpp"
+#include "engine/parse/xml/camera/camera.hpp"
 
-#include "engine/parse/xml/projection.hpp"
-#include "engine/parse/xml/xyz.hpp"
+#include "engine/parse/xml/camera/projection.hpp"
+#include "engine/parse/xml/util/xyz.hpp"
 #include "engine/util/try.hpp"
 
 namespace engine::parse::xml {

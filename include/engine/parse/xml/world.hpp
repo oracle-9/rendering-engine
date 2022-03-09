@@ -1,5 +1,4 @@
-#ifndef ENGINE_PARSE_XML_WORLD_HPP
-#define ENGINE_PARSE_XML_WORLD_HPP
+#pragma once
 
 #include "engine/parse/xml/err.hpp"
 #include "engine/render/world.hpp"
@@ -12,5 +11,3 @@ auto parse_world(char const* xml_filepath) noexcept
     -> cpp::result<render::world, parse_err>;
 
 } // namespace engine::parse::xml
-
-#endif // ENGINE_PARSE_XML_WORLD_HPP

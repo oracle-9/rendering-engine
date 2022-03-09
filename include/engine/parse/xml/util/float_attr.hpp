@@ -1,5 +1,4 @@
-#ifndef ENGINE_PARSE_XML_FLOAT_ATTR_HPP
-#define ENGINE_PARSE_XML_FLOAT_ATTR_HPP
+#pragma once
 
 #include "engine/parse/xml/err.hpp"
 
@@ -16,5 +15,3 @@ auto parse_float_attr(
     -> cpp::result<float, parse_err>;
 
 } // engine::parse::xml
-
-#endif // ENGINE_PARSE_XML_FLOAT_ATTR_HPP

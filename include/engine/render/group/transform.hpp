@@ -1,5 +1,4 @@
-#ifndef ENGINE_RENDER_TRANSFORM_HPP
-#define ENGINE_RENDER_TRANSFORM_HPP
+#pragma once
 
 #include <glm/vec3.hpp>
 #include <glm/vec4.hpp>
@@ -21,5 +20,3 @@ struct transform {
 };
 
 } // namespace engine::render
-
-#endif // ENGINE_RENDER_TRANSFORM_HPP

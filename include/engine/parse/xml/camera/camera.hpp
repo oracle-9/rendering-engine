@@ -1,5 +1,4 @@
-#ifndef ENGINE_PARSE_XML_CAMERA_HPP
-#define ENGINE_PARSE_XML_CAMERA_HPP
+#pragma once
 
 #include "engine/parse/xml/err.hpp"
 #include "engine/render/camera.hpp"
@@ -13,5 +12,3 @@ auto parse_camera(rapidxml::xml_node<> const* node) noexcept
     -> cpp::result<render::camera, parse_err>;
 
 } // namespace engine::parse::xml
-
-#endif // ENGINE_PARSE_XML_CAMERA_HPP

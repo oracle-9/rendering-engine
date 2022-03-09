@@ -1,6 +1,4 @@
-#ifndef ENGINE_PARSE_XML_ERR_HPP
-#define ENGINE_PARSE_XML_ERR_HPP
-
+#pragma once
 namespace engine::parse::xml {
 
 enum class parse_err {
@@ -20,5 +18,3 @@ enum class parse_err {
 };
 
 } // namespace engine::parse::xml
-
-#endif // ENGINE_PARSE_XML_ERR_HPP

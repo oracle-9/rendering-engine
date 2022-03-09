@@ -40,11 +40,11 @@ list(
 
 list(
     APPEND GENERATOR_SOURCES
-    "${SRC_PATH}/generator/main.cpp"
     "${SRC_PATH}/generator/primitives/box.cpp"
     "${SRC_PATH}/generator/primitives/cone.cpp"
     "${SRC_PATH}/generator/primitives/plane.cpp"
     "${SRC_PATH}/generator/primitives/sphere.cpp"
+    "${SRC_PATH}/generator/main.cpp"
 )
 
 add_executable(generator ${GENERATOR_HEADERS} ${GENERATOR_SOURCES})
@@ -55,32 +55,40 @@ target_include_directories(generator PRIVATE ${INCLUDE_PATH})
 # Engine
 list(
     APPEND ENGINE_HEADERS
-    "${INCLUDE_PATH}/engine/parse/xml/camera.hpp"
+    "${INCLUDE_PATH}/engine/parse/util/float.hpp"
+    "${INCLUDE_PATH}/engine/parse/xml/camera/camera.hpp"
+    "${INCLUDE_PATH}/engine/parse/xml/camera/projection.hpp"
+    "${INCLUDE_PATH}/engine/parse/xml/group/transform/rotate.hpp"
+    "${INCLUDE_PATH}/engine/parse/xml/group/transform/transform.hpp"
+    "${INCLUDE_PATH}/engine/parse/xml/group/model.hpp"
+    "${INCLUDE_PATH}/engine/parse/xml/util/float_attr.hpp"
+    "${INCLUDE_PATH}/engine/parse/xml/util/xyz.hpp"
     "${INCLUDE_PATH}/engine/parse/xml/err.hpp"
-    "${INCLUDE_PATH}/engine/parse/xml/float_attr.hpp"
-    "${INCLUDE_PATH}/engine/parse/xml/model.hpp"
-    "${INCLUDE_PATH}/engine/parse/xml/projection.hpp"
+    "${INCLUDE_PATH}/engine/parse/xml/module.hpp"
     "${INCLUDE_PATH}/engine/parse/xml/world.hpp"
-    "${INCLUDE_PATH}/engine/parse/xml/xyz.hpp"
+    "${INCLUDE_PATH}/engine/parse/module.hpp"
+    "${INCLUDE_PATH}/engine/render/group/group.hpp"
+    "${INCLUDE_PATH}/engine/render/group/model.hpp"
+    "${INCLUDE_PATH}/engine/render/group/transform.hpp"
     "${INCLUDE_PATH}/engine/render/camera.hpp"
-    "${INCLUDE_PATH}/engine/render/group.hpp"
-    "${INCLUDE_PATH}/engine/render/model.hpp"
-    "${INCLUDE_PATH}/engine/render/transform.hpp"
+    "${INCLUDE_PATH}/engine/render/module.hpp"
     "${INCLUDE_PATH}/engine/render/world.hpp"
-    "${INCLUDE_PATH}/engine/util/parse_float.hpp"
     "${INCLUDE_PATH}/engine/util/try.hpp"
+    "${INCLUDE_PATH}/engine/module.hpp"
 )
 
 list(
     APPEND ENGINE_SOURCES
-    "${SRC_PATH}/engine/main.cpp"
-    "${SRC_PATH}/engine/parse/xml/camera.cpp"
-    "${SRC_PATH}/engine/parse/xml/float_attr.cpp"
-    "${SRC_PATH}/engine/parse/xml/model.cpp"
-    "${SRC_PATH}/engine/parse/xml/projection.cpp"
+    "${SRC_PATH}/engine/parse/util/float.cpp"
+    "${SRC_PATH}/engine/parse/xml/camera/camera.cpp"
+    "${SRC_PATH}/engine/parse/xml/camera/projection.cpp"
+    "${SRC_PATH}/engine/parse/xml/group/transform/rotate.cpp"
+    "${SRC_PATH}/engine/parse/xml/group/transform/transform.cpp"
+    "${SRC_PATH}/engine/parse/xml/group/model.cpp"
+    "${SRC_PATH}/engine/parse/xml/util/float_attr.cpp"
+    "${SRC_PATH}/engine/parse/xml/util/xyz.cpp"
     "${SRC_PATH}/engine/parse/xml/world.cpp"
-    "${SRC_PATH}/engine/parse/xml/xyz.cpp"
-    "${SRC_PATH}/engine/util/parse_float.cpp"
+    "${SRC_PATH}/engine/main.cpp"
 )
 
 add_executable(engine ${ENGINE_HEADERS} ${ENGINE_SOURCES})

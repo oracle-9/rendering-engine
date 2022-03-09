@@ -1,6 +1,6 @@
 #include "engine/parse/xml/world.hpp"
 
-#include "engine/parse/xml/camera.hpp"
+#include "engine/parse/xml/camera/camera.hpp"
 #include "engine/util/try.hpp"
 
 #include <exception>

@@ -1,8 +1,7 @@
-#ifndef ENGINE_RENDER_GROUP_HPP
-#define ENGINE_RENDER_GROUP_HPP
+#pragma once
 
-#include "engine/render/model.hpp"
-#include "engine/render/transform.hpp"
+#include "engine/render/group/model.hpp"
+#include "engine/render/group/transform.hpp"
 
 #include <vector>
 
@@ -15,5 +14,3 @@ struct group {
 };
 
 } // namespace engine::render
-
-#endif // ENGINE_RENDER_GROUP_HPP

@@ -1,6 +1,6 @@
-#include "engine/parse/xml/xyz.hpp"
+#include "engine/parse/xml/util/xyz.hpp"
 
-#include "engine/parse/xml/float_attr.hpp"
+#include "engine/parse/xml/util/float_attr.hpp"
 #include "engine/util/try.hpp"
 
 namespace engine::parse::xml {
