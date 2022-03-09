@@ -6,11 +6,11 @@
 namespace engine::render {
 
 struct transform {
-    enum class type {
+    enum class kind {
         translate,
         rotate,
         scale
-    } type;
+    } kind;
 
     union {
         glm::vec3 translate;
