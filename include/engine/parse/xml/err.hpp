@@ -15,6 +15,8 @@ enum class parse_err {
     no_camera_lookat_node,
     no_camera_up_node,
     no_camera_proj_node,
+
+    unknown_transform,
 };
 
 } // namespace engine::parse::xml
