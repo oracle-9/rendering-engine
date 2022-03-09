@@ -6,16 +6,18 @@
 
 namespace engine::render {
 
-union transform {
+struct transform {
     enum class type {
         translate,
         rotate,
         scale
     } type;
 
-    glm::vec3 translate;
-    glm::vec4 rotate;
-    glm::vec3 scale;
+    union {
+        glm::vec3 translate;
+        glm::vec4 rotate;
+        glm::vec3 scale;
+    };
 };
 
 } // namespace engine::render
