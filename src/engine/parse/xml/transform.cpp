@@ -15,8 +15,8 @@ auto parse_transform(rapidxml::xml_node<> const* const node) noexcept
     using namespace std::string_view_literals;
 
     auto static constexpr translate_str = "translate"sv;
-    auto static constexpr rotate_str = "rotate_str"sv;
-    auto static constexpr scale_str = "scale_str"sv;
+    auto static constexpr rotate_str = "rotate"sv;
+    auto static constexpr scale_str = "scale"sv;
 
     auto const transform_name = std::string_view {
         node->name(),
