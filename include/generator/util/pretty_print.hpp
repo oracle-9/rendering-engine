@@ -1,5 +1,4 @@
-#ifndef GENERATOR_UTIL_PRETTY_PRINT_HPP
-#define GENERATOR_UTIL_PRETTY_PRINT_HPP
+#pragma once
 
 #include <fmt/color.h>
 
@@ -26,5 +25,3 @@
     );                                                                         \
     fmt::print(stderr, format_string __VA_OPT__(,)  __VA_ARGS__);              \
 } while (0)
-
-#endif // GENERATOR_UTIL_PRETTY_PRINT_HPP
