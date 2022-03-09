@@ -2,6 +2,7 @@
 namespace engine::parse::xml {
 
 enum class parse_err {
+    no_mem,
     io_err,
     syntax_err,
     malformed_num,

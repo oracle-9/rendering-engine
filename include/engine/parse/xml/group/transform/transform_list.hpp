@@ -9,7 +9,7 @@
 
 namespace engine::parse::xml {
 
-auto parse_transform_list(rapidxml::xml_node<> const* node)
+auto parse_transform_list(rapidxml::xml_node<> const* node) noexcept
     -> cpp::result<std::vector<render::transform>, parse_err>;
 
 } // engine::parse::xml

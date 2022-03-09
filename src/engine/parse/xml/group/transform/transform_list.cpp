@@ -3,11 +3,14 @@
 #include "engine/parse/xml/group/transform/transform.hpp"
 #include "engine/util/try.hpp"
 
+#include <new>
+#include <stdexcept>
+
 namespace engine::parse::xml {
 
-auto parse_transform_list(rapidxml::xml_node<> const* const node)
+auto parse_transform_list(rapidxml::xml_node<> const* const node) noexcept
     -> cpp::result<std::vector<render::transform>, parse_err>
-{
+try {
     auto transform_list = std::vector<render::transform>{};
 
     for (
@@ -19,6 +22,10 @@ auto parse_transform_list(rapidxml::xml_node<> const* const node)
     }
 
     return transform_list;
+} catch (std::bad_alloc const& e) {
+    return cpp::failure{parse_err::no_mem};
+} catch (std::length_error const& e) {
+    return cpp::failure{parse_err::no_mem};
 }
 
 } // engine::parse::xml
