@@ -18,7 +18,7 @@ using namespace brief_int;
 using namespace std::string_view_literals;
 
 auto display_help() -> void;
-auto parse_u32(char const*) -> u32;
+auto parse_u32(char const* s) -> u32;
 auto check_num_args(std::size_t expected, std::size_t actual) -> void;
 
 auto constexpr prog_name = "generator"sv;
