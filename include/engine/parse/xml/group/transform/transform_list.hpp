@@ -1,0 +1,15 @@
+#pragma once
+
+#include "engine/parse/xml/err.hpp"
+#include "engine/render/group/transform.hpp"
+
+#include <rapidxml.hpp>
+#include <result.hpp>
+#include <vector>
+
+namespace engine::parse::xml {
+
+auto parse_transform_list(rapidxml::xml_node<> const* node)
+    -> cpp::result<std::vector<render::transform>, parse_err>;
+
+} // engine::parse::xml

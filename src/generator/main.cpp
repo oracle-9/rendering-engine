@@ -1,14 +1,14 @@
-#include "brief_int.hpp"
-#include "fmt/core.h"
-#include "fmt/format.h"
-#include "fmt/os.h"
 #include "generator/primitives/module.hpp"
 #include "generator/util/pretty_print.hpp"
 
+#include <brief_int.hpp>
 #include <cerrno>
 #include <charconv>
 #include <cstdlib>
 #include <cstring>
+#include <fmt/core.h>
+#include <fmt/format.h>
+#include <fmt/os.h>
 #include <span>
 #include <stdexcept>
 #include <string_view>
@@ -18,7 +18,7 @@ using namespace brief_int;
 using namespace std::string_view_literals;
 
 auto display_help() -> void;
-auto parse_u32(char const*) -> u32;
+auto parse_u32(char const* s) -> u32;
 auto check_num_args(std::size_t expected, std::size_t actual) -> void;
 
 auto constexpr prog_name = "generator"sv;
@@ -26,7 +26,7 @@ auto constexpr prog_name = "generator"sv;
 auto const cli_actions = std::unordered_map<
     std::string_view,
     auto (*)(std::span<char const*>) -> void
->{
+> {
     {
         "-h",
         [](std::span<char const*>) {
@@ -119,10 +119,11 @@ auto parse_u32(char const* const s) -> u32 {
     u32 uninit;
     char const* const end = s + std::strlen(s);
     auto const [parse_end, err] = std::from_chars(s, end, uninit);
-    if (parse_end != end || err != std::errc()) {
+    if (parse_end != end || err != std::errc{}) {
         throw std::invalid_argument {
             fmt::format(
-                "failed parsing '{}' into u32", std::string_view{s, end}
+                "failed parsing '{}' into u32",
+                std::string_view{s, end}
             )
         };
     }
@@ -142,7 +143,7 @@ auto check_num_args(
 
 auto main(int argc, char* argv[]) -> int {
     if (argc < 2) {
-        pretty_print_err("no option provided.\n");
+        pretty_print_err("no command provided.\n");
         return EXIT_FAILURE;
     }
 
