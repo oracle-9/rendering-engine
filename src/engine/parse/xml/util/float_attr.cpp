@@ -25,7 +25,7 @@ auto parse_float_attr(
                     attr->value_size(),
                 }
             ),
-            return cpp::failure(parse_err::malformed_num)
+            return cpp::failure{parse_err::malformed_num}
         );
     }
 }
