@@ -11,11 +11,11 @@ namespace {
 
 using engine::parse::xml::parse_err;
 
-auto open_xml_file(std::filesystem::path const& xml_filepath) noexcept
+auto open_xml_file(char const* const xml_filepath) noexcept
     -> cpp::result<rapidxml::file<>, parse_err>
 {
     try {
-        return rapidxml::file{xml_filepath.c_str()};
+        return rapidxml::file{xml_filepath};
     } catch (std::exception const& io_err) {
         return cpp::failure{parse_err::io_err};
     }
@@ -25,7 +25,7 @@ auto open_xml_file(std::filesystem::path const& xml_filepath) noexcept
 
 namespace engine::parse::xml {
 
-auto parse_world(std::filesystem::path const& xml_filepath) noexcept
+auto parse_world(char const* const xml_filepath) noexcept
     -> cpp::result<render::world, parse_err>
 {
     auto input_file = TRY_RESULT(open_xml_file(xml_filepath));
