@@ -2,7 +2,7 @@
 
 #include <charconv>
 
-namespace engine::util {
+namespace engine::parse::util {
 
 auto parse_float(std::string_view const s) noexcept -> std::optional<float> {
     float uninit;
