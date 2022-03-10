@@ -23,7 +23,7 @@ auto generate_cone(
 	float x, y, z;
 	float rx1, rz1, rx2, rz2;
 	float tmp1, tmp2;
-    output_file.print("pontos:{},faces:{}\n", ((stacks-1)*slices*2+slices*2)*3,((stacks-1)*slices*2+slices*2));
+    output_file.print("{}\n", ((stacks-1)*slices*2+slices*2)*3);
 
     //Desenha lado a lado a partir da base até ao topo do cone
 	for (int i = 0; i < slices; i++) {
@@ -35,8 +35,8 @@ auto generate_cone(
 		rz1 = z;
 		//glVertex3f(x, y, z);
 		//glVertex3f(0, 0, 0);
-        output_file.print("{},{},{}\n", x, y, z);
-        output_file.print("0,0,0");
+        output_file.print("{} {} {}\n", x, y, z);
+        output_file.print("0 0 0");
 
 		alpha += step_lado;
 		x = radius * sin(alpha);
