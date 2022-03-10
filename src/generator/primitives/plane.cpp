@@ -3,18 +3,14 @@
 using namespace brief_int;
 
 auto generate_plane(
-    u32 len,
-    u32 num_divs,
-    fmt::ostream& output_fileNaoUsado
+    u32 comp,
+    u32 div,
+    fmt::ostream& output_file
 ) -> void {
     //static_cast<void>(len);
     //static_cast<void>(num_divs);
     //static_cast<void>(output_file);
-	std::ofstream output_file;
 	int num_vertices;
-
-
-	output_file.open("plane.3d", std::ofstream::out);
 
 	num_vertices = 6 * (div * div);
 
