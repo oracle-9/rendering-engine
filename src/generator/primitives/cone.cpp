@@ -36,7 +36,7 @@ auto generate_cone(
 		//glVertex3f(x, y, z);
 		//glVertex3f(0, 0, 0);
         output_file.print("{} {} {}\n", x, y, z);
-        output_file.print("0 0 0");
+        output_file.print("0 0 0\n");
 
 		alpha += step_lado;
 		x = radius * sin(alpha);
