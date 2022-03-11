@@ -12,6 +12,7 @@
 namespace engine::parse::xml {
 
 template <std::floating_point FP>
+[[nodiscard]]
 auto constexpr parse_fp_attr(
     rapidxml::xml_node<> const* const node,
     std::string_view const attr_name

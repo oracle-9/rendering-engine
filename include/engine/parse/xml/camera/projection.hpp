@@ -8,6 +8,7 @@
 
 namespace engine::parse::xml {
 
+[[nodiscard]]
 auto parse_projection(rapidxml::xml_node<> const* node) noexcept
     -> cpp::result<glm::dvec3, parse_err>;
 

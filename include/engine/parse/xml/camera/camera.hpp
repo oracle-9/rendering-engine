@@ -8,6 +8,7 @@
 
 namespace engine::parse::xml {
 
+[[nodiscard]]
 auto parse_camera(rapidxml::xml_node<> const* node) noexcept
     -> cpp::result<render::camera, parse_err>;
 

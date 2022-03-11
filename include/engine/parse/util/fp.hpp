@@ -8,6 +8,7 @@
 namespace engine::parse::util {
 
 template <std::floating_point FP>
+[[nodiscard]]
 auto constexpr parse_fp(std::string_view const s) noexcept
     -> std::optional<FP>
 {

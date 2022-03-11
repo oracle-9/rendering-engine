@@ -5,6 +5,7 @@
 
 namespace engine::parse::xml {
 
+[[nodiscard]]
 auto parse_rotate(rapidxml::xml_node<> const* const node) noexcept
     -> cpp::result<glm::vec4, parse_err>
 {

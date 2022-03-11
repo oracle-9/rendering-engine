@@ -12,6 +12,7 @@ namespace {
 
 using engine::parse::xml::parse_err;
 
+[[nodiscard]]
 auto open_xml_file(char const* const xml_filepath) noexcept
     -> cpp::result<rapidxml::file<>, parse_err>
 {
@@ -26,6 +27,7 @@ auto open_xml_file(char const* const xml_filepath) noexcept
 
 namespace engine::parse::xml {
 
+[[nodiscard]]
 auto parse_world(char const* const xml_filepath) noexcept
     -> cpp::result<render::world, parse_err>
 {
