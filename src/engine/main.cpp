@@ -53,14 +53,14 @@ auto main(int argc, char* argv[]) -> int {
     char const* const input_filename = cmd.data() + cmd.find('=') + 1_uz;
 
     errno = 0;
-    auto world_result = engine::parse::xml::parse_world(input_filename);
+    auto world = engine::parse::xml::parse_world(input_filename);
 
-    if (world_result.has_error()) {
+    if (world.has_error()) {
         int const local_errno = errno;
         pretty_print_err(
             "failed '{}' world generation with error '{}'",
             input_filename,
-            world_result.error()
+            world.error()
         );
         if (local_errno != 0) {
             fmt::print(stderr, ": '{}'", std::strerror(local_errno));
@@ -71,5 +71,5 @@ auto main(int argc, char* argv[]) -> int {
 
     pretty_print("successfully parsed world '{}'.\n", input_filename);
     std::fflush(stdout);
-    engine::render::launch().set_world(*world_result).run();
+    engine::render::launch().set_world(*world).run();
 }
