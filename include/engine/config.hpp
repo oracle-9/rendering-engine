@@ -1,5 +1,7 @@
 #pragma once
 
+#include "engine/render/world/world.hpp"
+
 #include <glm/vec4.hpp>
 #include <string_view>
 
@@ -29,6 +31,16 @@ namespace engine {
             0.08f, // G
             0.08f, // B
             1.f,   // A
+        };
+
+        auto const DEFAULT_WORLD = world {
+            .camera = {
+                .pos = {9., 3., 30.},
+                .lookat = {0., 0., 0.},
+                .up = {0., 1., 0.},
+                .projection = {90., 0.5, 1000.}
+            },
+            .root = {},
         };
     } // namespace render::config
 } // namespace engine

@@ -14,18 +14,8 @@ auto resize(int const width, int height) -> void;
 auto display_info() -> void;
 
 namespace state {
-    auto const default_world = world {
-        .camera = {
-            .pos = {9., 3., 30.},
-            .lookat = {0., 0., 0.},
-            .up = {0., 1., 0.},
-            .projection = {90., 0.5, 1000.}
-        },
-        .root = {},
-    };
-
     // Will eventually allow "reverting" to default world to undo changes.
-    auto default_world_mut = default_world;
+    auto default_world_mut = config::DEFAULT_WORLD;
     world* world_ptr = &default_world_mut;
 
     double aspect_ratio
