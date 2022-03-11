@@ -85,4 +85,3 @@ auto generate_cone(
         output_file.print("{} {} {}\n", 0, height, 0);
 	}
 }
-

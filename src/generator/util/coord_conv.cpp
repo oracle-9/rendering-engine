@@ -3,7 +3,7 @@
 #include <glm/exponential.hpp>
 #include <glm/trigonometric.hpp>
 
-auto to_cartesian(glm::vec3& cylindrical) -> glm::vec3 {
+auto to_cartesian(glm::vec3 const& cylindrical) -> glm::vec3 {
     auto const r = cylindrical[0];
     auto const theta = cylindrical[2];
     auto const y = cylindrical[1];
