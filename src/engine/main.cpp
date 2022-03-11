@@ -71,5 +71,5 @@ auto main(int argc, char* argv[]) -> int {
     pretty_print("successfully parsed world '{}'.\n", input_filename);
     std::fflush(stdout);
 
-    engine::render::renderer().run(*world_result);
+    engine::render::renderer::get().run(*world_result);
 }

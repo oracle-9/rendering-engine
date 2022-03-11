@@ -50,6 +50,11 @@ renderer::renderer() noexcept {
     print_info();
 }
 
+auto renderer::get() noexcept -> renderer& {
+    auto static lazy_static = renderer{};
+    return lazy_static;
+}
+
 [[noreturn]]
 auto renderer::run(world const&) noexcept -> void {
     glutMainLoop();

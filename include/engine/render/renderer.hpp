@@ -26,8 +26,10 @@ class renderer {
 
     auto static constexpr WIN_TITLE = "engine";
 
-  public:
     renderer() noexcept;
+
+  public:
+    auto static get() noexcept -> renderer&;
 
     [[noreturn]]
     auto run(world const&) noexcept -> void;
