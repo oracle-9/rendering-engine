@@ -15,10 +15,9 @@ auto display_info() -> void;
 
 namespace state {
     // Will eventually allow "reverting" to default world to undo changes.
+    auto aspect_ratio = config::DEFAULT_ASPECT_RATIO;
     auto default_world_mut = config::DEFAULT_WORLD;
-    world* world_ptr = &default_world_mut;
-
-    double aspect_ratio = config::DEFAULT_ASPECT_RATIO;
+    auto* world_ptr = &default_world_mut;
 } // namespace state
 
 auto launch() noexcept -> renderer& {
