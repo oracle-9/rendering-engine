@@ -61,9 +61,9 @@ try {
 
     return render::model{std::move(coords)};
 
-} catch (std::bad_alloc const& e) {
+} catch (std::bad_alloc const&) {
     return cpp::failure{parse_err::no_mem};
-} catch (std::length_error const& e) {
+} catch (std::length_error const&) {
     return cpp::failure{parse_err::no_mem};
 }
 

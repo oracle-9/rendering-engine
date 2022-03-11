@@ -16,7 +16,7 @@ auto open_xml_file(char const* const xml_filepath) noexcept
 {
     try {
         return rapidxml::file{xml_filepath};
-    } catch (std::exception const& io_err) {
+    } catch (std::exception const&) {
         return cpp::failure{parse_err::io_err};
     }
 }
@@ -32,7 +32,7 @@ auto parse_world(char const* const xml_filepath) noexcept
     auto xml_doc = rapidxml::xml_document{};
     try {
         xml_doc.parse<rapidxml::parse_default>(input_file.data());
-    } catch (rapidxml::parse_error const& xml_parse_err) {
+    } catch (rapidxml::parse_error const&) {
         return cpp::failure{parse_err::syntax_err};
     }
 
