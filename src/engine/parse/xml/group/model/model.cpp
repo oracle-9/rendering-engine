@@ -62,6 +62,7 @@ try {
     if (model_file.fail()) {
         return cpp::failure{parse_err::malformed_num};
     }
+    __builtin_unreachable();
 } catch (std::bad_alloc const&) {
     return cpp::failure{parse_err::no_mem};
 } catch (std::length_error const&) {
