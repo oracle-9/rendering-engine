@@ -11,7 +11,7 @@
 namespace engine::parse::xml {
 
 // TODO: Implement non-recursively.
-auto parse_group(rapidxml::xml_node<> const* node) noexcept
+auto parse_group(rapidxml::xml_node<> const* const node) noexcept
     -> cpp::result<render::group, parse_err>
 try {
     using namespace std::string_view_literals;
