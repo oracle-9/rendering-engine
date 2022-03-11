@@ -10,11 +10,6 @@
 namespace engine::render {
 using config::prog_name;
 
-struct render_payload {
-    struct world* world;
-    double aspect_ratio;
-};
-
 auto display_info() {
     // reinterpret_cast is needed to silence some fmt + unsigned char warnings.
     pretty_print(
@@ -30,15 +25,18 @@ auto display_info() {
     );
 }
 
-auto render(void* const payload) -> void {
-    auto [world_ptr, aspect_ratio] = *static_cast<render_payload*>(payload);
-    auto const& camera_pos = world_ptr->camera.pos;
+auto render(void* const payload) noexcept -> void {
+    auto [world_ptr, aspect_ratio]
+        = *static_cast<renderer::render_payload*>(payload);
+
+    auto const& camera_pos    = world_ptr->camera.pos;
     auto const& camera_lookat = world_ptr->camera.lookat;
-    auto const& camera_up = world_ptr->camera.up;
-    auto const& camera_proj = world_ptr->camera.projection;
+    auto const& camera_up     = world_ptr->camera.up;
+    auto const& camera_proj   = world_ptr->camera.projection;
 
     glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
     glLoadIdentity();
+
     gluLookAt(
         camera_pos.x,    camera_pos.y,    camera_pos.z,
         camera_lookat.x, camera_lookat.y, camera_lookat.z,
@@ -49,6 +47,7 @@ auto render(void* const payload) -> void {
     );
 
     glBegin(GL_TRIANGLES);
+        // Test.
         glVertex3f(0.f, 0.f, 0.f);
         glVertex3f(1.f, 1.f, 2.f);
         glVertex3f(3.f, 3.f, 3.f);
@@ -57,7 +56,16 @@ auto render(void* const payload) -> void {
     glutSwapBuffers();
 }
 
-renderer::renderer() noexcept : world_ref{&renderer::default_world} {
+renderer::renderer() noexcept
+    : default_world{}
+    , world_ref{&default_world}
+    , payload{
+        .world = this->world_ref,
+        .aspect_ratio
+            = static_cast<double>(renderer::WIN_WIDTH)
+            / static_cast<double>(renderer::WIN_HEIGHT),
+    }
+{
     {
         // GLUT requires argc and argv to be passed to their init function,
         // which we don't to forward.
@@ -85,20 +93,20 @@ renderer::renderer() noexcept : world_ref{&renderer::default_world} {
         renderer::BG_COLOR.a
     );
 
-    display_info();
-}
-
-auto renderer::set_world(struct world& world) noexcept -> renderer& {
-    render_payload static payload; // payload must be static to ensure
-                                   // GLUT doesn't outlive it.
-    this->world_ref = &world;
-    payload = render_payload {
+    this->payload = render_payload {
         .world = this->world_ref,
         .aspect_ratio
             = static_cast<double>(renderer::WIN_WIDTH)
             / static_cast<double>(renderer::WIN_HEIGHT),
     };
     glutDisplayFuncUcall(render, &payload);
+
+    display_info();
+}
+
+auto renderer::set_world(struct world& world) noexcept -> renderer& {
+    this->world_ref = &world;
+    this->payload.world = &world;
     return *this;
 }
 
