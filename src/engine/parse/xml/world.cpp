@@ -52,7 +52,6 @@ auto parse_world(char const* const xml_filepath) noexcept
         return cpp::failure{parse_err::no_group_node};
     );
 
-
     return render::world {
         .camera = TRY_RESULT(parse_camera(camera_node)),
         .root = TRY_RESULT(parse_group(group_node)),
