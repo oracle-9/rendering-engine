@@ -25,8 +25,8 @@ namespace state {
     };
 
     // Will eventually allow "reverting" to default world to undo changes.
-    auto mutable_default_world = default_world;
-    world* world_ptr = &mutable_default_world;
+    auto default_world_mut = default_world;
+    world* world_ptr = &default_world_mut;
 
     double aspect_ratio
         = static_cast<double>(config::DEFAULT_WIN_WIDTH)
