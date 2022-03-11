@@ -5,10 +5,10 @@
 namespace engine::render {
 
 struct camera {
-    glm::vec3 pos;
-    glm::vec3 lookat;
-    glm::vec3 up;
-    glm::vec3 projection;
+    glm::dvec3 pos;
+    glm::dvec3 lookat;
+    glm::dvec3 up;
+    glm::dvec3 projection;
 };
 
 } // namespace engine::render
