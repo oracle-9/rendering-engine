@@ -22,7 +22,6 @@ auto main(int argc, char* argv[]) -> int {
         return EXIT_FAILURE;
     }
 
-
     if (argc == 1) {
         // No XML file was provided, render a default world.
         engine::render::launch().run();
