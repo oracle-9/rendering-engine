@@ -12,6 +12,7 @@ project("CG-2021-22" VERSION 1.0 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 20) # C++20
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON) # compile_commands.json for IntelliSense
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 ################################################################################
 
 
@@ -156,7 +157,15 @@ endforeach()
 target_link_libraries(generator fmt::fmt)
 
 # Engine linked libraries
-target_link_libraries(engine fmt::fmt glm::glm GLUT::GLUT OpenGL::GL)
+target_link_libraries(
+    engine
+    fmt::fmt
+    glm::glm
+    GLUT::GLUT
+    ${GLUT_LIBRARY}     # overspecify libraries just in case.
+    OpenGL::GL
+    ${OPENGL_LIBRARIES}
+)
 ################################################################################
 
 
