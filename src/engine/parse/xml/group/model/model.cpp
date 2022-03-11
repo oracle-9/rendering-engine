@@ -42,7 +42,7 @@ try {
     }
 
     auto coords = std::vector<float>{};
-    coords.reserve(num_vertices * 3);
+    coords.reserve(num_vertices * 3_uz);
 
     float x, y, z;
     while (model_file >> x >> y >> z) {
