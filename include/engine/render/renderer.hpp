@@ -1,20 +1,22 @@
 #pragma once
 
-#include <glm/vec4.hpp>
+#include "engine/render/world/world.hpp"
 
+#include <glm/vec4.hpp>
 
 namespace engine::render {
 
-struct world;
-
 class renderer {
   private:
+    world* world_ref;
+    static inline struct world default_world{};
+
     enum : int {
         WIN_POS_X = 100,
         WIN_POS_Y = 100,
 
-        WIN_SIZ_X = 800,
-        WIN_SIZ_Y = 800,
+        WIN_WIDTH  = 800,
+        WIN_HEIGHT = 800,
     };
 
     auto static constexpr BG_COLOR = glm::vec4 {
@@ -31,8 +33,10 @@ class renderer {
   public:
     auto static get() noexcept -> renderer&;
 
+    auto set_world(struct world&) noexcept -> renderer&;
+
     [[noreturn]]
-    auto run(world const&) noexcept -> void;
+    auto run() noexcept -> void;
 };
 
 } // namespace engine::render

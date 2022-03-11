@@ -31,13 +31,15 @@ auto main(int argc, char* argv[]) -> int {
     using namespace brief_int::literals;
     using engine::config::prog_name;
 
-    if (argc < 2) {
-        pretty_print_err("no input file provided.\n");
-        return EXIT_FAILURE;
-    }
     if (argc > 2) {
         pretty_print_err("too many options provided.\n");
         return EXIT_FAILURE;
+    }
+
+
+    if (argc == 1) {
+        // No XML file was provided, render a default world.
+        engine::render::renderer::get().run();
     }
 
     auto const cmd = std::string_view{argv[1]};
@@ -48,7 +50,6 @@ auto main(int argc, char* argv[]) -> int {
         pretty_print_err("unrecognized command '{}'.\n", cmd);
         return EXIT_FAILURE;
     }
-
     char const* const input_filename = cmd.data() + cmd.find('=') + 1_uz;
 
     errno = 0;
@@ -70,6 +71,5 @@ auto main(int argc, char* argv[]) -> int {
 
     pretty_print("successfully parsed world '{}'.\n", input_filename);
     std::fflush(stdout);
-
-    engine::render::renderer::get().run(*world_result);
+    engine::render::renderer::get().set_world(*world_result).run();
 }
