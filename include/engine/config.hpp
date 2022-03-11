@@ -11,7 +11,7 @@ namespace engine {
     } // namespace config
 
     namespace render::config {
-        auto static constexpr WIN_TITLE = "engine";
+        auto constexpr WIN_TITLE = "engine";
 
         enum : int {
             DEFAULT_WIN_POS_X = 100,
@@ -23,14 +23,14 @@ namespace engine {
         static_assert(
             DEFAULT_WIN_HEIGHT > 0,
             "DEFAULT_WIN_HEIGHT must be greater than zero to prevent divide by"
-            " zero when calculating aspect ratio."
+                " zero when calculating aspect ratio."
         );
 
         double constexpr DEFAULT_ASPECT_RATIO
             = static_cast<double>(DEFAULT_WIN_WIDTH)
             / static_cast<double>(DEFAULT_WIN_WIDTH);
 
-        auto static constexpr DEFAULT_BG_COLOR = glm::vec4 {
+        auto constexpr DEFAULT_BG_COLOR = glm::vec4 {
             0.08f, // R
             0.08f, // G
             0.08f, // B
