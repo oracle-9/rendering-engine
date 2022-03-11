@@ -6,7 +6,7 @@
     fmt::print(                                                                \
         fmt::emphasis::bold | fg(fmt::terminal_color::white),                  \
         "{}: ",                                                                \
-        ::prog_name                                                            \
+        prog_name                                                              \
     );                                                                         \
     fmt::print(format_string __VA_OPT__(,) __VA_ARGS__);                       \
 } while (0)
@@ -16,7 +16,7 @@
         stderr,                                                                \
         fmt::emphasis::bold | fg(fmt::terminal_color::white),                  \
         "{}: ",                                                                \
-        ::prog_name                                                            \
+        prog_name                                                              \
     );                                                                         \
     fmt::print(                                                                \
         stderr,                                                                \
