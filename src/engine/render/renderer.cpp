@@ -25,7 +25,7 @@ auto print_info() {
     );
 }
 
-renderer::renderer() {
+renderer::renderer() noexcept {
     {
         int dummy_argc = 1;
         char dummy_arg[] = "";
@@ -51,7 +51,7 @@ renderer::renderer() {
 }
 
 [[noreturn]]
-auto renderer::run(world const&) -> void {
+auto renderer::run(world const&) noexcept -> void {
     glutMainLoop();
     __builtin_unreachable();
 }
