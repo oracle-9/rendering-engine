@@ -35,7 +35,7 @@ list(
     "${INCLUDE_PATH}/generator/primitives/cone.hpp"
     "${INCLUDE_PATH}/generator/primitives/plane.hpp"
     "${INCLUDE_PATH}/generator/primitives/sphere.hpp"
-    "${INCLUDE_PATH}/generator/util/pretty_print.hpp"
+    "${INCLUDE_PATH}/util/pretty_print.hpp"
     "${INCLUDE_PATH}/util/try.hpp"
 )
 
@@ -79,6 +79,7 @@ list(
     "${INCLUDE_PATH}/engine/render/module.hpp"
     "${INCLUDE_PATH}/engine/render/world.hpp"
     "${INCLUDE_PATH}/engine/module.hpp"
+    "${INCLUDE_PATH}/util/pretty_print.hpp"
     "${INCLUDE_PATH}/util/try.hpp"
 )
 

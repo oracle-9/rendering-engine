@@ -1,5 +1,5 @@
 #include "generator/primitives/module.hpp"
-#include "generator/util/pretty_print.hpp"
+#include "util/pretty_print.hpp"
 
 #include <brief_int.hpp>
 #include <cerrno>
