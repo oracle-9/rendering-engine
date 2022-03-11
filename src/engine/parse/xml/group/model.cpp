@@ -33,8 +33,8 @@ try {
         return cpp::failure{parse_err::no_model_file};
     }
 
-    usize num_coords;
-    model_file >> num_coords;
+    usize num_vertices;
+    model_file >> num_vertices;
     if (model_file.bad()) {
         return cpp::failure{parse_err::io_err};
     }
@@ -42,9 +42,8 @@ try {
         return cpp::failure{parse_err::malformed_num};
     }
 
-    num_coords *= 3_uz;
     auto coords = std::vector<float>{};
-    coords.reserve(num_coords);
+    coords.reserve(num_vertices * 3);
 
     float x, y, z;
     while (model_file >> x >> y >> z) {
