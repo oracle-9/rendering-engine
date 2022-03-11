@@ -1,9 +1,15 @@
 #pragma once
+
+#include <brief_int.hpp>
+
 namespace engine::parse::xml {
 
-enum class parse_err {
+// NOTE: changing the order of the enumerators requires a change in the
+// string formatting implementation.
+enum class parse_err : brief_int::usize {
     no_mem,
     io_err,
+
     syntax_err,
     malformed_num,
 
