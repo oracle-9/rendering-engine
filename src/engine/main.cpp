@@ -39,7 +39,7 @@ auto main(int argc, char* argv[]) -> int {
 
     if (argc == 1) {
         // No XML file was provided, render a default world.
-        engine::render::renderer::get().run();
+        engine::render::launch().run();
     }
 
     auto const cmd = std::string_view{argv[1]};
@@ -71,5 +71,5 @@ auto main(int argc, char* argv[]) -> int {
 
     pretty_print("successfully parsed world '{}'.\n", input_filename);
     std::fflush(stdout);
-    engine::render::renderer::get().set_world(*world_result).run();
+    engine::render::launch().set_world(*world_result).run();
 }
