@@ -10,9 +10,9 @@
 namespace engine::render {
 
 auto render() noexcept -> void;
-auto render_group(group const& root) -> void;
-auto resize(int width, int height) -> void;
-auto display_info() -> void;
+auto render_group(group const& root) noexcept -> void;
+auto resize(int width, int height) noexcept -> void;
+auto display_info() noexcept -> void;
 
 namespace state {
     // Will eventually allow "reverting" to default world to undo changes.
@@ -95,7 +95,7 @@ auto render() noexcept -> void {
 }
 
 // TODO: Implement non-recursively.
-auto render_group(group const& root) -> void {
+auto render_group(group const& root) noexcept -> void {
     // TODO: Finish implementing transforms.
     // for (auto const& transform : root->transforms) {
     //     switch (transform.kind) {
@@ -138,7 +138,7 @@ auto render_group(group const& root) -> void {
     }
 }
 
-auto resize(int const width, int height) -> void {
+auto resize(int const width, int height) noexcept -> void {
     // Prevent a divide by zero when window is too short.
     if (height == 0) {
         height = 1;
@@ -154,7 +154,7 @@ auto resize(int const width, int height) -> void {
     glViewport(0, 0, width, height);
 }
 
-auto display_info() -> void {
+auto display_info() noexcept -> void {
     using engine::config::prog_name;
 
     // reinterpret_cast is needed to silence some fmt + unsigned char warnings.
