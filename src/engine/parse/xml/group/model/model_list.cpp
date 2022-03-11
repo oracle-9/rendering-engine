@@ -28,5 +28,4 @@ try {
     return cpp::failure{parse_err::no_mem};
 }
 
-
 } // namespace engine::parse::xml
