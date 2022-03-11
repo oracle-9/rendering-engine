@@ -36,7 +36,7 @@ struct fmt::formatter<engine::parse::xml::parse_err> {
                 "no camera up node found",
                 "no camera projection node found",
 
-                "unrecognized group subnode"
+                "unrecognized group child node"
 
                 "unrecognized transformation",
 

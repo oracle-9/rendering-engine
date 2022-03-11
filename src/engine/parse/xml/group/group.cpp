@@ -24,23 +24,23 @@ try {
     auto root = render::group{};
 
     for (
-        auto const* subnode = node->first_node();
-        subnode != nullptr;
-        subnode = subnode->next_sibling()
+        auto const* child = node->first_node();
+        child != nullptr;
+        child = child->next_sibling()
     ) {
-        auto const subnode_name = std::string_view {
-            subnode->name(),
-            subnode->name_size(),
+        auto const child_name = std::string_view {
+            child->name(),
+            child->name_size(),
         };
 
-        if (subnode_name == transform_str) {
-            root.transforms = TRY_RESULT(parse_transform_list(subnode));
-        } else if (subnode_name == models_str) {
-            root.models = TRY_RESULT(parse_model_list(subnode));
-        } else if (subnode_name == group_str) {
-            root.children.push_back(TRY_RESULT(parse_group(subnode)));
+        if (child_name == transform_str) {
+            root.transforms = TRY_RESULT(parse_transform_list(child));
+        } else if (child_name == models_str) {
+            root.models = TRY_RESULT(parse_model_list(child));
+        } else if (child_name == group_str) {
+            root.children.push_back(TRY_RESULT(parse_group(child)));
         } else {
-            return cpp::failure{parse_err::unknown_group_subnode};
+            return cpp::failure{parse_err::unknown_group_child_node};
         }
     }
 

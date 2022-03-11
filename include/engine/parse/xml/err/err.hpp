@@ -22,7 +22,7 @@ enum class parse_err : brief_int::usize {
     no_camera_up_node,
     no_camera_proj_node,
 
-    unknown_group_subnode,
+    unknown_group_child_node,
 
     unknown_transform,
 
