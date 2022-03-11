@@ -4,6 +4,8 @@
 #include "engine/parse/xml/group/transform/transform_list.hpp"
 #include "engine/util/try.hpp"
 
+#include <new>
+#include <stdexcept>
 #include <string_view>
 
 namespace engine::parse::xml {
@@ -11,7 +13,7 @@ namespace engine::parse::xml {
 // TODO: Implement non-recursively.
 auto parse_group(rapidxml::xml_node<> const* node) noexcept
     -> cpp::result<render::group, parse_err>
-{
+try {
     using namespace std::string_view_literals;
 
     auto static constexpr transform_str = "transform"sv;
@@ -41,6 +43,11 @@ auto parse_group(rapidxml::xml_node<> const* node) noexcept
     }
 
     return root;
+
+} catch (std::bad_alloc const&) {
+    return cpp::failure{parse_err::no_mem};
+} catch (std::length_error const&) {
+    return cpp::failure{parse_err::no_mem};
 }
 
 } // namespace engine::parse::xml
