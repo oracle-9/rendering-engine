@@ -58,7 +58,9 @@ try {
         return cpp::failure{parse_err::malformed_num};
     }
 
-    return render::model{std::move(coords)};
+    return render::model {
+        .coords = std::move(coords)
+    };
 
 } catch (std::bad_alloc const&) {
     return cpp::failure{parse_err::no_mem};
