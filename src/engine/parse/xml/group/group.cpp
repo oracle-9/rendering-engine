@@ -31,6 +31,7 @@ try {
             node->name(),
             node->name_size(),
         };
+
         if (subnode_name == transform_str) {
             root.transforms = TRY_RESULT(parse_transform_list(subnode));
         } else if (subnode_name == models_str) {
