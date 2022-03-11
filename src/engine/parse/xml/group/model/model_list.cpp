@@ -18,7 +18,7 @@ try {
         model != nullptr;
         model = model->next_sibling()
     ) {
-        model_list.push_back(TRY_RESULT(parse_model(node)));
+        model_list.push_back(TRY_RESULT(parse_model(model)));
     }
 
     return model_list;
