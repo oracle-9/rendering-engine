@@ -6,7 +6,7 @@
 #include <cmath>
 
 auto generate_sphere(
-    brief_int::u32 radius,
+    float radius,
     brief_int::u32 num_slices,
     brief_int::u32 num_stacks,
     fmt::ostream& output_file

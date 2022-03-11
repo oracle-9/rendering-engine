@@ -19,6 +19,7 @@ using namespace std::string_view_literals;
 
 auto display_help() -> void;
 auto parse_u32(char const* s) -> u32;
+auto parse_float(char const* s) -> float;
 auto check_num_args(usize expected, usize actual) -> void;
 
 auto constexpr prog_name = "generator"sv;
@@ -43,7 +44,7 @@ auto const cli_actions = std::unordered_map<
         "sphere",
         [](std::span<char const*> const args) {
             check_num_args(4, args.size());
-            u32 const radius = parse_u32(args[0]);
+            float const radius = parse_float(args[0]);
             u32 const num_slices = parse_u32(args[1]);
             u32 const num_stacks = parse_u32(args[2]);
             auto output_file = fmt::output_file(args[3]);
@@ -64,8 +65,8 @@ auto const cli_actions = std::unordered_map<
         "cone",
         [](std::span<char const*> const args) {
             check_num_args(5, args.size());
-            u32 const radius = parse_u32(args[0]);
-            u32 const height = parse_u32(args[1]);
+            float const radius = parse_float(args[0]);
+            float const height = parse_float(args[1]);
             u32 const num_slices = parse_u32(args[2]);
             u32 const num_stacks = parse_u32(args[3]);
             auto output_file = fmt::output_file(args[4]);
@@ -123,6 +124,21 @@ auto parse_u32(char const* const s) -> u32 {
         throw std::invalid_argument {
             fmt::format(
                 "failed parsing '{}' into u32",
+                std::string_view{s, end}
+            )
+        };
+    }
+    return uninit;
+}
+
+auto parse_float(char const* const s) -> float {
+    float uninit;
+    char const* const end = s + std::strlen(s);
+    auto const [parse_end, err] = std::from_chars(s, end, uninit);
+    if (parse_end != end || err != std::errc{}) {
+        throw std::invalid_argument {
+            fmt::format(
+                "failed parsing '{}' into float",
                 std::string_view{s, end}
             )
         };

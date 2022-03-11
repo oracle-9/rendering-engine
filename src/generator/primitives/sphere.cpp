@@ -3,7 +3,7 @@
 using namespace brief_int;
 
 auto generate_sphere(
-    u32 radius,
+    float radius,
     u32 num_slices,
     u32 num_stacks,
     fmt::ostream& output_file

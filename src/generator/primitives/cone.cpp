@@ -6,8 +6,8 @@
 using namespace brief_int;
 
 auto generate_cone(
-    u32 radius,
-    u32 height,
+    float radius,
+    float height,
     u32 slices,
     u32 stacks,
     fmt::ostream& output_file
