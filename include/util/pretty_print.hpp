@@ -5,7 +5,7 @@
 #define pretty_print(format_string, ...) do {                                  \
     fmt::print(                                                                \
         fmt::emphasis::bold | fg(fmt::terminal_color::white),                  \
-        "{}:",                                                                 \
+        "{}: ",                                                                \
         ::prog_name                                                            \
     );                                                                         \
     fmt::print(format_string __VA_OPT__(,) __VA_ARGS__);                       \
