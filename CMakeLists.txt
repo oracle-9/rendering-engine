@@ -67,6 +67,7 @@ list(
     "${INCLUDE_PATH}/engine/parse/xml/util/float_attr.hpp"
     "${INCLUDE_PATH}/engine/parse/xml/util/xyz.hpp"
     "${INCLUDE_PATH}/engine/parse/xml/err.hpp"
+    "${INCLUDE_PATH}/engine/parse/xml/err_fmt.hpp"
     "${INCLUDE_PATH}/engine/parse/xml/module.hpp"
     "${INCLUDE_PATH}/engine/parse/xml/world.hpp"
     "${INCLUDE_PATH}/engine/parse/module.hpp"
@@ -94,6 +95,7 @@ list(
     "${SRC_PATH}/engine/parse/xml/util/float_attr.cpp"
     "${SRC_PATH}/engine/parse/xml/util/xyz.cpp"
     "${SRC_PATH}/engine/parse/xml/world.cpp"
+    "${SRC_PATH}/engine/render/world.cpp"
     "${SRC_PATH}/engine/main.cpp"
 )
 
@@ -145,7 +147,7 @@ endforeach()
 target_link_libraries(generator fmt::fmt)
 
 # Engine linked libraries
-target_link_libraries(engine glm::glm)
+target_link_libraries(engine fmt::fmt glm::glm)
 ################################################################################
 
 
