@@ -1,3 +1,5 @@
+#pragma once
+
 #include "engine/parse/xml/err/err.hpp"
 
 #include <array>
