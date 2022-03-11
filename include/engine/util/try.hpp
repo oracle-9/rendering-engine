@@ -37,7 +37,7 @@
     if (_result_val.has_error()) {                                             \
         return cpp::failure{_result_val.error()};                              \
     }                                                                          \
-    _result_val.value();                                                       \
+    *_result_val;                                                              \
 })
 
 #define TRY_RESULT_OR(result_expr, stmt) ({                                    \
@@ -45,5 +45,5 @@
     if (_result_val.has_error()) {                                             \
         stmt;                                                                  \
     }                                                                          \
-    _result_val.value();                                                       \
+    *_result_val;                                                              \
 })
