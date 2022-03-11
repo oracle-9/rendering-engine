@@ -10,7 +10,8 @@
 namespace engine::render {
 
 auto render() noexcept -> void;
-auto resize(int const width, int height) -> void;
+auto render_group(group const& root) -> void;
+auto resize(int width, int height) -> void;
 auto display_info() -> void;
 
 namespace state {
@@ -88,16 +89,53 @@ auto render() noexcept -> void {
         camera_proj[0], state::aspect_ratio, camera_proj[1], camera_proj[2]
     );
 
-    glColor3f(1.f, 0.f, 0.f);
-
-    glBegin(GL_TRIANGLES);
-        // Test.
-        glVertex3f(0.f, 0.f, 0.f);
-        glVertex3f(10.f, 0.f, 10.f);
-        glVertex3f(10.f, 0.f, 0.f);
-    glEnd();
+    render_group(state::world_ptr->root);
 
     glutSwapBuffers();
+}
+
+// TODO: Implement non-recursively.
+auto render_group(group const& root) -> void {
+    // TODO: Finish implementing transforms.
+    // for (auto const& transform : root->transforms) {
+    //     switch (transform.kind) {
+    //         using enum decltype(transform::kind);
+    //         case translate:
+    //             glTranslatef(
+    //                 transform.translate.x,
+    //                 transform.translate.y,
+    //                 transform.translate.z
+    //             );
+    //             break;
+    //         case rotate:
+    //             glRotatef(
+    //                 transform.rotate[0],
+    //                 transform.rotate[1],
+    //                 transform.rotate[2],
+    //                 transform.rotate[3]
+    //             );
+    //             break;
+    //         case scale:
+    //             glScalef(
+    //                 transform.scale.x,
+    //                 transform.scale.y,
+    //                 transform.scale.z
+    //             );
+    //             break;
+    //     }
+    // }
+    for (auto const& model : root.models) {
+        float const* i = model.coords.data();
+        float const* const end = i + model.coords.size();
+        glBegin(GL_TRIANGLES);
+        for ( ; i != end; i += 3) {
+            glVertex3fv(i);
+        }
+        glEnd();
+    }
+    for (auto const& child_node : root.children) {
+        render_group(child_node);
+    }
 }
 
 auto resize(int const width, int height) -> void {
