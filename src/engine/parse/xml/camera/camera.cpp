@@ -14,7 +14,7 @@ auto parse_camera(rapidxml::xml_node<> const* const node) noexcept
         return cpp::failure{parse_err::no_camera_pos_node}
     );
     auto const* const lookat_node = TRY_NULLABLE_OR(
-        node->first_node("look_at"),
+        node->first_node("lookAt"),
         return cpp::failure{parse_err::no_camera_lookat_node}
     );
     auto const* const up_node = TRY_NULLABLE_OR(
