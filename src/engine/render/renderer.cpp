@@ -30,7 +30,7 @@ auto launch() noexcept -> renderer& {
 
 renderer::renderer() noexcept {
     // GLUT requires argc and argv to be passed to their init function,
-    // which we don't to forward.
+    // which we don't want to forward.
     // Therefore, we create our own dummy values and forward those instead.
     static int dummy_argc = 1;
     static char dummy_arg[] = "";
