@@ -1,6 +1,6 @@
 #include "engine/parse/xml/group/model/model.hpp"
 
-#include "engine/util/try.hpp"
+#include "util/try.hpp"
 
 #include <brief_int.hpp>
 #include <fstream>

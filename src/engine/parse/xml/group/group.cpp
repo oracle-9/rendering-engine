@@ -2,7 +2,7 @@
 
 #include "engine/parse/xml/group/model/model_list.hpp"
 #include "engine/parse/xml/group/transform/transform_list.hpp"
-#include "engine/util/try.hpp"
+#include "util/try.hpp"
 
 #include <new>
 #include <stdexcept>

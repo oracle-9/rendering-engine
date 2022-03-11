@@ -2,7 +2,7 @@
 
 #include "engine/parse/xml/camera/camera.hpp"
 #include "engine/parse/xml/group/group.hpp"
-#include "engine/util/try.hpp"
+#include "util/try.hpp"
 
 #include <exception>
 #include <rapidxml.hpp>
