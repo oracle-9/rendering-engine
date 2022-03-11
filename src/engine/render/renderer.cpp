@@ -18,9 +18,7 @@ namespace state {
     auto default_world_mut = config::DEFAULT_WORLD;
     world* world_ptr = &default_world_mut;
 
-    double aspect_ratio
-        = static_cast<double>(config::DEFAULT_WIN_WIDTH)
-        / static_cast<double>(config::DEFAULT_WIN_WIDTH);
+    double aspect_ratio = config::DEFAULT_ASPECT_RATIO;
 } // namespace state
 
 auto launch() noexcept -> renderer& {

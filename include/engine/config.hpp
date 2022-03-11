@@ -26,6 +26,10 @@ namespace engine {
             " zero when calculating aspect ratio."
         );
 
+        double constexpr DEFAULT_ASPECT_RATIO
+            = static_cast<double>(DEFAULT_WIN_WIDTH)
+            / static_cast<double>(DEFAULT_WIN_WIDTH);
+
         auto static constexpr DEFAULT_BG_COLOR = glm::vec4 {
             0.08f, // R
             0.08f, // G
