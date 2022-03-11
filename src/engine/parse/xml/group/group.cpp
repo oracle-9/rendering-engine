@@ -28,8 +28,8 @@ try {
         subnode = subnode->next_sibling()
     ) {
         auto const subnode_name = std::string_view {
-            node->name(),
-            node->name_size(),
+            subnode->name(),
+            subnode->name_size(),
         };
 
         if (subnode_name == transform_str) {
