@@ -9,9 +9,7 @@
 #include <fmt/core.h>
 #include <string_view>
 
-using namespace std::string_view_literals;
-
-auto constexpr prog_name = "engine"sv;
+namespace engine {
 
 auto display_help() -> void {
     using namespace fmt::literals;
@@ -23,12 +21,15 @@ auto display_help() -> void {
         "    {prog} --input=<input_file>\n"
         "        Render the world described in the XML file named\n"
         "        <input_file>.\n",
-        "prog"_a = ::prog_name
+        "prog"_a = config::prog_name
     );
 }
 
+} // namespace engine
+
 auto main(int argc, char* argv[]) -> int {
     using namespace brief_int::literals;
+    using engine::config::prog_name;
 
     if (argc < 2) {
         pretty_print_err("no input file provided.\n");
@@ -41,7 +42,7 @@ auto main(int argc, char* argv[]) -> int {
 
     auto const cmd = std::string_view{argv[1]};
     if (cmd == "-h" || cmd == "--help") {
-        display_help();
+        engine::display_help();
         return EXIT_SUCCESS;
     } else if (not cmd.starts_with("--input=")) {
         pretty_print_err("unrecognized command '{}'.\n", cmd);
@@ -70,5 +71,5 @@ auto main(int argc, char* argv[]) -> int {
     pretty_print("successfully parsed world '{}'.\n", input_filename);
     std::fflush(stdout);
 
-    (*world_result).render();
+    engine::render::renderer().run(*world_result);
 }

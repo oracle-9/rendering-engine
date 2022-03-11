@@ -72,12 +72,14 @@ list(
     "${INCLUDE_PATH}/engine/parse/xml/module.hpp"
     "${INCLUDE_PATH}/engine/parse/xml/world.hpp"
     "${INCLUDE_PATH}/engine/parse/module.hpp"
-    "${INCLUDE_PATH}/engine/render/group/group.hpp"
-    "${INCLUDE_PATH}/engine/render/group/model.hpp"
-    "${INCLUDE_PATH}/engine/render/group/transform.hpp"
-    "${INCLUDE_PATH}/engine/render/camera.hpp"
+    "${INCLUDE_PATH}/engine/render/world/group/group.hpp"
+    "${INCLUDE_PATH}/engine/render/world/group/model.hpp"
+    "${INCLUDE_PATH}/engine/render/world/group/transform.hpp"
+    "${INCLUDE_PATH}/engine/render/world/camera.hpp"
+    "${INCLUDE_PATH}/engine/render/world/world.hpp"
     "${INCLUDE_PATH}/engine/render/module.hpp"
-    "${INCLUDE_PATH}/engine/render/world.hpp"
+    "${INCLUDE_PATH}/engine/render/renderer.hpp"
+    "${INCLUDE_PATH}/engine/config.hpp"
     "${INCLUDE_PATH}/engine/module.hpp"
     "${INCLUDE_PATH}/util/pretty_print.hpp"
     "${INCLUDE_PATH}/util/try.hpp"
@@ -97,7 +99,7 @@ list(
     "${SRC_PATH}/engine/parse/xml/util/float_attr.cpp"
     "${SRC_PATH}/engine/parse/xml/util/xyz.cpp"
     "${SRC_PATH}/engine/parse/xml/world.cpp"
-    "${SRC_PATH}/engine/render/world.cpp"
+    "${SRC_PATH}/engine/render/renderer.cpp"
     "${SRC_PATH}/engine/main.cpp"
 )
 
@@ -121,6 +123,12 @@ add_subdirectory(${FMT_PATH})
 set(GLM_PATH "${LIB_PATH}/glm")
 add_subdirectory(${GLM_PATH})
 
+# GLUT
+find_package(GLUT REQUIRED)
+
+# OpenGL
+find_package(OpenGL REQUIRED)
+
 # rapidxml
 set(RAPIDXML_PATH "${LIB_PATH}/rapidxml")
 
@@ -133,6 +141,8 @@ list(
     ${BRIEF_INT_PATH}
     ${FMT_PATH}
     ${GLM_PATH}
+    ${GLUT_INCLUDE_DIRS}
+    ${OPENGL_INCLUDE_DIRS}
     ${RAPIDXML_PATH}
     ${RESULT_PATH}
 )
@@ -149,7 +159,7 @@ endforeach()
 target_link_libraries(generator fmt::fmt)
 
 # Engine linked libraries
-target_link_libraries(engine fmt::fmt glm::glm)
+target_link_libraries(engine fmt::fmt glm::glm GLUT::GLUT OpenGL::GL)
 ################################################################################
 
 
