@@ -1,7 +1,7 @@
 #pragma once
 
 #include "engine/parse/xml/err/err.hpp"
-#include "engine/render/group/model.hpp"
+#include "engine/render/world/group/model.hpp"
 
 #include <rapidxml.hpp>
 #include <result.hpp>

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "engine/parse/xml/err/err.hpp"
-#include "engine/render/camera.hpp"
+#include "engine/render/world/camera.hpp"
 
 #include <rapidxml.hpp>
 #include <result.hpp>
