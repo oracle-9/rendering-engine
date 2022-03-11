@@ -56,7 +56,7 @@ target_include_directories(generator PRIVATE ${INCLUDE_PATH})
 # Engine
 list(
     APPEND ENGINE_HEADERS
-    "${INCLUDE_PATH}/engine/parse/util/float.hpp"
+    "${INCLUDE_PATH}/engine/parse/util/fp.hpp"
     "${INCLUDE_PATH}/engine/parse/xml/camera/camera.hpp"
     "${INCLUDE_PATH}/engine/parse/xml/camera/projection.hpp"
     "${INCLUDE_PATH}/engine/parse/xml/group/model/model.hpp"
@@ -65,7 +65,7 @@ list(
     "${INCLUDE_PATH}/engine/parse/xml/group/transform/transform_list.hpp"
     "${INCLUDE_PATH}/engine/parse/xml/group/transform/transform.hpp"
     "${INCLUDE_PATH}/engine/parse/xml/group/group.hpp"
-    "${INCLUDE_PATH}/engine/parse/xml/util/float_attr.hpp"
+    "${INCLUDE_PATH}/engine/parse/xml/util/fp_attr.hpp"
     "${INCLUDE_PATH}/engine/parse/xml/util/xyz.hpp"
     "${INCLUDE_PATH}/engine/parse/xml/err/err_fmt.hpp"
     "${INCLUDE_PATH}/engine/parse/xml/err/err.hpp"
@@ -87,7 +87,6 @@ list(
 
 list(
     APPEND ENGINE_SOURCES
-    "${SRC_PATH}/engine/parse/util/float.cpp"
     "${SRC_PATH}/engine/parse/xml/camera/camera.cpp"
     "${SRC_PATH}/engine/parse/xml/camera/projection.cpp"
     "${SRC_PATH}/engine/parse/xml/group/model/model.cpp"
@@ -96,8 +95,6 @@ list(
     "${SRC_PATH}/engine/parse/xml/group/transform/transform_list.cpp"
     "${SRC_PATH}/engine/parse/xml/group/transform/transform.cpp"
     "${SRC_PATH}/engine/parse/xml/group/group.cpp"
-    "${SRC_PATH}/engine/parse/xml/util/float_attr.cpp"
-    "${SRC_PATH}/engine/parse/xml/util/xyz.cpp"
     "${SRC_PATH}/engine/parse/xml/world.cpp"
     "${SRC_PATH}/engine/render/renderer.cpp"
     "${SRC_PATH}/engine/main.cpp"
