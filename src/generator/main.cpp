@@ -159,10 +159,10 @@ auto main(int argc, char* argv[]) -> int {
         errno = 0;
         maybe_action->second(args);
     } catch (std::exception const& e) {
-        int const local_errno = errno;
         using namespace fmt::literals;
+        int const local_errno = errno;
         pretty_print_err(
-            "failed {primitive} generation with error '{err}'",
+            "failed {primitive} generation with error '{err}'.",
             "primitive"_a = cmd,
             "err"_a = e.what()
         );
