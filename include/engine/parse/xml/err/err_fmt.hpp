@@ -19,7 +19,6 @@ struct fmt::formatter<engine::parse::xml::parse_err> {
     auto constexpr format(parse_err const err, FormatContext& ctx) {
         return format_to(ctx.out(), "{}", [err] {
             using namespace brief_int::literals;
-            using namespace std::string_view_literals;
 
             auto static constexpr to_string = std::to_array<std::string_view>({
                 "ran out of memory",
