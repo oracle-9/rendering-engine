@@ -121,7 +121,8 @@ auto display_info() -> void {
 
     // reinterpret_cast is needed to silence some fmt + unsigned char warnings.
     pretty_print(
-        "Vendor: {}\n", reinterpret_cast<char const*>(glGetString(GL_VENDOR))
+        "Vendor: {}\n",
+        reinterpret_cast<char const*>(glGetString(GL_VENDOR))
     );
     pretty_print(
         "Renderer: {}\n",
