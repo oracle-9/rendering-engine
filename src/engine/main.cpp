@@ -10,21 +10,7 @@
 #include <string_view>
 
 namespace engine {
-
-auto display_help() -> void {
-    using namespace fmt::literals;
-    fmt::print(
-        "Usage:\n"
-        "    {prog} (-h | --help)\n"
-        "        Display this message.\n"
-        "\n"
-        "    {prog} --input=<input_file>\n"
-        "        Render the world described in the XML file named\n"
-        "        <input_file>.\n",
-        "prog"_a = config::prog_name
-    );
-}
-
+    auto display_help() -> void;
 } // namespace engine
 
 auto main(int argc, char* argv[]) -> int {
@@ -73,3 +59,21 @@ auto main(int argc, char* argv[]) -> int {
     std::fflush(stdout);
     engine::render::launch().set_world(*world).run();
 }
+
+namespace engine {
+
+auto display_help() -> void {
+    using namespace fmt::literals;
+    fmt::print(
+        "Usage:\n"
+        "    {prog} (-h | --help)\n"
+        "        Display this message.\n"
+        "\n"
+        "    {prog} --input=<input_file>\n"
+        "        Render the world described in the XML file named\n"
+        "        <input_file>.\n",
+        "prog"_a = config::prog_name
+    );
+}
+
+} // namespace engine
