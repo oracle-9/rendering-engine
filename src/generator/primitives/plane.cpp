@@ -17,13 +17,13 @@ auto generate_plane(
 
 	output_file.print("{}\n", num_vertices);
 
-	float xNeg = -(comp / 2);
+	float xNeg = -((float)comp / 2);
 	//	float xPos = comp / 2;
-	float zNeg = -(comp / 2);
+	float zNeg = -((float)comp / 2);
 	//	float zPos = comp / 2;
 
-	float passoX = comp / div;
-	float passoZ = comp / div;
+	float passoX = (float)comp / (float)div;
+	float passoZ = (float)comp / (float)div;
 
 
 	// divide por colunas
@@ -53,7 +53,7 @@ auto generate_plane(
 		}
 
 		xNeg += passoX;
-		printf("%f %f\n",xNeg,zNeg);
+		//printf("%f %f\n",xNeg,zNeg);
 	}
 
 	//plane.close();
