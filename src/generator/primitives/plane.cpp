@@ -27,10 +27,10 @@ auto generate_plane(
 
 
 	// divide por colunas
-	for (int i = 1; i <= div; i++) {
+	for (int i = 1; i <= (int) div; i++) {
 		// divide por linhas
 		float zNeg = -((float) comp / 2.0);
-		for (int d = 1; d <= div; d++) {
+		for (int d = 1; d <= (int) div; d++) {
 
 			// PONTOS DO PRIMIERO TRIANGULO ----- > p3 tem de vir antes do p2 devido à regra da mão direita
 			// p1 = (xNeg, 0, zNeg);
