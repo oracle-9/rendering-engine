@@ -75,7 +75,6 @@ auto render() noexcept -> void {
     auto const& camera_pos    = state::world_ptr->camera.pos;
     auto const& camera_lookat = state::world_ptr->camera.lookat;
     auto const& camera_up     = state::world_ptr->camera.up;
-    auto const& camera_proj   = state::world_ptr->camera.projection;
 
     glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
     glLoadIdentity();
@@ -85,11 +84,6 @@ auto render() noexcept -> void {
         camera_lookat.x, camera_lookat.y, camera_lookat.z,
         camera_up.x,     camera_up.y,     camera_up.z
     );
-    /*
-    gluPerspective(
-        camera_proj[0], state::aspect_ratio, camera_proj[1], camera_proj[2]
-    );
-    */
     glPolygonMode(GL_FRONT, GL_LINE);
     render_group(state::world_ptr->root);
 
@@ -145,13 +139,14 @@ auto resize(int const width, int height) noexcept -> void {
     if (height == 0) {
         height = 1;
     }
+    auto const& camera_proj   = state::world_ptr->camera.projection;
 
     double const aspect_ratio
         = static_cast<double>(width) / static_cast<double>(height);
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluPerspective(45.0, aspect_ratio, 1.0, 1000.0);
+    gluPerspective(camera_proj[0], aspect_ratio, camera_proj[1], camera_proj[2]);
     glMatrixMode(GL_MODELVIEW);
     glViewport(0, 0, width, height);
 }

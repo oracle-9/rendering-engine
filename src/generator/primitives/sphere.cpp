@@ -9,8 +9,8 @@ auto generate_sphere(
     fmt::ostream& output_file
 ) -> void {
 
-    float rotationSlice = (float) 2 * M_PI / num_slices; // 360 / nº slices
-	float rotationStack = (float) M_PI / num_stacks;     // 180 / nº stacks
+    float rotationSlice = 2 * M_PI / num_slices; // 360 / nº slices
+	float rotationStack = M_PI / num_stacks;     // 180 / nº stacks
 
 	// x= r * cos(beta)  * sin(alpha);
 	// y= r * sin(beta);
@@ -20,12 +20,12 @@ auto generate_sphere(
 
     output_file.print("{}\n",num_vertices);
 
-	for (int i = 0; i < (int) num_stacks; i++) {
+	for (int i = 0; i < num_stacks; i++) {
 
-		float stackAngle = (float) (M_PI / 2) - i * rotationStack; // beta
-		float stackAngle2 = (float) (M_PI / 2) - (i+1) * rotationStack; // beta da stack baixo
+		float stackAngle = (M_PI / 2) - i * rotationStack; // beta
+		float stackAngle2 = (M_PI / 2) - (i+1) * rotationStack; // beta da stack baixo
 
-		for (int j = 0; j < (int) num_slices; j++) {
+		for (int j = 0; j < num_slices; j++) {
 
 			float sliceAngle = j * rotationSlice; // alpha
 			float sliceAngle2 = (j+1) * rotationSlice; // alpha da slice lado
@@ -41,7 +41,7 @@ auto generate_sphere(
                 output_file.print("{} {} {}\n",radius * cos(stackAngle) * sin(sliceAngle), radius * sin(stackAngle), radius * cos(stackAngle) * cos(sliceAngle));
 			}
 
-			if (i > 0 && i < (int) num_stacks-1) {  // só as stacks que têm 2 triangulos por face
+			if (i > 0 && i < num_stacks-1) {  // só as stacks que têm 2 triangulos por face
                 output_file.print("{} {} {}\n",radius * cos(stackAngle2) * sin(sliceAngle2), radius * sin(stackAngle2), radius * cos(stackAngle2) * cos(sliceAngle2));
                 output_file.print("{} {} {}\n",radius * cos(stackAngle) * sin(sliceAngle2), radius * sin(stackAngle), radius * cos(stackAngle) * cos(sliceAngle2));
                 output_file.print("{} {} {}\n",radius * cos(stackAngle) * sin(sliceAngle), radius * sin(stackAngle), radius * cos(stackAngle) * cos(sliceAngle));
