@@ -18,7 +18,7 @@ auto generate_box(
 
 	//box.open("box.3d", std::ofstream::out | std::ios_base::app);
 
-	output_file.print("{}", num_vertices);
+	output_file.print("{}\n", num_vertices);
 
 	// lado esquerdo
 	geraPlanoBox('x', (float) comp, (int) (int) div, -1, output_file);
