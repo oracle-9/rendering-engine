@@ -13,8 +13,8 @@ auto generate_box(
 
 auto geraPlanoBox(
 	char k,
-    brief_int::u32 comp,
-    brief_int::u32 div,
-    brief_int::u32 v,
+    float comp,
+    int div,
+    int  v,
     fmt::ostream& output_file
 ) -> void;

@@ -21,22 +21,22 @@ auto generate_box(
 	output_file.print("{}", num_vertices);
 
 	// lado esquerdo
-	geraPlanoBox('x', comp, div, -1, output_file);
+	geraPlanoBox('x', (float) comp, (int) (int) div, -1, output_file);
 
 	// lado direito
-	geraPlanoBox('x', comp, div, 1, output_file);
+	geraPlanoBox('x', (float) comp, (int) div, 1, output_file);
 
 	// lado frente
-	geraPlanoBox('z', comp, div, -1, output_file);
+	geraPlanoBox('z', (float) comp, (int) div, -1, output_file);
 
 	// lado trás
-	geraPlanoBox('z', comp, div, 1, output_file);
+	geraPlanoBox('z', (float) comp, (int) div, 1, output_file);
 
 	// base
-	geraPlanoBox('y', comp, div, -1, output_file);
+	geraPlanoBox('y', (float) comp, (int) div, -1, output_file);
 
 	// topo
-	geraPlanoBox('y', comp, div, 1, output_file);
+	geraPlanoBox('y', (float) comp, (int) div, 1, output_file);
 
 
 }
@@ -44,9 +44,9 @@ auto generate_box(
 
 auto geraPlanoBox(
 	char k,
-    u32 comp,
-    u32 div,
-    u32 v,
+    float comp,
+    int div,
+    int v,
 	fmt::ostream& output_file
 ) -> void {
 

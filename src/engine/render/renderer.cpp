@@ -85,10 +85,12 @@ auto render() noexcept -> void {
         camera_lookat.x, camera_lookat.y, camera_lookat.z,
         camera_up.x,     camera_up.y,     camera_up.z
     );
+    /*
     gluPerspective(
         camera_proj[0], state::aspect_ratio, camera_proj[1], camera_proj[2]
     );
-
+    */
+    glPolygonMode(GL_FRONT, GL_LINE);
     render_group(state::world_ptr->root);
 
     glutSwapBuffers();
