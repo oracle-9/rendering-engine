@@ -80,6 +80,7 @@ list(
     "${INCLUDE_PATH}/engine/render/world/group/transform.hpp"
     "${INCLUDE_PATH}/engine/render/world/camera.hpp"
     "${INCLUDE_PATH}/engine/render/world/world.hpp"
+    "${INCLUDE_PATH}/engine/render/keyboard.hpp"
     "${INCLUDE_PATH}/engine/render/module.hpp"
     "${INCLUDE_PATH}/engine/render/renderer.hpp"
     "${INCLUDE_PATH}/engine/config.hpp"

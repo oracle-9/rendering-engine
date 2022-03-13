@@ -46,5 +46,17 @@ namespace engine {
             },
             .root = {},
         };
+
+        enum camera_keys : unsigned char {
+            KEY_MOVE_UP = 'w',
+            KEY_MOVE_LEFT = 'a',
+            KEY_MOVE_DOWN = 's',
+            KEY_MOVE_RIGHT = 'd',
+        };
+
+        enum : unsigned int { RENDER_TICK_MILLIS = 16 }; // 60 FPS
+
+        double constexpr CAM_TRANSL_FACTOR = 0.06;
+
     } // namespace render::config
 } // namespace engine
