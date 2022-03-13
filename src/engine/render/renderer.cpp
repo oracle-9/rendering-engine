@@ -89,7 +89,7 @@ renderer::renderer() noexcept {
     display_info();
 }
 
-auto renderer::set_world(struct world& world) noexcept -> renderer& {
+auto renderer::set_world(world& world) noexcept -> renderer& {
     state::world_ptr = &world;
     return *this;
 }
@@ -139,6 +139,7 @@ auto update_camera(int) noexcept -> void {
             camera_pos.x += config::CAM_TRANSL_FACTOR;
         }
     }
+
     glutPostRedisplay();
     glutTimerFunc(config::RENDER_TICK_MILLIS, update_camera, 0);
 }

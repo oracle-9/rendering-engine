@@ -13,7 +13,7 @@ namespace engine::render {
         renderer() noexcept;
 
       public:
-        auto set_world(struct world& w) noexcept -> renderer&;
+        auto set_world(world& world) noexcept -> renderer&;
 
         [[noreturn]]
         auto run() noexcept -> void;
