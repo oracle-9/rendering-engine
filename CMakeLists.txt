@@ -136,6 +136,10 @@ set(RAPIDXML_PATH "${LIB_PATH}/rapidxml")
 # result
 set(RESULT_PATH "${LIB_PATH}/result")
 
+# spdlog
+set(SPDLOG_PATH "${LIB_PATH}/spdlog")
+add_subdirectory(${SPDLOG_PATH})
+
 list(
     APPEND
     LIB_INCLUDE_PATHS
@@ -146,6 +150,7 @@ list(
     ${OPENGL_INCLUDE_DIRS}
     ${RAPIDXML_PATH}
     ${RESULT_PATH}
+    ${SPDLOG_PATH}
 )
 
 foreach(TARGET generator engine)
@@ -168,6 +173,7 @@ target_link_libraries(
     ${GLUT_LIBRARY}     # overspecify libraries just in case.
     OpenGL::GL
     ${OPENGL_LIBRARIES}
+    spdlog::spdlog
 )
 ################################################################################
 
