@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <glm/vec3.hpp>
 #include <numbers>
+#include <vector>
 
 using namespace brief_int;
 
