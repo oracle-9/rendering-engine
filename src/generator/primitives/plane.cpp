@@ -84,6 +84,8 @@ auto generate_plane(
 
     // Again, since the plane is on the xOz plane, we can hardcode the y
     // coordinate to zero.
+    // Moreover, to ensure the plane is centered at the origin, we need to
+    // perform a translation of negative half_side_len.
     for (auto&& vertex_2D : vertices_2D) {
         vertex_2D -= half_side_len;
         output_file.print("{} 0 {}\n", vertex_2D[0], vertex_2D[1]);
