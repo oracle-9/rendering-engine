@@ -1,6 +1,6 @@
 #include "generator/primitives/cone.hpp"
 
-#include "generator/util/coord_conv.hpp"
+#include "util/coord_conv.hpp"
 
 #include <algorithm>
 #include <glm/vec3.hpp>
@@ -168,7 +168,7 @@ auto generate_cone(
     // We need to make sure the vertices are represented with a cartesian
     // coordinate system before we forward them to OpenGL.
     for (auto&& vertex : vertices) {
-        to_cartesian_inplace(vertex);
+        util::to_cartesian_inplace(vertex);
         output_file.print("{} {} {}\n", vertex.x, vertex.y, vertex.z);
     }
 }

@@ -36,7 +36,7 @@ list(
     "${INCLUDE_PATH}/generator/primitives/cone.hpp"
     "${INCLUDE_PATH}/generator/primitives/plane.hpp"
     "${INCLUDE_PATH}/generator/primitives/sphere.hpp"
-    "${INCLUDE_PATH}/generator/util/coord_conv.hpp"
+    "${INCLUDE_PATH}/util/coord_conv.hpp"
     "${INCLUDE_PATH}/util/pretty_print.hpp"
     "${INCLUDE_PATH}/util/try.hpp"
 )
@@ -47,8 +47,8 @@ list(
     "${SRC_PATH}/generator/primitives/cone.cpp"
     "${SRC_PATH}/generator/primitives/plane.cpp"
     "${SRC_PATH}/generator/primitives/sphere.cpp"
-    "${SRC_PATH}/generator/util/coord_conv.cpp"
     "${SRC_PATH}/generator/main.cpp"
+    "${SRC_PATH}/util/coord_conv.cpp"
 )
 
 add_executable(generator ${GENERATOR_HEADERS} ${GENERATOR_SOURCES})

@@ -1,7 +1,9 @@
-#include "generator/util/coord_conv.hpp"
+#include "util/coord_conv.hpp"
 
 #include <glm/exponential.hpp>
 #include <glm/trigonometric.hpp>
+
+namespace util {
 
 auto to_cartesian(glm::vec3 const& cylindrical) -> glm::vec3 {
     float const r = cylindrical[0];
@@ -44,3 +46,5 @@ auto to_cylindrical_inplace(glm::vec3& cartesian) -> void {
     cartesian[1] = y;
     cartesian[2] = glm::atan(z, x);
 }
+
+} // namespace util
