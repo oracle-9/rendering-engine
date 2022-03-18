@@ -4,7 +4,7 @@
 #include <fmt/os.h>
 
 auto generate_plane(
-    brief_int::u32 len,
+    float side_len,
     brief_int::u32 num_divs,
     fmt::ostream& output_file
 ) -> void;
