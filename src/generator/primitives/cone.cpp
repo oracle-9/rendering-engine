@@ -9,25 +9,25 @@
 using namespace brief_int;
 
 auto generate_cone(
-    float radius,
-    float height,
-    u32 num_slices,
-    u32 num_stacks,
+    float const radius,
+    float const height,
+    u32 const num_slices,
+    u32 const num_stacks,
     fmt::ostream& output_file
 ) -> void {
     using namespace brief_int::literals;
 
-    if (num_slices < 3_u32) {
+    if (num_slices <= 2_u32) {
         return;
     }
 
-    if (num_stacks < 1_u32) {
+    if (num_stacks == 0_u32) {
         return;
     }
 
     // We cache num_stacks as a float because we're going to use it in some
     // expressions ahead.
-    float const num_stacks_f = static_cast<float>(num_stacks);
+    auto const num_stacks_f = static_cast<float>(num_stacks);
 
     // Stores the angle, in radians, of a slice.
     // Radians are used instead of degrees to allow easy conversion from
@@ -35,26 +35,26 @@ auto generate_cone(
     // function.
     // This specific order of operations *should* provide the best
     // approximation, since 2.f and num_stacks_f are both integers.
-    float const slice_angle
+    auto const slice_angle
         = std::numbers::pi_v<float>
         * (2.f / static_cast<float>(num_slices));
 
     // Stores a factor with which to compute the radius at a given stack
     // separator. This value is equivalent to the radius of the last (upper)
     // stack.
-    float const radius_factor = radius / num_stacks_f;
+    auto const radius_factor = radius / num_stacks_f;
 
     // Stores the height of a stack.
-    float const stack_height = height / num_stacks_f;
+    auto const stack_height = height / num_stacks_f;
 
     // We cache this value because we're going to use it as an iteration limit
     // in the inner loop.
     // This expression won't wrap around since num_stacks cannot be lower
     // than 1, which we have asserted already.
-    u32 const num_stacks_minus_one = num_stacks - 1_u32;
+    auto const num_stacks_minus_one = num_stacks - 1_u32;
 
     // Stores the distance from the base of the cone to the last stack separator.
-    float const top_height = height - stack_height;
+    auto const top_height = height - stack_height;
 
     // The "pointy end" of the cone
     // (https://en.wikipedia.org/wiki/Apex_(geometry)).
@@ -63,7 +63,7 @@ auto generate_cone(
     auto const apex = glm::vec3{0.f, height, 0.f};
 
     // The total amount of vertices the cone will contain.
-    usize const total_vertex_count
+    auto const total_vertex_count
         = 6_uz // magic math number.
         * static_cast<usize>(num_slices)
         * static_cast<usize>(num_stacks);
@@ -90,10 +90,10 @@ auto generate_cone(
     for (auto i = 0_u32; i < num_slices; ++i) {
         // Stores the accumulated angle, i.e. the sum of all angles from the
         // first slice up until this slice.
-        float const curr_angle = static_cast<float>(i) * slice_angle;
+        auto const curr_angle = static_cast<float>(i) * slice_angle;
 
         // Same, but for the next slice.
-        float const next_angle = static_cast<float>(i + 1_u32) * slice_angle;
+        auto const next_angle = static_cast<float>(i + 1_u32) * slice_angle;
 
         // The base of the cone is composed of num_slices triangles.
         // The next 3 lines of code generate the base of the current slice,
@@ -119,29 +119,29 @@ auto generate_cone(
         for (auto j = 0_u32; j < num_stacks_minus_one; ++j) {
             // We cache j as a float because we're going to use it more than
             // once.
-            float const j_f = static_cast<float>(j);
+            auto const j_f = static_cast<float>(j);
 
             // We do the same of j + 1.
-            float const j_plus_1_f = static_cast<float>(j + 1_u32);
+            auto const j_plus_1_f = static_cast<float>(j + 1_u32);
 
             // Stores the distance FROM the normal that intersects
             // the center of the base of the cone TO any vertex that constitutes
             // the current stack separator.
-            float const curr_radius = radius - j_f * radius_factor;
+            auto const curr_radius = radius - j_f * radius_factor;
 
             // The same as the above, but for the next stack separator, where
             // 'the next stack' means 'the stack above this stack (in the
             // vertical y axis)'.
-            float const next_radius = radius - j_plus_1_f * radius_factor;
+            auto const next_radius = radius - j_plus_1_f * radius_factor;
 
             // Stores the distance FROM the base of the cone TO any vertex that
             // constitutes the current stack separator.
-            float const curr_height = j_f * stack_height;
+            auto const curr_height = j_f * stack_height;
 
             // The same as the above, but for the next stack separator, where
             // 'the next stack' means 'the stack above this stack (in the
             // vertical y axis)'.
-            float const next_height = j_plus_1_f * stack_height;
+            auto const next_height = j_plus_1_f * stack_height;
 
             // First we generate the first half of the slice wall.
             vertices.emplace_back(curr_radius, curr_height, curr_angle);
@@ -167,8 +167,8 @@ auto generate_cone(
 
     // We need to make sure the vertices are represented with a cartesian
     // coordinate system before we forward them to OpenGL.
-    std::ranges::for_each(vertices, [&output_file](auto&& vertex) {
+    for (auto&& vertex : vertices) {
         to_cartesian_inplace(vertex);
         output_file.print("{} {} {}\n", vertex.x, vertex.y, vertex.z);
-    });
+    }
 }
