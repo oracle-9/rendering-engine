@@ -2,9 +2,8 @@
 
 #include "util/coord_conv.hpp"
 
-#include <algorithm>
+#include <glm/ext/scalar_constants.hpp>
 #include <glm/vec3.hpp>
-#include <numbers>
 #include <vector>
 
 using namespace brief_int;
@@ -37,7 +36,7 @@ auto generate_cone(
     // This specific order of operations *should* provide the best
     // approximation, since 2.f and num_stacks_f are both integers.
     auto const slice_angle
-        = std::numbers::pi_v<float>
+        = glm::pi<float>()
         * (2.f / static_cast<float>(num_slices));
 
     // Stores a factor with which to compute the radius at a given stack
