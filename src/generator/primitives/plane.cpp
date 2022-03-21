@@ -54,7 +54,7 @@ auto generate_plane(
 
         // Stores the upper (with higher magnitude, not positionally above) z
         // coordinate of the current division.
-        auto const hi_z = lo_z + div_side_len;
+        auto const hi_z = static_cast<float>(row + 1_u32) * div_side_len;
 
         for (auto col = 0_u32; col < num_divs; ++col) {
             // Stores the lower (with lower magnitude, not positionally below) x
@@ -63,7 +63,7 @@ auto generate_plane(
 
             // Stores the upper (with higher magnitude, not positionally above)
             // x coordinate of the current division.
-            auto const hi_x = lo_x + div_side_len;
+            auto const hi_x = static_cast<float>(col + 1_u32) * div_side_len;
 
             // First we generate the first half of the division.
             vertices_2D.emplace_back(lo_x, lo_z);
