@@ -1,272 +1,275 @@
 #include "generator/primitives/box.hpp"
 
+#include <glm/vec3.hpp>
+#include <vector>
+
 using namespace brief_int;
 
 auto generate_box(
-    u32 comp,
-    u32 div,
+    float const side_len,
+    u32 const num_divs,
     fmt::ostream& output_file
 ) -> void {
-    //static_cast<void>(num_units);
-    //static_cast<void>(grid_len);
-    //static_cast<void>(output_file);
-	u32 num_vertices;
+    using namespace brief_int::literals;
 
-	num_vertices = 6 * 6 * (div * div);
+    // We cache num_divs as a usize because we're going to use it in the next
+    // expression.
+    auto const num_divs_uz = static_cast<usize>(num_divs);
 
-	//std::ofstream box;
+    // The total amount of vertices the box will contain.
+	auto const total_vertex_count
+        = 6_uz                      // number of faces in a cube.
+        * num_divs_uz * num_divs_uz // number of divisions in a face.
+        * 2_uz                      // number of triangles in a division.
+        * 3_uz;                     // number of vertices in a triangle.
 
-	//box.open("box.3d", std::ofstream::out | std::ios_base::app);
+    // We push every vertex to this vector.
+    // At the end of the function call, it must contain total_vertex_count
+    // vertices.
+    // NOTE:
+    //   * The box is not centered at the origin. Instead, its bottom left back
+    //     corner is placed on the origin. We want the box to be centered at the
+    //     origin, so we need to perform a translation of -side_len/2 to each
+    //     vertex before we forward them to OpenGL;
+    //   * These vertices are stored using a CARTESIAN coordinate system
+    //     (https://en.wikipedia.org/wiki/Cartesian_coordinate_system);
+    //   * The generated triangles follow the CCW (counter-clockwise)
+    //     convention.
+    auto vertices = std::vector<glm::vec3>{};
+    vertices.reserve(total_vertex_count);
 
-	output_file.print("{}\n", num_vertices);
+    // Stores the side length of a box side division.
+    auto const div_side_len = side_len / static_cast<float>(num_divs);
 
-	// lado esquerdo
-	geraPlanoBox('x', (float) comp, (int) (int) div, -1, output_file);
+    // We generate the vertices for each plane manually.
+    // The order in which the planes are generated is:
+    // front -> back -> left -> right -> top -> bottom.
+    // The front plane is the plane parallel to the plane xOy, with positive z.
 
-	// lado direito
-	geraPlanoBox('x', (float) comp, (int) div, 1, output_file);
+    // Generate the front plane.
+    // We iterate division by division.
+    // The outer loop traverses the y axis and the inner the loop traverses the
+    // x axis.
+    for (auto row = 0_u32; row < num_divs; ++row) {
+        // Stores the lower (with lower magnitude, not positionally below) y
+        // coordinate of the current division.
+        auto const lo_y = static_cast<float>(row) * div_side_len;
 
-	// lado frente
-	geraPlanoBox('z', (float) comp, (int) div, -1, output_file);
+        // Stores the upper (with higher magnitude, not positionally above) y
+        // coordinate of the current division.
+        auto const hi_y = static_cast<float>(row + 1_u32) * div_side_len;
 
-	// lado trás
-	geraPlanoBox('z', (float) comp, (int) div, 1, output_file);
+        for (auto col = 0_u32; col < num_divs; ++col) {
+            // Stores the lower (with lower magnitude, not positionally below) x
+            // coordinate of the current division.
+            auto const lo_x = static_cast<float>(col) * div_side_len;
 
-	// base
-	geraPlanoBox('y', (float) comp, (int) div, -1, output_file);
+            // Stores the upper (with higher magnitude, not positionally above)
+            // x coordinate of the current division.
+            auto const hi_x = static_cast<float>(col + 1_u32) * div_side_len;
 
-	// topo
-	geraPlanoBox('y', (float) comp, (int) div, 1, output_file);
+            // First we generate the first half of the division.
+            vertices.emplace_back(lo_x, hi_y, side_len);
+            vertices.emplace_back(lo_x, lo_y, side_len);
+            vertices.emplace_back(hi_x, hi_y, side_len);
 
+            // Then we generate the second.
+            vertices.emplace_back(hi_x, hi_y, side_len);
+            vertices.emplace_back(lo_x, lo_y, side_len);
+            vertices.emplace_back(hi_x, lo_y, side_len);
+        }
+    }
 
-}
+    // Generate the back plane.
+    // We iterate division by division.
+    // The outer loop traverses the y axis and the inner the loop traverses the
+    // x axis.
+    for (auto row = 0_u32; row < num_divs; ++row) {
+        // Stores the lower (with lower magnitude, not positionally below) y
+        // coordinate of the current division.
+        auto const lo_y = static_cast<float>(row) * div_side_len;
 
+        // Stores the upper (with higher magnitude, not positionally above) y
+        // coordinate of the current division.
+        auto const hi_y = static_cast<float>(row + 1_u32) * div_side_len;
 
-auto geraPlanoBox(
-	char k,
-    float comp,
-    int div,
-    int v,
-	fmt::ostream& output_file
-) -> void {
+        for (auto col = 0_u32; col < num_divs; ++col) {
+            // Stores the lower (with lower magnitude, not positionally below) x
+            // coordinate of the current division.
+            auto const lo_x = static_cast<float>(col) * div_side_len;
 
-	//std::ofstream box;
+            // Stores the upper (with higher magnitude, not positionally above)
+            // x coordinate of the current division.
+            auto const hi_x = static_cast<float>(col + 1_u32) * div_side_len;
 
-	//box.open("box.3d", std::ofstream::out | std::ios_base::app); // append or write
+            // Since this plane is contained in the xOy plane, every vertex's
+            // z coordinate is zero.
 
-	//ofstream box("box.3d");
+            // First we generate the first half of the division.
+            vertices.emplace_back(lo_x, hi_y, 0.f);
+            vertices.emplace_back(hi_x, lo_y, 0.f);
+            vertices.emplace_back(lo_x, lo_y, 0.f);
 
-	float xNeg = -(comp / 2);
-	float yNeg = -(comp / 2);
-	float zNeg = -(comp / 2);
-	float xPos = comp / 2;
-	float yPos = comp / 2;
-	float zPos = comp / 2;
+            // Then we generate the second.
+            vertices.emplace_back(hi_x, hi_y, 0.f);
+            vertices.emplace_back(hi_x, lo_y, 0.f);
+            vertices.emplace_back(lo_x, hi_y, 0.f);
+        }
+    }
 
-	float passoX = comp / div;
-	float passoY = comp / div;
-	float passoZ = comp / div;
+    // Generate the left plane.
+    // We iterate division by division.
+    // The outer loop traverses the y axis and the inner the loop traverses the
+    // z axis.
+    for (auto row = 0_u32; row < num_divs; ++row) {
+        // Stores the lower (with lower magnitude, not positionally below) y
+        // coordinate of the current division.
+        auto const lo_y = static_cast<float>(row) * div_side_len;
 
-	u32 i, d;
+        // Stores the upper (with higher magnitude, not positionally above) y
+        // coordinate of the current division.
+        auto const hi_y = static_cast<float>(row + 1_u32) * div_side_len;
 
-	if (k == 'x') { // lado esquerdo e direito ---> depende do v
-		if (v == -1) {
-			// divide por colunas
-			for (i = 1; i <= div; i++) {
-				// divide por linhas
-				float yPos = comp / 2;
-				for (d = 1; d <= div; d++) {
+        for (auto col = 0_u32; col < num_divs; ++col) {
+            // Stores the lower (with lower magnitude, not positionally below) z
+            // coordinate of the current division.
+            auto const lo_z = static_cast<float>(col) * div_side_len;
 
-					// PONTOS DO PRIMIERO TRIANGULO
-					// p1
-					output_file.print("{} {} {}\n", xPos * v, yPos, zPos);
-					// p2
-					output_file.print("{} {} {}\n", xPos * v, yPos, zPos - passoZ);
-					// p3
-					output_file.print("{} {} {}\n", xPos * v, yPos - passoY, zPos);
+            // Stores the upper (with higher magnitude, not positionally above)
+            // z coordinate of the current division.
+            auto const hi_z = static_cast<float>(col + 1_u32) * div_side_len;
 
+            // Since this plane is contained in the yOz plane, every vertex's
+            // x coordinate is zero.
 
+            // First we generate the first half of the division.
+            vertices.emplace_back(0.f, hi_y, lo_z);
+            vertices.emplace_back(0.f, lo_y, lo_z);
+            vertices.emplace_back(0.f, hi_y, hi_z);
 
-					// PONTOS DO SEGUNDO TRIANGULO
-					// p3
-					output_file.print("{} {} {}\n", xPos * v, yPos - passoY, zPos);
-					// p2
-					output_file.print("{} {} {}\n", xPos * v, yPos, zPos - passoZ);
-					// p4
-					output_file.print("{} {} {}\n", xPos * v, yPos - passoY, zPos - passoZ);
+            // Then we generate the second.
+            vertices.emplace_back(0.f, hi_y, hi_z);
+            vertices.emplace_back(0.f, lo_y, lo_z);
+            vertices.emplace_back(0.f, lo_y, hi_z);
+        }
+    }
 
-					yPos -= passoY;
-				}
+    // Generate the right plane.
+    // We iterate division by division.
+    // The outer loop traverses the y axis and the inner the loop traverses the
+    // z axis.
+    for (auto row = 0_u32; row < num_divs; ++row) {
+        // Stores the lower (with lower magnitude, not positionally below) y
+        // coordinate of the current division.
+        auto const lo_y = static_cast<float>(row) * div_side_len;
 
-				zPos -= passoZ;
-			}
-		}
-		else {
-			// divide por colunas
-			for (i = 1; i <= div; i++) {
-				// divide por linhas
-				float yPos = comp / 2;
-				for (d = 1; d <= div; d++) {
+        // Stores the upper (with higher magnitude, not positionally above) y
+        // coordinate of the current division.
+        auto const hi_y = static_cast<float>(row + 1_u32) * div_side_len;
 
-					// PONTOS DO PRIMIERO TRIANGULO
-					// p1
-					output_file.print("{} {} {}\n", xPos * v, yPos, zPos);
-					// p3
-					output_file.print("{} {} {}\n", xPos * v, yPos - passoY, zPos);
-					// p2
-					output_file.print("{} {} {}\n", xPos * v, yPos, zPos - passoZ);
+        for (auto col = 0_u32; col < num_divs; ++col) {
+            // Stores the lower (with lower magnitude, not positionally below) z
+            // coordinate of the current division.
+            auto const lo_z = static_cast<float>(col) * div_side_len;
 
+            // Stores the upper (with higher magnitude, not positionally above)
+            // z coordinate of the current division.
+            auto const hi_z = static_cast<float>(col + 1_u32) * div_side_len;
 
+            // First we generate the first half of the division.
+            vertices.emplace_back(side_len, hi_y, hi_z);
+            vertices.emplace_back(side_len, lo_y, hi_z);
+            vertices.emplace_back(side_len, hi_y, lo_z);
 
+            // Then we generate the second.
+            vertices.emplace_back(side_len, hi_y, lo_z);
+            vertices.emplace_back(side_len, lo_y, hi_z);
+            vertices.emplace_back(side_len, lo_y, lo_z);
+        }
+    }
 
-					// PONTOS DO SEGUNDO TRIANGULO
-					// p2
-					output_file.print("{} {} {}\n", xPos * v, yPos, zPos - passoZ);
-					// p3
-					output_file.print("{} {} {}\n", xPos * v, yPos - passoY, zPos);
-					// p4
-					output_file.print("{} {} {}\n", xPos * v, yPos - passoY, zPos - passoZ);
+    // Generate the top plane.
+    // We iterate division by division.
+    // The outer loop traverses the z axis and the inner the loop traverses the
+    // x axis.
+    for (auto row = 0_u32; row < num_divs; ++row) {
+        // Stores the lower (with lower magnitude, not positionally below) z
+        // coordinate of the current division.
+        auto const lo_z = static_cast<float>(row) * div_side_len;
 
-					yPos -= passoY;
-				}
+        // Stores the upper (with higher magnitude, not positionally above) z
+        // coordinate of the current division.
+        auto const hi_z = static_cast<float>(row + 1_u32) * div_side_len;
 
-				zPos -= passoZ;
-			}
-		}
-	}
-	else if (k == 'y') { // topo e base ----> depende do v
-		if (v == -1) {
-			// divide por colunas
-			for (int i = 1; i <= div; i++) {
-				// divide por linhas
-				float zNeg = -(comp / 2);
-				for (int d = 1; d <= div; d++) {
+        for (auto col = 0_u32; col < num_divs; ++col) {
+            // Stores the lower (with lower magnitude, not positionally below) x
+            // coordinate of the current division.
+            auto const lo_x = static_cast<float>(col) * div_side_len;
 
-					// PONTOS DO PRIMIERO TRIANGULO ----- > p3 tem de vir antes do p2 devido à regra da mão direita
-					// p1
-					output_file.print("{} {} {}\n", xNeg, yPos * v, zNeg);
-					// p2
-					output_file.print("{} {} {}\n", xNeg + passoX, yPos * v, zNeg);
-					// p3
-					output_file.print("{} {} {}\n", xNeg, yPos * v, zNeg + passoZ);
+            // Stores the upper (with higher magnitude, not positionally above)
+            // x coordinate of the current division.
+            auto const hi_x = static_cast<float>(col + 1_u32) * div_side_len;
 
+            // First we generate the first half of the division.
+            vertices.emplace_back(lo_x, side_len, lo_z);
+            vertices.emplace_back(lo_x, side_len, hi_z);
+            vertices.emplace_back(hi_x, side_len, lo_z);
 
-					// PONTOS DO SEGUNDO TRIANGULO
-					// p2
-					output_file.print("{} {} {}\n", xNeg + passoX, yPos * v, zNeg);
-					// p4
-					output_file.print("{} {} {}\n", xNeg + passoX, yPos * v, zNeg + passoZ);
-					// p3
-					output_file.print("{} {} {}\n", xNeg, yPos * v, zNeg + passoZ);
+            // Then we generate the second.
+            vertices.emplace_back(hi_x, side_len, lo_z);
+            vertices.emplace_back(lo_x, side_len, hi_z);
+            vertices.emplace_back(hi_x, side_len, hi_z);
+        }
+    }
 
-					zNeg += passoZ;
-				}
+    // Generate the bottom plane.
+    // We iterate division by division.
+    // The outer loop traverses the z axis and the inner the loop traverses the
+    // x axis.
+    for (auto row = 0_u32; row < num_divs; ++row) {
+        // Stores the lower (with lower magnitude, not positionally below) z
+        // coordinate of the current division.
+        auto const lo_z = static_cast<float>(row) * div_side_len;
 
-				xNeg += passoX;
-			}
-		}
-		else {
-			// divide por colunas
-			for (int i = 1; i <= div; i++) {
-				// divide por linhas
-				float zNeg = -(comp / 2);
-				for (int d = 1; d <= div; d++) {
+        // Stores the upper (with higher magnitude, not positionally above) z
+        // coordinate of the current division.
+        auto const hi_z = static_cast<float>(row + 1_u32) * div_side_len;
 
-					// PONTOS DO PRIMIERO TRIANGULO ----- > p3 tem de vir antes do p2 devido à regra da mão direita
-					// p1
-					output_file.print("{} {} {}\n", xNeg, yPos * v, zNeg);
-					// p3
-					output_file.print("{} {} {}\n", xNeg, yPos * v, zNeg + passoZ);
-					// p2
-					output_file.print("{} {} {}\n", xNeg + passoX, yPos * v, zNeg);
+        for (auto col = 0_u32; col < num_divs; ++col) {
+            // Stores the lower (with lower magnitude, not positionally below) x
+            // coordinate of the current division.
+            auto const lo_x = static_cast<float>(col) * div_side_len;
 
+            // Stores the upper (with higher magnitude, not positionally above)
+            // x coordinate of the current division.
+            auto const hi_x = static_cast<float>(col + 1_u32) * div_side_len;
 
-					// PONTOS DO SEGUNDO TRIANGULO
-					// p2
-					output_file.print("{} {} {}\n", xNeg + passoX, yPos * v, zNeg);
-					// p3
-					output_file.print("{} {} {}\n", xNeg, yPos * v, zNeg + passoZ);
-					// p4
-					output_file.print("{} {} {}\n", xNeg + passoX, yPos * v, zNeg + passoZ);
+            // Since this plane is contained in the xOz plane, every vertex's
+            // y coordinate is zero.
 
-					zNeg += passoZ;
-				}
+            // First we generate the first half of the division.
+            vertices.emplace_back(lo_x, 0.f, hi_z);
+            vertices.emplace_back(lo_x, 0.f, lo_z);
+            vertices.emplace_back(hi_x, 0.f, hi_z);
 
-				xNeg += passoX;
-			}
-		}
-	}
-	else if (k == 'z') { // frente e trás ----> depende do v
-		if (v == -1) {
-			// divide por colunas
-			for (i = 1; i <= div; i++) {
-				// divide por linhas
-				float yPos = comp / 2;
-				for (d = 1; d <= div; d++) {
+            // Then we generate the second.
+            vertices.emplace_back(hi_x, 0.f, hi_z);
+            vertices.emplace_back(lo_x, 0.f, lo_z);
+            vertices.emplace_back(hi_x, 0.f, lo_z);
+        }
+    }
 
-					// PONTOS DO PRIMIERO TRIANGULO
-					// p1
-					output_file.print("{} {} {}\n", xNeg, yPos, zPos * v);
-					// p2
-					output_file.print("{} {} {}\n", xNeg + passoX, yPos, zPos * v);
-					// p3
-					output_file.print("{} {} {}\n", xNeg, yPos - passoY, zPos * v);
+    // Print the total amount of vertices on the first line.
+    output_file.print("{}\n", total_vertex_count);
 
-
-
-					// PONTOS DO SEGUNDO TRIANGULO
-					// p2
-					output_file.print("{} {} {}\n", xNeg + passoX, yPos, zPos * v);
-					// p4
-					output_file.print("{} {} {}\n", xNeg + passoX, yPos - passoY, zPos * v);
-					// p3
-					output_file.print("{} {} {}\n", xNeg, yPos - passoY, zPos * v);
-
-					yPos -= passoY;
-				}
-
-				xNeg += passoX;
-			}
-		}
-		else {
-			// divide por colunas
-			for (i = 1; i <= div; i++) {
-				// divide por linhas
-				float yPos = comp / 2;
-				for (d = 1; d <= div; d++) {
-
-					// PONTOS DO PRIMIERO TRIANGULO
-					// p1
-					output_file.print("{} {} {}\n", xNeg, yPos, zPos * v);
-					// p3
-					output_file.print("{} {} {}\n", xNeg, yPos - passoY, zPos * v);
-					// p2
-					output_file.print("{} {} {}\n", xNeg + passoX, yPos, zPos * v);
-
-
-
-					// PONTOS DO SEGUNDO TRIANGULO
-					// p2
-					output_file.print("{} {} {}\n", xNeg + passoX, yPos, zPos * v);
-					// p3
-					output_file.print("{} {} {}\n", xNeg, yPos - passoY, zPos * v);
-					// p4
-					output_file.print("{} {} {}\n", xNeg + passoX, yPos - passoY, zPos * v);
-
-					yPos -= passoY;
-				}
-
-				xNeg += passoX;
-			}
-		}
-	}
-//	else {
-//		cout << "Nao recebi um valor 0 no geraPlanoBox\n";
-//	}
-
-	//box.close();
-
-
-
-
+    // To ensure the box is centered at the origin, we need to perform a
+    // translation of -side_len/2.
+    for (
+        // Stores half of the box side length.
+        auto const half_side_len = side_len / 2.f;
+        auto&& vertex : vertices
+    ) {
+        vertex -= half_side_len;
+        output_file.print("{} {} {}\n", vertex.x, vertex.y, vertex.z);
+    }
 }
