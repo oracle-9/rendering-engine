@@ -36,19 +36,22 @@ struct fmt::formatter<engine::parse::xml::parse_err> {
                 "no camera up node found",
                 "no camera projection node found",
 
-                "unrecognized group child node"
+                "unrecognized group child node",
 
                 "unrecognized transformation",
 
                 "no model filename attribute",
                 "model points to nonexistent file",
             });
+
             auto const idx
                 = static_cast<std::underlying_type_t<parse_err>>(err);
-            if (idx < 0_uz || idx > 14_uz) {
-                __builtin_unreachable();
+
+            if (idx >= 0_uz && idx <= 14_uz) {
+                return to_string[idx];
             }
-            return to_string[idx];
+
+            __builtin_unreachable();
         }());
     }
 };
