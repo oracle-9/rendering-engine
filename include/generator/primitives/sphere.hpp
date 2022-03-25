@@ -1,9 +1,10 @@
 #pragma once
-#define _USE_MATH_DEFINES
+
+#include "generator/primitives/err/err.hpp"
 
 #include <brief_int.hpp>
-#include <cmath>
 #include <fmt/os.h>
+#include <result.hpp>
 
 namespace generator {
 
@@ -12,6 +13,6 @@ auto generate_sphere(
     brief_int::u32 num_slices,
     brief_int::u32 num_stacks,
     fmt::ostream& output_file
-) -> void;
+) noexcept -> cpp::result<void, generator_err>;
 
 } // namespace generator

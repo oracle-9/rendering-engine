@@ -1,55 +1,133 @@
 #include "generator/primitives/sphere.hpp"
 
+#include <glm/ext/scalar_constants.hpp>
+#include <glm/trigonometric.hpp>
+#include <glm/vec3.hpp>
+#include <new>
+#include <stdexcept>
+#include <vector>
+
 using namespace brief_int;
 
 namespace generator {
 
 auto generate_sphere(
-    float radius,
-    u32 num_slices,
-    u32 num_stacks,
+    float const radius,
+    u32 const num_slices,
+    u32 const num_stacks,
     fmt::ostream& output_file
-) -> void {
+) noexcept -> cpp::result<void, generator_err>
+try {
+    using namespace brief_int::literals;
 
-    float rotationSlice = 2 * M_PI / num_slices; // 360 / nº slices
-	float rotationStack = M_PI / num_stacks;     // 180 / nº stacks
+    if (num_slices <= 2_u32) {
+        // A sphere needs at least 3 slices to be properly generated.
+        return cpp::fail(generator_err::sphere_lt_three_slices);
+    }
 
-	// x= r * cos(beta)  * sin(alpha);
-	// y= r * sin(beta);
-	// z= r * cos(beta)  * cos(alpha);
+    if (num_stacks <= 1_u32) {
+        // A sphere needs at least 2 stacks to be properly generated.
+        return cpp::fail(generator_err::sphere_lt_two_stacks);
+    }
 
-    int num_vertices = 2*3*num_slices + 2*3*(num_stacks-2)*num_slices; // (faces 1º e 2º stack) + (faces das restantes stacks)
+    auto const slice_angle
+        = glm::pi<float>() * (2.f / static_cast<float>(num_slices));
 
-    output_file.print("{}\n",num_vertices);
+	auto const stack_angle
+        = glm::pi<float>() / static_cast<float>(num_stacks);
 
-	for (int i = 0; i < num_stacks; i++) {
+    auto const total_vertex_count
+        = 6_uz
+        * static_cast<usize>(num_stacks - 1_u32)
+        * static_cast<usize>(num_slices);
 
-		float stackAngle = (M_PI / 2) - i * rotationStack; // beta
-		float stackAngle2 = (M_PI / 2) - (i+1) * rotationStack; // beta da stack baixo
+    auto vertices = std::vector<glm::vec3>{};
+    vertices.reserve(total_vertex_count);
 
-		for (int j = 0; j < num_slices; j++) {
+	for (auto i = 0_u32; i < num_stacks; ++i) {
+        auto static constexpr half_pi = glm::pi<float>() / 2.f;
 
-			float sliceAngle = j * rotationSlice; // alpha
-			float sliceAngle2 = (j+1) * rotationSlice; // alpha da slice lado
+		auto const curr_stack_angle
+            = half_pi - static_cast<float>(i) * stack_angle;
 
-			if (i < num_stacks-1) { // todas as stacks menos a ultima de baixo
-            	output_file.print("{} {} {}\n",radius * cos(stackAngle) * sin(sliceAngle), radius * sin(stackAngle), radius * cos(stackAngle) * cos(sliceAngle));
-            	output_file.print("{} {} {}\n",radius * cos(stackAngle2) * sin(sliceAngle), radius * sin(stackAngle2), radius * cos(stackAngle2) * cos(sliceAngle));
-            	output_file.print("{} {} {}\n",radius * cos(stackAngle2) * sin(sliceAngle2), radius * sin(stackAngle2), radius * cos(stackAngle2) * cos(sliceAngle2));
-			}
-			else{ // stack final separada porque está ao contrario
-				output_file.print("{} {} {}\n",radius * cos(stackAngle2) * sin(sliceAngle2), radius * sin(stackAngle2), radius * cos(stackAngle2) * cos(sliceAngle2));
-                output_file.print("{} {} {}\n",radius * cos(stackAngle) * sin(sliceAngle2), radius * sin(stackAngle), radius * cos(stackAngle) * cos(sliceAngle2));
-                output_file.print("{} {} {}\n",radius * cos(stackAngle) * sin(sliceAngle), radius * sin(stackAngle), radius * cos(stackAngle) * cos(sliceAngle));
-			}
+		auto const next_stack_angle
+            = half_pi - static_cast<float>(i + 1_u32) * stack_angle;
 
-			if (i > 0 && i < num_stacks-1) {  // só as stacks que têm 2 triangulos por face
-                output_file.print("{} {} {}\n",radius * cos(stackAngle2) * sin(sliceAngle2), radius * sin(stackAngle2), radius * cos(stackAngle2) * cos(sliceAngle2));
-                output_file.print("{} {} {}\n",radius * cos(stackAngle) * sin(sliceAngle2), radius * sin(stackAngle), radius * cos(stackAngle) * cos(sliceAngle2));
-                output_file.print("{} {} {}\n",radius * cos(stackAngle) * sin(sliceAngle), radius * sin(stackAngle), radius * cos(stackAngle) * cos(sliceAngle));
-			}
+		for (auto j = 0_u32; j < num_slices; ++j) {
+			auto const curr_slice_angle
+                = static_cast<float>(j) * slice_angle;
+
+			auto const next_slice_angle
+                = static_cast<float>(j + 1_u32) * slice_angle;
+
+            using glm::cos;
+            using glm::sin;
+
+			if (i < num_stacks - 1_u32) {
+                vertices.emplace_back(
+                    radius * cos(curr_stack_angle) * sin(curr_slice_angle),
+                    radius * sin(curr_stack_angle),
+                    radius * cos(curr_stack_angle) * cos(curr_slice_angle)
+                );
+                vertices.emplace_back(
+                    radius * cos(next_stack_angle) * sin(curr_slice_angle),
+                    radius * sin(next_stack_angle),
+                    radius * cos(next_stack_angle) * cos(curr_slice_angle)
+                );
+                vertices.emplace_back(
+                    radius * cos(next_stack_angle) * sin(next_slice_angle),
+                    radius * sin(next_stack_angle),
+                    radius * cos(next_stack_angle) * cos(next_slice_angle)
+                );
+            } else {
+                vertices.emplace_back(
+                    radius * cos(next_stack_angle) * sin(next_slice_angle),
+                    radius * sin(next_stack_angle),
+                    radius * cos(next_stack_angle) * cos(next_slice_angle)
+                );
+                vertices.emplace_back(
+                    radius * cos(curr_stack_angle) * sin(next_slice_angle),
+                    radius * sin(curr_stack_angle),
+                    radius * cos(curr_stack_angle) * cos(next_slice_angle)
+                );
+                vertices.emplace_back(
+                    radius * cos(curr_stack_angle) * sin(curr_slice_angle),
+                    radius * sin(curr_stack_angle),
+                    radius * cos(curr_stack_angle) * cos(curr_slice_angle)
+                );
+            }
+
+            if (i > 0_u32 && i < num_stacks - 1_u32) {
+                vertices.emplace_back(
+                    radius * cos(next_stack_angle) * sin(next_slice_angle),
+                    radius * sin(next_stack_angle),
+                    radius * cos(next_stack_angle) * cos(next_slice_angle)
+                );
+                vertices.emplace_back(
+                    radius * cos(curr_stack_angle) * sin(next_slice_angle),
+                    radius * sin(curr_stack_angle),
+                    radius * cos(curr_stack_angle) * cos(next_slice_angle)
+                );
+                vertices.emplace_back(
+                    radius * cos(curr_stack_angle) * sin(curr_slice_angle),
+                    radius * sin(curr_stack_angle),
+                    radius * cos(curr_stack_angle) * cos(curr_slice_angle)
+                );
+            }
 		}
 	}
+
+    output_file.print("{}\n",total_vertex_count);
+    for (auto&& vertex : vertices) {
+        output_file.print("{} {} {}\n", vertex.x, vertex.y, vertex.z);
+    }
+
+    return {};
+
+} catch (std::bad_alloc const&) {
+    return cpp::fail(generator_err::no_mem);
+} catch (std::length_error const&) {
+    return cpp::fail(generator_err::no_mem);
 }
 
 } // namespace generator
