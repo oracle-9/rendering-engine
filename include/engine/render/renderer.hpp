@@ -9,11 +9,11 @@ class renderer;
 auto launch() noexcept -> renderer&;
 
 class renderer {
-    private:
+  private:
     friend auto launch() noexcept -> renderer&;
     renderer() noexcept;
 
-    public:
+  public:
     auto set_world(world& world) noexcept -> renderer&;
 
     [[noreturn]]
