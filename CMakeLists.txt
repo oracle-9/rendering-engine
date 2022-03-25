@@ -31,6 +31,8 @@ set(LIB_PATH "${PROJECT_SOURCE_DIR}/lib")
 # Generator
 list(
     APPEND GENERATOR_HEADERS
+    "${INCLUDE_PATH}/generator/primitives/err/err_fmt.hpp"
+    "${INCLUDE_PATH}/generator/primitives/err/err.hpp"
     "${INCLUDE_PATH}/generator/primitives/module.hpp"
     "${INCLUDE_PATH}/generator/primitives/box.hpp"
     "${INCLUDE_PATH}/generator/primitives/cone.hpp"
@@ -54,7 +56,6 @@ list(
 add_executable(generator ${GENERATOR_HEADERS} ${GENERATOR_SOURCES})
 
 target_include_directories(generator PRIVATE ${INCLUDE_PATH})
-
 
 # Engine
 list(
