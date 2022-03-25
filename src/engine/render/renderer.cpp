@@ -122,22 +122,16 @@ auto update_camera(int) noexcept -> void {
 
     auto& camera_pos = state::world_ptr->camera.pos;
 
-    if (not (kb.pressed(KEY_MOVE_UP) and kb.pressed(KEY_MOVE_DOWN))) {
-        // do not translate if both keys are pressed.
-        if (kb.pressed(KEY_MOVE_UP)) {
-            camera_pos.y += config::CAM_TRANSL_FACTOR;
-        } else if (kb.pressed(KEY_MOVE_DOWN)) {
-            camera_pos.y -= config::CAM_TRANSL_FACTOR;
-        }
+    if (kb.pressed(KEY_MOVE_UP) and not kb.pressed(KEY_MOVE_DOWN)) {
+        camera_pos.y += config::CAM_TRANSL_FACTOR;
+    } else if (kb.pressed(KEY_MOVE_DOWN) and not kb.pressed(KEY_MOVE_UP)) {
+        camera_pos.y -= config::CAM_TRANSL_FACTOR;
     }
 
-    if (not (kb.pressed(KEY_MOVE_LEFT) and kb.pressed(KEY_MOVE_RIGHT))) {
-        // do not translate if both keys are pressed.
-        if (kb.pressed(KEY_MOVE_LEFT)) {
-            camera_pos.x -= config::CAM_TRANSL_FACTOR;
-        } else if (kb.pressed(KEY_MOVE_RIGHT)) {
-            camera_pos.x += config::CAM_TRANSL_FACTOR;
-        }
+    if (kb.pressed(KEY_MOVE_LEFT) and not kb.pressed(KEY_MOVE_RIGHT)) {
+        camera_pos.x -= config::CAM_TRANSL_FACTOR;
+    } else if (kb.pressed(KEY_MOVE_RIGHT) and not kb.pressed(KEY_MOVE_LEFT)) {
+        camera_pos.x += config::CAM_TRANSL_FACTOR;
     }
 
     glutPostRedisplay();
