@@ -175,8 +175,8 @@ auto render_group(group const& root) noexcept -> void {
     //     }
     // }
     for (auto const& model : root.models) {
-        float const* i = model.coords.data();
-        float const* const end = i + model.coords.size();
+        auto const* i = model.coords.data();
+        auto const* const end = i + model.coords.size();
         glBegin(GL_TRIANGLES);
         for ( ; i != end; i += 3) {
             glVertex3fv(i);

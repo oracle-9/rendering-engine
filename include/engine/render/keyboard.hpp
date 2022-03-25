@@ -4,7 +4,7 @@
 #include <brief_int.hpp>
 #include <limits>
 
-namespace engine::render::state {
+namespace engine::render {
 
 class keyboard {
   private:
@@ -27,4 +27,4 @@ class keyboard {
     }
 };
 
-} // namespace engine::render::state
+} // namespace engine::render
