@@ -1,21 +1,23 @@
 #pragma once
 
 namespace engine::render {
-    // Forward declarations.
-    struct world;
-    class renderer;
 
-    auto launch() noexcept -> renderer&;
+// Forward declarations.
+struct world;
+class renderer;
 
-    class renderer {
-      private:
-        friend auto launch() noexcept -> renderer&;
-        renderer() noexcept;
+auto launch() noexcept -> renderer&;
 
-      public:
-        auto set_world(world& world) noexcept -> renderer&;
+class renderer {
+    private:
+    friend auto launch() noexcept -> renderer&;
+    renderer() noexcept;
 
-        [[noreturn]]
-        auto run() noexcept -> void;
-    };
+    public:
+    auto set_world(world& world) noexcept -> renderer&;
+
+    [[noreturn]]
+    auto run() noexcept -> void;
+};
+
 } // namespace engine::render
