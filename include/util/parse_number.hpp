@@ -8,7 +8,7 @@
 
 namespace util {
 
-template <::util::Number N>
+template <Number N>
 [[nodiscard]]
 auto constexpr parse_number(std::string_view const s) noexcept
     -> std::optional<N>

@@ -27,7 +27,7 @@ auto constexpr parse_number_attr(
         return N{};
     } else {
         return TRY_OPTION_OR(
-            util::parse_number<N>(
+            ::util::parse_number<N>(
                 std::string_view {
                     attr->value(),
                     attr->value_size(),
