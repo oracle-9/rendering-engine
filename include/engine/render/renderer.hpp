@@ -6,12 +6,12 @@ namespace engine::render {
 struct world;
 class renderer;
 
-auto launch() noexcept -> renderer&;
+auto launch() -> renderer&;
 
 class renderer {
   private:
-    auto friend launch() noexcept -> renderer&;
-    renderer() noexcept;
+    auto friend launch() -> renderer&;
+    renderer();
 
   public:
     auto set_world(world& world) noexcept -> renderer&;

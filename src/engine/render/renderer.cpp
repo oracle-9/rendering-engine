@@ -14,7 +14,7 @@ auto render() noexcept -> void;
 auto update_camera(int) noexcept -> void;
 auto render_group(group const& root) noexcept -> void;
 auto resize(int width, int height) noexcept -> void;
-auto display_info() noexcept -> void;
+auto display_info() -> void;
 
 namespace state {
     // Will eventually allow "reverting" to default world to undo changes.
@@ -24,12 +24,12 @@ namespace state {
     auto kb = keyboard{};
 } // namespace state
 
-auto launch() noexcept -> renderer& {
+auto launch() -> renderer& {
     auto static lazy_static = renderer{};
     return lazy_static;
 }
 
-renderer::renderer() noexcept {
+renderer::renderer() {
     // GLUT requires argc and argv to be passed to their init function,
     // which we don't want to forward.
     // Therefore, we create our own dummy values and forward those instead.
@@ -202,7 +202,7 @@ auto resize(int const width, int height) noexcept -> void {
     glMatrixMode(GL_MODELVIEW);
 }
 
-auto display_info() noexcept -> void {
+auto display_info() -> void {
     using engine::config::prog_name;
 
     // reinterpret_cast is needed to silence some fmt + unsigned char warnings.
