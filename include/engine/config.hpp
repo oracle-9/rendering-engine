@@ -26,7 +26,7 @@ namespace engine {
                 " zero when calculating aspect ratio."
         );
 
-        double constexpr DEFAULT_ASPECT_RATIO
+        auto constexpr DEFAULT_ASPECT_RATIO
             = static_cast<double>(DEFAULT_WIN_WIDTH)
             / static_cast<double>(DEFAULT_WIN_WIDTH);
 
@@ -56,7 +56,7 @@ namespace engine {
 
         enum : unsigned int { RENDER_TICK_MILLIS = 16 }; // 60 FPS
 
-        double constexpr CAM_TRANSL_FACTOR = 0.06;
+        auto constexpr CAM_TRANSL_FACTOR = 0.06;
 
     } // namespace render::config
 } // namespace engine
