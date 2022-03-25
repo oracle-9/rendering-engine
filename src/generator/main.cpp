@@ -19,6 +19,7 @@
 #include <utility>
 
 using namespace brief_int;
+using namespace brief_int::literals;
 using namespace std::string_view_literals;
 
 namespace generator {
@@ -109,7 +110,7 @@ std::unordered_map<
     {
         "sphere",
         [](std::span<char const*> const args) {
-            check_num_args(4, args.size());
+            check_num_args(4_uz, args.size());
             auto const radius = try_parse_float(args[0]);
             auto const num_slices = try_parse_u32(args[1]);
             auto const num_stacks = try_parse_u32(args[2]);
@@ -124,7 +125,7 @@ std::unordered_map<
     {
         "box",
         [](std::span<char const*> const args) {
-            check_num_args(3, args.size());
+            check_num_args(3_uz, args.size());
             auto const side_len = try_parse_float(args[0]);
             auto const num_divs = try_parse_u32(args[1]);
             auto output_file = fmt::output_file(args[2]);
@@ -137,7 +138,7 @@ std::unordered_map<
     {
         "cone",
         [](std::span<char const*> const args) {
-            check_num_args(5, args.size());
+            check_num_args(5_uz, args.size());
             auto const radius = try_parse_float(args[0]);
             auto const height = try_parse_float(args[1]);
             auto const num_slices = try_parse_u32(args[2]);
@@ -154,7 +155,7 @@ std::unordered_map<
     {
         "plane",
         [](std::span<char const*> const args) {
-            check_num_args(3, args.size());
+            check_num_args(3_uz, args.size());
             auto const side_len = try_parse_float(args[0]);
             auto const num_divs = try_parse_u32(args[1]);
             auto output_file = fmt::output_file(args[2]);
