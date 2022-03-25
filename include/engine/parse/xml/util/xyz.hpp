@@ -18,7 +18,6 @@ using xyz_ret
     >;
 
 template <std::floating_point FP>
-[[nodiscard]]
 auto constexpr parse_xyz(rapidxml::xml_node<> const* const node) noexcept
     -> cpp::result<xyz_ret<FP>, parse_err>
 {

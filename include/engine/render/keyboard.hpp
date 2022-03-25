@@ -13,6 +13,7 @@ class keyboard {
   public:
     constexpr keyboard() : keys{} {}
 
+    [[nodiscard]]
     auto constexpr pressed(unsigned char const key) const noexcept -> bool {
         return this->keys[static_cast<brief_int::usize>(key)];
     }

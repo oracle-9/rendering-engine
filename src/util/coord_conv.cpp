@@ -5,6 +5,7 @@
 
 namespace util {
 
+[[nodiscard]]
 auto to_cartesian(glm::vec3 const& cylindrical) -> glm::vec3 {
     auto const r = cylindrical[0];
     auto const y = cylindrical[1];
@@ -17,6 +18,7 @@ auto to_cartesian(glm::vec3 const& cylindrical) -> glm::vec3 {
     };
 }
 
+[[nodiscard]]
 auto to_cylindrial(glm::vec3 const& cartesian) -> glm::vec3 {
     auto const x = cartesian.x;
     auto const y = cartesian.y;

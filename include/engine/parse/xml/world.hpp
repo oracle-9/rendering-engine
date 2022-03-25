@@ -7,7 +7,6 @@
 
 namespace engine::parse::xml {
 
-[[nodiscard]]
 auto parse_world(char const* xml_filepath) noexcept
     -> cpp::result<render::world, parse_err>;
 

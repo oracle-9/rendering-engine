@@ -8,7 +8,6 @@
 
 namespace engine::parse::xml {
 
-[[nodiscard]]
 auto parse_group(rapidxml::xml_node<> const* node) noexcept
     -> cpp::result<render::group, parse_err>;
 
