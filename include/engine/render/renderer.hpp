@@ -10,7 +10,7 @@ auto launch() noexcept -> renderer&;
 
 class renderer {
   private:
-    friend auto launch() noexcept -> renderer&;
+    auto friend launch() noexcept -> renderer&;
     renderer() noexcept;
 
   public:
