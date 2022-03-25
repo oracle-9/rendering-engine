@@ -33,7 +33,7 @@ try {
     auto const slice_angle
         = glm::pi<float>() * (2.f / static_cast<float>(num_slices));
 
-	auto const stack_angle
+    auto const stack_angle
         = glm::pi<float>() / static_cast<float>(num_stacks);
 
     auto const total_vertex_count
@@ -44,26 +44,26 @@ try {
     auto vertices = std::vector<glm::vec3>{};
     vertices.reserve(total_vertex_count);
 
-	for (auto i = 0_u32; i < num_stacks; ++i) {
+    for (auto i = 0_u32; i < num_stacks; ++i) {
         auto static constexpr half_pi = glm::pi<float>() / 2.f;
 
-		auto const curr_stack_angle
+        auto const curr_stack_angle
             = half_pi - static_cast<float>(i) * stack_angle;
 
-		auto const next_stack_angle
+        auto const next_stack_angle
             = half_pi - static_cast<float>(i + 1_u32) * stack_angle;
 
-		for (auto j = 0_u32; j < num_slices; ++j) {
-			auto const curr_slice_angle
+        for (auto j = 0_u32; j < num_slices; ++j) {
+            auto const curr_slice_angle
                 = static_cast<float>(j) * slice_angle;
 
-			auto const next_slice_angle
+            auto const next_slice_angle
                 = static_cast<float>(j + 1_u32) * slice_angle;
 
             using glm::cos;
             using glm::sin;
 
-			if (i < num_stacks - 1_u32) {
+            if (i < num_stacks - 1_u32) {
                 vertices.emplace_back(
                     radius * cos(curr_stack_angle) * sin(curr_slice_angle),
                     radius * sin(curr_stack_angle),
@@ -114,8 +114,8 @@ try {
                     radius * cos(curr_stack_angle) * cos(curr_slice_angle)
                 );
             }
-		}
-	}
+        }
+    }
 
     output_file.print("{}\n",total_vertex_count);
     for (auto&& vertex : vertices) {

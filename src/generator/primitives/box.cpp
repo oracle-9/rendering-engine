@@ -28,7 +28,7 @@ try {
     auto const num_divs_uz = static_cast<usize>(num_divs);
 
     // The total amount of vertices the box will contain.
-	auto const total_vertex_count
+    auto const total_vertex_count
         = 6_uz                      // number of faces in a cube.
         * num_divs_uz * num_divs_uz // number of divisions in a face.
         * 2_uz                      // number of triangles in a division.
