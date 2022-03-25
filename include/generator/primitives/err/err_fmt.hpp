@@ -23,12 +23,22 @@ struct fmt::formatter<generator::generator_err> {
             auto static constexpr to_string = std::to_array<std::string_view>({
                 "ran out of memory",
                 "input/output error",
+
+                "attempted to generate a box with zero divisions",
+
+                "attempted to generate a cone with less than three slices",
+                "attempted to generate a cone with zero stacks",
+
+                "attempted to generate a plane with zero divisions",
+
+                "attempted to generate a sphere with less than three slices",
+                "attempted to generate a sphere with less than two stacks",
             });
 
             auto const idx
                 = static_cast<std::underlying_type_t<generator_err>>(err);
 
-            if (idx >= 0_uz || idx <= 2_uz) {
+            if (idx >= 0_uz || idx <= 7_uz) {
                 return to_string[idx];
             }
 
