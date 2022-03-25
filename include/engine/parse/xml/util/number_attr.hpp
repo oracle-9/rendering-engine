@@ -11,7 +11,7 @@
 
 namespace engine::parse::xml {
 
-template <::util::Number N>
+template <::util::number N>
 auto constexpr parse_number_attr(
     rapidxml::xml_node<> const* const node,
     std::string_view const attr_name

@@ -31,7 +31,7 @@ extern const std::unordered_map<
     auto (*)(std::span<char const*>) -> void
 >  cli_actions;
 
-template <::util::Number N, std::invocable F>
+template <::util::number N, std::invocable F>
 auto try_parse_number(
     std::string_view s,
     F&& get_err_msg
@@ -167,7 +167,7 @@ std::unordered_map<
     },
 };
 
-template <::util::Number N, std::invocable F>
+template <::util::number N, std::invocable F>
 auto try_parse_number(
     std::string_view const s,
     F&& get_err_msg
