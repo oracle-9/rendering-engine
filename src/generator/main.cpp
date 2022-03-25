@@ -179,7 +179,7 @@ auto try_parse_number(
 {
     return TRY_OPTION_OR(
         ::util::parse_number<N>(s),
-        throw std::invalid_argument{std::forward<F>(get_err_msg)()};
+        throw std::invalid_argument{std::forward<F>(get_err_msg)()}
     );
 }
 
