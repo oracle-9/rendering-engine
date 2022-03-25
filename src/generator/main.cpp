@@ -118,7 +118,7 @@ std::unordered_map<
             auto const result
                 = generate_sphere(radius, num_slices, num_stacks, output_file);
             if (result.has_error()) {
-                throw std::invalid_argument(fmt::format("{}", result.error()));
+                throw std::runtime_error(fmt::format("{}", result.error()));
             }
         }
     },
@@ -131,7 +131,7 @@ std::unordered_map<
             auto output_file = fmt::output_file(args[2_uz]);
             auto const result = generate_box(side_len, num_divs, output_file);
             if (result.has_error()) {
-                throw std::invalid_argument(fmt::format("{}", result.error()));
+                throw std::runtime_error(fmt::format("{}", result.error()));
             }
         }
     },
@@ -148,7 +148,7 @@ std::unordered_map<
                 radius, height, num_slices, num_stacks, output_file
             );
             if (result.has_error()) {
-                throw std::invalid_argument(fmt::format("{}", result.error()));
+                throw std::runtime_error(fmt::format("{}", result.error()));
             }
         },
     },
@@ -161,7 +161,7 @@ std::unordered_map<
             auto output_file = fmt::output_file(args[2_uz]);
             auto const result = generate_plane(side_len, num_divs, output_file);
             if (result.has_error()) {
-                throw std::invalid_argument(fmt::format("{}", result.error()));
+                throw std::runtime_error(fmt::format("{}", result.error()));
             }
         }
     },
