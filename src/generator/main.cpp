@@ -88,21 +88,6 @@ auto main(int argc, char* argv[]) -> int {
 
 namespace generator {
 
-template <::util::Number N, std::invocable F>
-auto try_parse_number(
-    std::string_view s,
-    F&& get_err_msg
-) -> N
-    requires std::constructible_from<
-        std::invalid_argument,
-        std::invoke_result_t<F>
-    >;
-
-auto try_parse_u32(char const* s) -> u32;
-auto try_parse_float(char const* s) -> float;
-auto check_num_args(usize expected, usize actual) -> void;
-auto display_help() -> void;
-
 std::string_view const prog_name = "generator";
 
 std::unordered_map<
