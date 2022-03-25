@@ -11,7 +11,6 @@
 namespace engine::parse::xml {
 
 // TODO: Implement non-recursively.
-[[nodiscard]]
 auto parse_group(rapidxml::xml_node<> const* const node) noexcept
     -> cpp::result<render::group, parse_err>
 try {

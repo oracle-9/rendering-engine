@@ -8,7 +8,6 @@
 
 namespace engine::parse::xml {
 
-[[nodiscard]]
 auto parse_transform(rapidxml::xml_node<> const* const node) noexcept
     -> cpp::result<render::transform, parse_err>
 {

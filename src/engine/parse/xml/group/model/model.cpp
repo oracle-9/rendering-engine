@@ -11,7 +11,6 @@
 
 namespace engine::parse::xml {
 
-[[nodiscard]]
 auto parse_model(rapidxml::xml_node<> const* const node) noexcept
     -> cpp::result<render::model, parse_err>
 try {
