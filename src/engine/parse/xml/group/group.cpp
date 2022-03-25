@@ -40,16 +40,16 @@ try {
         } else if (child_name == group_str) {
             root.children.push_back(TRY_RESULT(parse_group(child)));
         } else {
-            return cpp::failure{parse_err::unknown_group_child_node};
+            return cpp::fail(parse_err::unknown_group_child_node);
         }
     }
 
     return root;
 
 } catch (std::bad_alloc const&) {
-    return cpp::failure{parse_err::no_mem};
+    return cpp::fail(parse_err::no_mem);
 } catch (std::length_error const&) {
-    return cpp::failure{parse_err::no_mem};
+    return cpp::fail(parse_err::no_mem);
 }
 
 } // namespace engine::parse::xml

@@ -19,7 +19,7 @@ auto open_xml_file(char const* const xml_filepath) noexcept
     try {
         return rapidxml::file{xml_filepath};
     } catch (std::exception const&) {
-        return cpp::failure{parse_err::io_err};
+        return cpp::fail(parse_err::io_err);
     }
 }
 
@@ -36,22 +36,22 @@ auto parse_world(char const* const xml_filepath) noexcept
     try {
         xml_doc.parse<rapidxml::parse_default>(input_file.data());
     } catch (rapidxml::parse_error const&) {
-        return cpp::failure{parse_err::syntax_err};
+        return cpp::fail(parse_err::syntax_err);
     }
 
     auto const* const world_node = TRY_NULLABLE_OR(
         xml_doc.first_node("world"),
-        return cpp::failure{parse_err::no_world_node}
+        return cpp::fail(parse_err::no_world_node)
     );
 
     auto const* const camera_node = TRY_NULLABLE_OR(
         world_node->first_node("camera"),
-        return cpp::failure{parse_err::no_camera_node};
+        return cpp::fail(parse_err::no_camera_node);
     );
 
     auto const* const group_node = TRY_NULLABLE_OR(
         world_node->first_node("group"),
-        return cpp::failure{parse_err::no_group_node};
+        return cpp::fail(parse_err::no_group_node);
     );
 
     return render::world {

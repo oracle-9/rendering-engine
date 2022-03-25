@@ -35,7 +35,7 @@
 #define TRY_RESULT(result_expr) ({                                             \
     auto _result_val = result_expr;                                            \
     if (_result_val.has_error()) {                                             \
-        return cpp::failure{_result_val.error()};                              \
+        return cpp::fail(_result_val.error());                                 \
     }                                                                          \
     *_result_val;                                                              \
 })

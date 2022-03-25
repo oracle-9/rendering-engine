@@ -40,7 +40,7 @@ auto parse_transform(rapidxml::xml_node<> const* const node) noexcept
             .scale = TRY_RESULT(parse_xyz<float>(node)),
         };
     } else {
-        return cpp::failure{parse_err::unknown_transform};
+        return cpp::fail(parse_err::unknown_transform);
     }
 }
 

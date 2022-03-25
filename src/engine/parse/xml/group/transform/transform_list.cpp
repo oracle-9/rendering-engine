@@ -25,9 +25,9 @@ try {
     return transform_list;
 
 } catch (std::bad_alloc const&) {
-    return cpp::failure{parse_err::no_mem};
+    return cpp::fail(parse_err::no_mem);
 } catch (std::length_error const&) {
-    return cpp::failure{parse_err::no_mem};
+    return cpp::fail(parse_err::no_mem);
 }
 
 } // engine::parse::xml
