@@ -31,13 +31,13 @@ set(LIB_PATH "${PROJECT_SOURCE_DIR}/lib")
 # Generator
 list(
     APPEND GENERATOR_HEADERS
-    "${INCLUDE_PATH}/generator/primitives/err/err_fmt.hpp"
-    "${INCLUDE_PATH}/generator/primitives/err/err.hpp"
-    "${INCLUDE_PATH}/generator/primitives/module.hpp"
+    "${INCLUDE_PATH}/generator/err/err_fmt.hpp"
+    "${INCLUDE_PATH}/generator/err/err.hpp"
     "${INCLUDE_PATH}/generator/primitives/box.hpp"
     "${INCLUDE_PATH}/generator/primitives/cone.hpp"
     "${INCLUDE_PATH}/generator/primitives/plane.hpp"
     "${INCLUDE_PATH}/generator/primitives/sphere.hpp"
+    "${INCLUDE_PATH}/generator/module.hpp"
     "${INCLUDE_PATH}/util/coord_conv.hpp"
     "${INCLUDE_PATH}/util/number.hpp"
     "${INCLUDE_PATH}/util/parse_number.hpp"

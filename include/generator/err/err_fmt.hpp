@@ -1,6 +1,6 @@
 #pragma once
 
-#include "generator/primitives/err/err.hpp"
+#include "generator/err/err.hpp"
 
 #include <array>
 #include <fmt/format.h>
