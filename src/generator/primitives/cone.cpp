@@ -4,6 +4,8 @@
 
 #include <glm/ext/scalar_constants.hpp>
 #include <glm/vec3.hpp>
+#include <new>
+#include <stdexcept>
 #include <vector>
 
 using namespace brief_int;
@@ -16,22 +18,27 @@ auto generate_cone(
     u32 const num_slices,
     u32 const num_stacks,
     fmt::ostream& output_file
-) -> void {
+) noexcept -> cpp::result<void, generator_err>
+try {
     using namespace brief_int::literals;
 
     if (num_slices <= 2_u32) {
-        return;
+        // A cone needs at least 3 slices to be properly generated.
+        return cpp::fail(generator_err::cone_lt_three_slices);
     }
 
     if (num_stacks == 0_u32) {
-        return;
+        // A cone cannot have zero stacks, otherwise the expressions used to
+        // calculate the radius factor (radius / num_stacks) and stack height
+        // (height / num_stacks) will fail.
+        return cpp::fail(generator_err::cone_zero_stacks);
     }
 
     // We cache num_stacks as a float because we're going to use it in some
     // expressions ahead.
     auto const num_stacks_f = static_cast<float>(num_stacks);
 
-    // Stores the angle, in radians, of a slice.
+    // Stores the angle, in RADIANS, of a slice.
     // Radians are used instead of degrees to allow easy conversion from
     // cylindrical coordinates to cartesian coordinates, at the end of the
     // function.
@@ -55,7 +62,8 @@ auto generate_cone(
     // than 1, which we have asserted already.
     auto const num_stacks_minus_one = num_stacks - 1_u32;
 
-    // Stores the distance from the base of the cone to the last stack separator.
+    // Stores the distance from the base of the cone to the last stack
+    // separator.
     auto const top_height = height - stack_height;
 
     // The "pointy end" of the cone
@@ -71,19 +79,24 @@ auto generate_cone(
         * static_cast<usize>(num_stacks);
 
     // We push every vertex to this vector.
-    // At the end of the function call, it must contain
-    // total_vertex_count vertices.
-    // NOTE: These vertices are stored using a CYLINDRICAL coordinate system
-    //       (https://en.wikipedia.org/wiki/Cylindrical_coordinate_system),
-    //       where:
+    // At the end of the function call, it must contain total_vertex_count
+    // vertices.
+    // NOTE:
+    //   * These vertices are stored using a CYLINDRICAL coordinate system
+    //     (https://en.wikipedia.org/wiki/Cylindrical_coordinate_system),
+    //     where:
     //       - the first coordinate is the radial distance aka radius;
-    //       - the second coordinate is the azimuth aka angular position in
-    //         RADIANS;
-    //       - the third coordinate is the altitude aka height.
-    //       In order to forward these vertices to OpenGL, they need to be
-    //       converted to a CARTESIAN coordinate system.
-    //       Moreover, the generated triangles follow the CCW
-    //       (counter-clockwise) convention.
+    //       - the second coordinate is the altitude aka height;
+    //       - the third coordinate is the azimuth aka angular position in
+    //         RADIANS.
+    //     Usually the second coordinate is the azimuth and the third coordinate
+    //     is the altitude. However, in order to play nice with OpenGL, these
+    //     coordinates have been swapped, since in its 3D space the second
+    //     coordinate is the altitude.
+    //     In order to forward these vertices to OpenGL, these coordinates need
+    //     to be converted to a CARTESIAN coordinate system;
+    //   * The generated triangles follow the CCW (counter-clockwise)
+    //     convention.
     auto vertices = std::vector<glm::vec3>{};
     vertices.reserve(total_vertex_count);
 
@@ -146,13 +159,13 @@ auto generate_cone(
             auto const next_height = j_plus_1_f * stack_height;
 
             // First we generate the first half of the slice wall.
-            vertices.emplace_back(curr_radius, curr_height, curr_angle);
-            vertices.emplace_back(next_radius, next_height, curr_angle);
             vertices.emplace_back(next_radius, next_height, next_angle);
+            vertices.emplace_back(curr_radius, curr_height, next_angle);
+            vertices.emplace_back(next_radius, next_height, curr_angle);
 
             // Then we generate the second.
             vertices.emplace_back(curr_radius, curr_height, curr_angle);
-            vertices.emplace_back(next_radius, next_height, next_angle);
+            vertices.emplace_back(next_radius, next_height, curr_angle);
             vertices.emplace_back(curr_radius, curr_height, next_angle);
         }
 
@@ -165,14 +178,22 @@ auto generate_cone(
         vertices.emplace_back(radius_factor, top_height, curr_angle);
     }
 
+    // Print the total amount of vertices on the first line.
     output_file.print("{}\n", total_vertex_count);
 
-    // We need to make sure the vertices are represented with a cartesian
+    // We need to make sure the vertices are represented in a cartesian
     // coordinate system before we forward them to OpenGL.
     for (auto&& vertex : vertices) {
         util::to_cartesian_inplace(vertex);
         output_file.print("{} {} {}\n", vertex.x, vertex.y, vertex.z);
     }
+
+    return {};
+
+} catch (std::bad_alloc const&) {
+    return cpp::fail(generator_err::no_mem);
+} catch (std::length_error const&) {
+    return cpp::fail(generator_err::no_mem);
 }
 
 } // namespace generator
