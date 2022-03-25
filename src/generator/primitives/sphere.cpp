@@ -2,6 +2,8 @@
 
 using namespace brief_int;
 
+namespace generator {
+
 auto generate_sphere(
     float radius,
     u32 num_slices,
@@ -49,3 +51,5 @@ auto generate_sphere(
 		}
 	}
 }
+
+} // namespace generator

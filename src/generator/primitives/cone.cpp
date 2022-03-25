@@ -8,6 +8,8 @@
 
 using namespace brief_int;
 
+namespace generator {
+
 auto generate_cone(
     float const radius,
     float const height,
@@ -172,3 +174,5 @@ auto generate_cone(
         output_file.print("{} {} {}\n", vertex.x, vertex.y, vertex.z);
     }
 }
+
+} // namespace generator

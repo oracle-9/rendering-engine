@@ -3,6 +3,8 @@
 #include <brief_int.hpp>
 #include <fmt/os.h>
 
+namespace generator {
+
 auto generate_cone(
     float radius,
     float height,
@@ -10,3 +12,5 @@ auto generate_cone(
     brief_int::u32 num_stacks,
     fmt::ostream& output_file
 ) -> void;
+
+} // namespace generator

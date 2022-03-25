@@ -17,6 +17,8 @@
 using namespace brief_int;
 using namespace std::string_view_literals;
 
+namespace generator {
+
 auto display_help() -> void;
 auto parse_u32(char const* s) -> u32;
 auto parse_float(char const* s) -> float;
@@ -101,18 +103,18 @@ auto display_help() -> void {
         "            Generate a sphere with radius <radius>, <num_slices>\n"
         "            slices and <num_stacks> stacks.\n"
         "\n"
-        "        box <num_units> <grid_len>\n"
-        "            Generate a box with <num_units> units, where each side\n"
-        "            is divided in a <grid_len>x<grid_len> grid.\n"
+        "        box <len> <num_divs>\n"
+        "            Generate a box where each side has <len> units in length\n"
+        "            and <num_divs> divisions along each axis.\n"
         "\n"
         "        cone <radius> <height> <num_slices> <num_stacks>\n"
         "            Generate a cone with radius <radius>, height <height>,\n"
         "            <num_slices> slices and <num_stacks> stacks.\n"
         "\n"
         "        plane <len> <num_divs>\n"
-        "            Generate a plane with <len> units in length, and\n"
+        "            Generate a plane with <len> units in length and\n"
         "            <num_divs> divisions along each axis.\n",
-        "prog"_a = ::prog_name
+        "prog"_a = prog_name
     );
 }
 
@@ -154,15 +156,20 @@ auto check_num_args(usize const expected, usize const actual) -> void {
     }
 }
 
+} // namespace generator
+
 auto main(int argc, char* argv[]) -> int {
+    using generator::cli_actions;
+    using generator::prog_name;
+
     if (argc < 2) {
         pretty_print_err("no command provided.\n");
         return EXIT_FAILURE;
     }
 
     auto const cmd = std::string_view{argv[1]};
-    auto const maybe_action = ::cli_actions.find(cmd);
-    if (maybe_action == ::cli_actions.end()) {
+    auto const maybe_action = cli_actions.find(cmd);
+    if (maybe_action == cli_actions.end()) {
         pretty_print_err("unrecognized command '{}'.\n", cmd);
         return EXIT_FAILURE;
     }

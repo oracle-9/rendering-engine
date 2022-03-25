@@ -5,6 +5,8 @@
 
 using namespace brief_int;
 
+namespace generator {
+
 auto generate_box(
     float const side_len,
     u32 const num_divs,
@@ -273,3 +275,5 @@ auto generate_box(
         output_file.print("{} {} {}\n", vertex.x, vertex.y, vertex.z);
     }
 }
+
+} // namespace generator

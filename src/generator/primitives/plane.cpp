@@ -5,6 +5,8 @@
 
 using namespace brief_int;
 
+namespace generator {
+
 auto generate_plane(
     float const side_len,
     u32 const num_divs,
@@ -91,3 +93,5 @@ auto generate_plane(
         output_file.print("{} 0 {}\n", vertex_2D[0], vertex_2D[1]);
     }
 }
+
+} // namespace generator
