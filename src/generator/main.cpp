@@ -41,8 +41,8 @@ auto try_parse_number(
         std::invoke_result_t<F>
     >;
 
-auto try_parse_u32(char const* s) -> u32;
-auto try_parse_float(char const* s) -> float;
+auto try_parse_u32(std::string_view s) -> u32;
+auto try_parse_float(std::string_view s) -> float;
 auto check_num_args(usize expected, usize actual) -> void;
 auto display_help() -> void;
 
@@ -183,14 +183,14 @@ auto try_parse_number(
     );
 }
 
-auto try_parse_u32(char const* const s) -> u32 {
+auto try_parse_u32(std::string_view const s) -> u32 {
     return try_parse_number<u32>(
         s,
         [s] { return fmt::format("failed parsing '{}' into u32", s); }
     );
 }
 
-auto try_parse_float(char const* const s) -> float {
+auto try_parse_float(std::string_view const s) -> float {
     return try_parse_number<float>(
         s,
         [s] { return fmt::format("failed parsing '{}' into float", s); }
