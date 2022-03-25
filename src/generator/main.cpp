@@ -111,10 +111,10 @@ std::unordered_map<
         "sphere",
         [](std::span<char const*> const args) {
             check_num_args(4_uz, args.size());
-            auto const radius = try_parse_float(args[0]);
-            auto const num_slices = try_parse_u32(args[1]);
-            auto const num_stacks = try_parse_u32(args[2]);
-            auto output_file = fmt::output_file(args[3]);
+            auto const radius = try_parse_float(args[0_uz]);
+            auto const num_slices = try_parse_u32(args[1_uz]);
+            auto const num_stacks = try_parse_u32(args[2_uz]);
+            auto output_file = fmt::output_file(args[3_uz]);
             auto const result
                 = generate_sphere(radius, num_slices, num_stacks, output_file);
             if (result.has_error()) {
@@ -126,9 +126,9 @@ std::unordered_map<
         "box",
         [](std::span<char const*> const args) {
             check_num_args(3_uz, args.size());
-            auto const side_len = try_parse_float(args[0]);
-            auto const num_divs = try_parse_u32(args[1]);
-            auto output_file = fmt::output_file(args[2]);
+            auto const side_len = try_parse_float(args[0_uz]);
+            auto const num_divs = try_parse_u32(args[1_uz]);
+            auto output_file = fmt::output_file(args[2_uz]);
             auto const result = generate_box(side_len, num_divs, output_file);
             if (result.has_error()) {
                 throw std::invalid_argument(fmt::format("{}", result.error()));
@@ -139,11 +139,11 @@ std::unordered_map<
         "cone",
         [](std::span<char const*> const args) {
             check_num_args(5_uz, args.size());
-            auto const radius = try_parse_float(args[0]);
-            auto const height = try_parse_float(args[1]);
-            auto const num_slices = try_parse_u32(args[2]);
-            auto const num_stacks = try_parse_u32(args[3]);
-            auto output_file = fmt::output_file(args[4]);
+            auto const radius = try_parse_float(args[0_uz]);
+            auto const height = try_parse_float(args[1_uz]);
+            auto const num_slices = try_parse_u32(args[2_uz]);
+            auto const num_stacks = try_parse_u32(args[3_uz]);
+            auto output_file = fmt::output_file(args[4_uz]);
             auto const result = generate_cone(
                 radius, height, num_slices, num_stacks, output_file
             );
@@ -156,9 +156,9 @@ std::unordered_map<
         "plane",
         [](std::span<char const*> const args) {
             check_num_args(3_uz, args.size());
-            auto const side_len = try_parse_float(args[0]);
-            auto const num_divs = try_parse_u32(args[1]);
-            auto output_file = fmt::output_file(args[2]);
+            auto const side_len = try_parse_float(args[0_uz]);
+            auto const num_divs = try_parse_u32(args[1_uz]);
+            auto output_file = fmt::output_file(args[2_uz]);
             auto const result = generate_plane(side_len, num_divs, output_file);
             if (result.has_error()) {
                 throw std::invalid_argument(fmt::format("{}", result.error()));
