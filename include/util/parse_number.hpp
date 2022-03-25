@@ -1,18 +1,19 @@
 #pragma once
 
+#include "util/number.hpp"
+
 #include <charconv>
-#include <concepts>
 #include <optional>
 #include <string_view>
 
-namespace engine::parse::util {
+namespace util {
 
-template <std::floating_point FP>
+template <::util::Number N>
 [[nodiscard]]
-auto constexpr parse_fp(std::string_view const s) noexcept
-    -> std::optional<FP>
+auto constexpr parse_number(std::string_view const s) noexcept
+    -> std::optional<N>
 {
-    FP uninit;
+    N uninit;
     char const* const begin = s.data();
     char const* const end = begin + s.length();
     auto const [parse_end, err] = std::from_chars(begin, end, uninit);
@@ -22,4 +23,4 @@ auto constexpr parse_fp(std::string_view const s) noexcept
     return uninit;
 }
 
-} // namespace engine::util
+} // namespace util

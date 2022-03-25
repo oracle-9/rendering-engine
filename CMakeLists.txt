@@ -39,6 +39,8 @@ list(
     "${INCLUDE_PATH}/generator/primitives/plane.hpp"
     "${INCLUDE_PATH}/generator/primitives/sphere.hpp"
     "${INCLUDE_PATH}/util/coord_conv.hpp"
+    "${INCLUDE_PATH}/util/number.hpp"
+    "${INCLUDE_PATH}/util/parse_number.hpp"
     "${INCLUDE_PATH}/util/pretty_print.hpp"
     "${INCLUDE_PATH}/util/try.hpp"
 )
@@ -60,7 +62,6 @@ target_include_directories(generator PRIVATE ${INCLUDE_PATH})
 # Engine
 list(
     APPEND ENGINE_HEADERS
-    "${INCLUDE_PATH}/engine/parse/util/fp.hpp"
     "${INCLUDE_PATH}/engine/parse/xml/camera/camera.hpp"
     "${INCLUDE_PATH}/engine/parse/xml/camera/projection.hpp"
     "${INCLUDE_PATH}/engine/parse/xml/group/model/model.hpp"
@@ -69,7 +70,7 @@ list(
     "${INCLUDE_PATH}/engine/parse/xml/group/transform/transform_list.hpp"
     "${INCLUDE_PATH}/engine/parse/xml/group/transform/transform.hpp"
     "${INCLUDE_PATH}/engine/parse/xml/group/group.hpp"
-    "${INCLUDE_PATH}/engine/parse/xml/util/fp_attr.hpp"
+    "${INCLUDE_PATH}/engine/parse/xml/util/number_attr.hpp"
     "${INCLUDE_PATH}/engine/parse/xml/util/xyz.hpp"
     "${INCLUDE_PATH}/engine/parse/xml/err/err_fmt.hpp"
     "${INCLUDE_PATH}/engine/parse/xml/err/err.hpp"
@@ -86,6 +87,9 @@ list(
     "${INCLUDE_PATH}/engine/render/renderer.hpp"
     "${INCLUDE_PATH}/engine/config.hpp"
     "${INCLUDE_PATH}/engine/module.hpp"
+    "${INCLUDE_PATH}/util/coord_conv.hpp"
+    "${INCLUDE_PATH}/util/number.hpp"
+    "${INCLUDE_PATH}/util/parse_number.hpp"
     "${INCLUDE_PATH}/util/pretty_print.hpp"
     "${INCLUDE_PATH}/util/try.hpp"
 )
