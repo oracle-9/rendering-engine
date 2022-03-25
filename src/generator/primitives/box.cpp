@@ -1,6 +1,8 @@
 #include "generator/primitives/box.hpp"
 
 #include <glm/vec3.hpp>
+#include <new>
+#include <stdexcept>
 #include <vector>
 
 using namespace brief_int;
@@ -11,8 +13,15 @@ auto generate_box(
     float const side_len,
     u32 const num_divs,
     fmt::ostream& output_file
-) -> void {
+) noexcept -> cpp::result<void, generator_err>
+try {
     using namespace brief_int::literals;
+
+    if (num_divs == 0_u32) {
+        // A box cannot have zero divisions, otherwise the expression used to
+        // calculate the division side length (side_len / num_divs) will fail.
+        return cpp::fail(generator_err::box_zero_divs);
+    }
 
     // We cache num_divs as a usize because we're going to use it in the next
     // expression.
@@ -274,6 +283,13 @@ auto generate_box(
         vertex -= half_side_len;
         output_file.print("{} {} {}\n", vertex.x, vertex.y, vertex.z);
     }
+
+    return {};
+
+} catch (std::bad_alloc const&) {
+    return cpp::fail(generator_err::no_mem);
+} catch (std::length_error const&) {
+    return cpp::fail(generator_err::no_mem);
 }
 
 } // namespace generator

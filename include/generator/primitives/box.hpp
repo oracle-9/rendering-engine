@@ -1,7 +1,10 @@
 #pragma once
 
+#include "generator/primitives/err/err.hpp"
+
 #include <brief_int.hpp>
 #include <fmt/os.h>
+#include <result.hpp>
 
 namespace generator {
 
@@ -9,6 +12,6 @@ auto generate_box(
     float side_len,
     brief_int::u32 num_divs,
     fmt::ostream& output_file
-) -> void;
+) noexcept -> cpp::result<void, generator_err>;
 
 } // namespace generator
