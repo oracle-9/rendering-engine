@@ -58,7 +58,6 @@ renderer::renderer() {
     glutTimerFunc(config::RENDER_TICK_MILLIS, update_camera, 0);
     glutKeyboardFunc(key_down);
     glutKeyboardUpFunc(key_up);
-
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
     glClearColor(
@@ -69,7 +68,6 @@ renderer::renderer() {
     );
     glPolygonMode(GL_FRONT, config::POLYGON_MODE);
     glLineWidth(config::LINE_WIDTH);
-
     display_info();
 }
 
@@ -179,6 +177,7 @@ auto render_group(group const& root) noexcept -> void {
     //             break;
     //     }
     // }
+
     for (auto const& model : root.models) {
         auto const* i = model.coords.data();
         auto const* const end = i + model.coords.size();
@@ -188,6 +187,7 @@ auto render_group(group const& root) noexcept -> void {
         }
         glEnd();
     }
+
     for (auto const& child_node : root.children) {
         render_group(child_node);
     }
