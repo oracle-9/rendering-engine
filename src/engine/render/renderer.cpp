@@ -189,11 +189,11 @@ auto render_group(group const& root) noexcept -> void {
         glEnd();
     }
 
-    glPopMatrix();
-
     for (auto const& child_node : root.children) {
         render_group(child_node);
     }
+
+    glPopMatrix();
 }
 
 auto resize(int const width, int height) noexcept -> void {
