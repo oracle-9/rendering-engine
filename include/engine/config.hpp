@@ -2,6 +2,7 @@
 
 #include "engine/render/world/world.hpp"
 
+#include <GL/freeglut.h>
 #include <glm/vec4.hpp>
 #include <string_view>
 
@@ -49,11 +50,14 @@ auto const DEFAULT_WORLD = world {
     .root = {},
 };
 
-enum camera_keys : unsigned char {
+enum : GLenum { DEFAULT_POLYGON_MODE = GL_LINE };
+
+enum kb_keys : unsigned char {
     KEY_MOVE_UP = 'w',
     KEY_MOVE_LEFT = 'a',
     KEY_MOVE_DOWN = 's',
     KEY_MOVE_RIGHT = 'd',
+    KEY_NEXT_POLYGON_MODE = 'm',
 };
 
 enum : unsigned int { RENDER_TICK_MILLIS = 16 }; // 60 FPS

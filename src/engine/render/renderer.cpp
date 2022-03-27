@@ -17,11 +17,13 @@ auto resize(int width, int height) noexcept -> void;
 auto display_info() -> void;
 
 namespace state {
-    // Will eventually allow "reverting" to default world to undo changes.
     auto aspect_ratio = config::DEFAULT_ASPECT_RATIO;
+    auto kb = keyboard{};
+
     auto default_world_mut = config::DEFAULT_WORLD;
     auto* world_ptr = &default_world_mut;
-    auto kb = keyboard{};
+
+    auto polygon_mode = static_cast<GLenum>(config::DEFAULT_POLYGON_MODE);
 } // namespace state
 
 auto launch() -> renderer& {
@@ -50,7 +52,7 @@ renderer::renderer() {
     glutTimerFunc(config::RENDER_TICK_MILLIS, update_camera, 0);
     glutKeyboardFunc([](unsigned char const key, int, int) {
         switch (key) {
-            using enum config::camera_keys;
+            using enum config::kb_keys;
             case KEY_MOVE_UP:
             case KEY_MOVE_LEFT:
             case KEY_MOVE_DOWN:
@@ -58,13 +60,29 @@ renderer::renderer() {
                 state::kb.press(key);
                 glutPostRedisplay();
                 break;
+            case KEY_NEXT_POLYGON_MODE:
+                using state::polygon_mode;
+                switch (polygon_mode) {
+                    case GL_POINT:
+                        polygon_mode = GL_LINE;
+                        break;
+                    case GL_LINE:
+                        polygon_mode = GL_FILL;
+                        break;
+                    case GL_FILL:
+                        polygon_mode = GL_POINT;
+                        break;
+                    default:
+                        __builtin_unreachable();
+                }
+                break;
             default:
                 break;
         }
     });
     glutKeyboardUpFunc([](unsigned char const key, int, int) {
         switch (key) {
-            using enum config::camera_keys;
+            using enum config::kb_keys;
             case KEY_MOVE_UP:
             case KEY_MOVE_LEFT:
             case KEY_MOVE_DOWN:
@@ -110,7 +128,7 @@ auto render() noexcept -> void {
         camera.lookat.x, camera.lookat.y, camera.lookat.z,
         camera.up.x,     camera.up.y,     camera.up.z
     );
-    glPolygonMode(GL_FRONT, GL_LINE);
+    glPolygonMode(GL_FRONT, state::polygon_mode);
     render_group(state::world_ptr->root);
     glutSwapBuffers();
 }
@@ -118,7 +136,7 @@ auto render() noexcept -> void {
 // TODO: implement rotation and zoom.
 auto update_camera(int) noexcept -> void {
     using state::kb;
-    using enum config::camera_keys;
+    using enum config::kb_keys;
 
     auto& camera_pos = state::world_ptr->camera.pos;
 
