@@ -26,7 +26,7 @@ namespace state {
     auto polygon_mode = static_cast<GLenum>(config::DEFAULT_POLYGON_MODE);
 } // namespace state
 
-auto launch() -> renderer& {
+auto get() -> renderer& {
     auto static lazy_static = renderer{};
     return lazy_static;
 }

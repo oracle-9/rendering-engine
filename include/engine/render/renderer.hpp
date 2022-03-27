@@ -6,11 +6,11 @@ namespace engine::render {
 struct world;
 class renderer;
 
-auto launch() -> renderer&;
+auto get() -> renderer&;
 
 class renderer {
   private:
-    auto friend launch() -> renderer&;
+    auto friend get() -> renderer&;
     renderer();
 
   public:

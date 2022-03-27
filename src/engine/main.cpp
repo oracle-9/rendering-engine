@@ -10,7 +10,7 @@
 #include <string_view>
 
 namespace engine {
-    auto display_help() -> void;
+auto display_help() -> void;
 } // namespace engine
 
 auto main(int argc, char* argv[]) -> int {
@@ -24,7 +24,7 @@ auto main(int argc, char* argv[]) -> int {
 
     if (argc == 1) {
         // No XML file was provided, render a default world.
-        engine::render::launch().run();
+        engine::render::get().run();
     }
 
     auto const cmd = std::string_view{argv[1]};
@@ -56,7 +56,7 @@ auto main(int argc, char* argv[]) -> int {
 
     pretty_print("successfully parsed world '{}'.\n", input_filename);
     std::fflush(stdout);
-    engine::render::launch().set_world(*world).run();
+    engine::render::get().set_world(*world).run();
 }
 
 namespace engine {
