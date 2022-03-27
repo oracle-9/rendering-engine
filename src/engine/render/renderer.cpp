@@ -149,34 +149,35 @@ auto render_axis() noexcept -> void {
 
 // TODO: Implement non-recursively.
 auto render_group(group const& root) noexcept -> void {
-    // TODO: Finish implementing transforms.
-    // for (auto const& transform : root->transforms) {
-    //     switch (transform.kind) {
-    //         using enum decltype(transform::kind);
-    //         case translate:
-    //             glTranslatef(
-    //                 transform.translate.x,
-    //                 transform.translate.y,
-    //                 transform.translate.z
-    //             );
-    //             break;
-    //         case rotate:
-    //             glRotatef(
-    //                 transform.rotate[0],
-    //                 transform.rotate[1],
-    //                 transform.rotate[2],
-    //                 transform.rotate[3]
-    //             );
-    //             break;
-    //         case scale:
-    //             glScalef(
-    //                 transform.scale.x,
-    //                 transform.scale.y,
-    //                 transform.scale.z
-    //             );
-    //             break;
-    //     }
-    // }
+    glPushMatrix();
+
+    for (auto const& transform : root.transforms) {
+        switch (transform.kind) {
+            using enum transform::kind_t;
+            case translate:
+                glTranslatef(
+                    transform.translate.x,
+                    transform.translate.y,
+                    transform.translate.z
+                );
+                break;
+            case rotate:
+                glRotatef(
+                    transform.rotate[0],
+                    transform.rotate[1],
+                    transform.rotate[2],
+                    transform.rotate[3]
+                );
+                break;
+            case scale:
+                glScalef(
+                    transform.scale.x,
+                    transform.scale.y,
+                    transform.scale.z
+                );
+                break;
+        }
+    }
 
     for (auto const& model : root.models) {
         auto const* i = model.coords.data();
@@ -187,6 +188,8 @@ auto render_group(group const& root) noexcept -> void {
         }
         glEnd();
     }
+
+    glPopMatrix();
 
     for (auto const& child_node : root.children) {
         render_group(child_node);
