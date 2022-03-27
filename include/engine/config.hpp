@@ -49,6 +49,11 @@ auto inline constexpr FG_COLOR = glm::vec4{1.f, 1.f, 1.f, 1.f};
 
 auto inline constexpr ENABLE_AXIS = false;
 
+auto inline constexpr LINE_WIDTH = 1.f;
+auto inline constexpr LINE_WIDTH_MIN = 1.f;
+auto inline constexpr LINE_WIDTH_MAX = 5.f;
+auto inline constexpr LINE_WIDTH_STEP = 1.f;
+
 enum : GLenum { POLYGON_MODE = GL_LINE };
 
 enum kb_keys : unsigned char {
@@ -56,8 +61,14 @@ enum kb_keys : unsigned char {
     KEY_MOVE_LEFT = 'a',
     KEY_MOVE_DOWN = 's',
     KEY_MOVE_RIGHT = 'd',
+    KEY_MOVE_UP_FAST = 'W',
+    KEY_MOVE_LEFT_FAST = 'A',
+    KEY_MOVE_DOWN_FAST = 'S',
+    KEY_MOVE_RIGHT_FAST = 'D',
     KEY_TOGGLE_AXIS = '.',
     KEY_NEXT_POLYGON_MODE = 'm',
+    KEY_THINNER_LINES = '_',
+    KEY_THICKER_LINES = '*',
 };
 
 auto inline constexpr Y_AXIS_HALF_LEN = 50.f;

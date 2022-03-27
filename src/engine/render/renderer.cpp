@@ -6,6 +6,7 @@
 #include "util/pretty_print.hpp"
 
 #include <GL/freeglut.h>
+#include <algorithm>
 #include <fmt/core.h>
 #include <glm/gtc/type_ptr.hpp>
 
@@ -26,6 +27,7 @@ namespace state {
 
     auto enable_axis = config::ENABLE_AXIS;
     auto polygon_mode = static_cast<GLenum>(config::POLYGON_MODE);
+    auto line_width = config::LINE_WIDTH;
 
     auto kb = keyboard{};
 
@@ -66,6 +68,7 @@ renderer::renderer() {
         config::BG_COLOR.a
     );
     glPolygonMode(GL_FRONT, config::POLYGON_MODE);
+    glLineWidth(config::LINE_WIDTH);
 
     display_info();
 }
@@ -92,6 +95,7 @@ auto render() noexcept -> void {
         camera.up.x,     camera.up.y,     camera.up.z
     );
     glPolygonMode(GL_FRONT, state::polygon_mode);
+    glLineWidth(state::line_width);
     if (state::enable_axis) {
         render_axis();
     }
@@ -101,9 +105,9 @@ auto render() noexcept -> void {
 
 // TODO: implement rotation and zoom.
 auto update_camera(int) noexcept -> void {
-    using state::kb;
     using enum config::kb_keys;
 
+    auto const& kb = state::kb;
     auto& camera_pos = state::world_ptr->camera.pos;
 
     if (kb.pressed(KEY_MOVE_UP) and not kb.pressed(KEY_MOVE_DOWN)) {
@@ -231,6 +235,18 @@ auto key_down(unsigned char const key, int, int) noexcept -> void {
                 default:
                     __builtin_unreachable();
             }
+            break;
+        case KEY_THINNER_LINES:
+            state::line_width = std::max(
+                state::line_width - config::LINE_WIDTH_STEP,
+                config::LINE_WIDTH_MIN
+            );
+            break;
+        case KEY_THICKER_LINES:
+            state::line_width = std::min(
+                state::line_width + config::LINE_WIDTH_STEP,
+                config::LINE_WIDTH_MAX
+            );
             break;
         default:
             break;
