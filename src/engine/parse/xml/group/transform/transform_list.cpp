@@ -18,7 +18,7 @@ try {
         transform != nullptr;
         transform = transform->next_sibling()
     ) {
-        transform_list.push_back(TRY_RESULT(parse_transform(node)));
+        transform_list.push_back(TRY_RESULT(parse_transform(transform)));
     }
 
     return transform_list;
