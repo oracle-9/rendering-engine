@@ -55,21 +55,7 @@ renderer::renderer() {
     glutReshapeFunc(resize);
     glutTimerFunc(config::RENDER_TICK_MILLIS, update_camera, 0);
     glutKeyboardFunc(key_down);
-    glutKeyboardUpFunc([](unsigned char const key, int, int) {
-        switch (key) {
-            using enum config::kb_keys;
-            case KEY_MOVE_UP:
-            case KEY_MOVE_LEFT:
-            case KEY_MOVE_DOWN:
-            case KEY_MOVE_RIGHT:
-            case KEY_TOGGLE_AXIS:
-            case KEY_NEXT_POLYGON_MODE:
-                state::kb.release(key);
-                break;
-            default:
-                break;
-        }
-    });
+    glutKeyboardUpFunc(key_up);
 
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
