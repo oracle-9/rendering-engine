@@ -7,23 +7,31 @@
 
 #include <GL/freeglut.h>
 #include <fmt/core.h>
+#include <glm/gtc/type_ptr.hpp>
 
 namespace engine::render {
 
 auto render() noexcept -> void;
 auto update_camera(int) noexcept -> void;
+auto render_axis() noexcept -> void;
 auto render_group(group const& root) noexcept -> void;
 auto resize(int width, int height) noexcept -> void;
 auto display_info() -> void;
 
 namespace state {
-    auto aspect_ratio = config::DEFAULT_ASPECT_RATIO;
+    auto bg_color = config::DEFAULT_BG_COLOR;
+    auto fg_color = config::DEFAULT_FG_COLOR;
+
+    auto polygon_mode = static_cast<GLenum>(config::DEFAULT_POLYGON_MODE);
+
     auto kb = keyboard{};
+
+
 
     auto default_world_mut = config::DEFAULT_WORLD;
     auto* world_ptr = &default_world_mut;
 
-    auto polygon_mode = static_cast<GLenum>(config::DEFAULT_POLYGON_MODE);
+
 } // namespace state
 
 auto get() -> renderer& {
@@ -98,10 +106,10 @@ renderer::renderer() {
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
     glClearColor(
-        config::DEFAULT_BG_COLOR.r,
-        config::DEFAULT_BG_COLOR.g,
-        config::DEFAULT_BG_COLOR.b,
-        config::DEFAULT_BG_COLOR.a
+        state::bg_color.r,
+        state::bg_color.g,
+        state::bg_color.b,
+        state::bg_color.a
     );
 
     display_info();
@@ -129,6 +137,7 @@ auto render() noexcept -> void {
         camera.up.x,     camera.up.y,     camera.up.z
     );
     glPolygonMode(GL_FRONT, state::polygon_mode);
+    render_axis();
     render_group(state::world_ptr->root);
     glutSwapBuffers();
 }
@@ -154,6 +163,29 @@ auto update_camera(int) noexcept -> void {
 
     glutPostRedisplay();
     glutTimerFunc(config::RENDER_TICK_MILLIS, update_camera, 0);
+}
+
+auto render_axis() noexcept -> void {
+    glBegin(GL_LINES);
+
+    // x axis.
+    glColor3fv(glm::value_ptr(config::AXIS_COLOR[0]));
+    glVertex3f(-config::X_AXIS_HALF_LEN, 0.f, 0.f);
+    glVertex3f(config::X_AXIS_HALF_LEN, 0.f, 0.f);
+
+    // y axis.
+    glColor3fv(glm::value_ptr(config::AXIS_COLOR[1]));
+    glVertex3f(0.f, -config::Y_AXIS_HALF_LEN, 0.f);
+    glVertex3f(0.f, config::Y_AXIS_HALF_LEN, 0.f);
+
+    // z axis.
+    glColor3fv(glm::value_ptr(config::AXIS_COLOR[2]));
+    glVertex3f(0.f, 0.f, -config::Z_AXIS_HALF_LEN);
+    glVertex3f(0.f, 0.f, config::Z_AXIS_HALF_LEN);
+
+    glEnd();
+
+    glColor3fv(glm::value_ptr(state::fg_color));
 }
 
 // TODO: Implement non-recursively.
@@ -208,14 +240,14 @@ auto resize(int const width, int height) noexcept -> void {
 
     auto const& camera_proj = state::world_ptr->camera.projection;
 
-    state::aspect_ratio
-        = static_cast<double>(width) / static_cast<double>(height);
-
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     glViewport(0, 0, width, height);
     gluPerspective(
-        camera_proj[0], state::aspect_ratio, camera_proj[1], camera_proj[2]
+        camera_proj[0],
+        static_cast<double>(width) / static_cast<double>(height),
+        camera_proj[1],
+        camera_proj[2]
     );
     glMatrixMode(GL_MODELVIEW);
 }
