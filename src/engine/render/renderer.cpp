@@ -16,22 +16,21 @@ auto update_camera(int) noexcept -> void;
 auto render_axis() noexcept -> void;
 auto render_group(group const& root) noexcept -> void;
 auto resize(int width, int height) noexcept -> void;
+auto key_down(unsigned char key, int x, int y) noexcept -> void;
+auto key_up(unsigned char key, int x, int y) noexcept -> void;
 auto display_info() -> void;
 
 namespace state {
-    auto bg_color = config::DEFAULT_BG_COLOR;
-    auto fg_color = config::DEFAULT_FG_COLOR;
+    auto bg_color = config::BG_COLOR;
+    auto fg_color = config::FG_COLOR;
 
-    auto polygon_mode = static_cast<GLenum>(config::DEFAULT_POLYGON_MODE);
+    auto enable_axis = config::ENABLE_AXIS;
+    auto polygon_mode = static_cast<GLenum>(config::POLYGON_MODE);
 
     auto kb = keyboard{};
 
-
-
-    auto default_world_mut = config::DEFAULT_WORLD;
+    auto default_world_mut = config::WORLD;
     auto* world_ptr = &default_world_mut;
-
-
 } // namespace state
 
 auto get() -> renderer& {
@@ -48,46 +47,14 @@ renderer::renderer() {
     static char* dummy_argv[] = {dummy_arg};
     glutInit(&dummy_argc, dummy_argv);
     glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
-    glutInitWindowPosition(
-        config::DEFAULT_WIN_POS_X,
-        config::DEFAULT_WIN_POS_Y
-    );
-    glutInitWindowSize(config::DEFAULT_WIN_WIDTH, config::DEFAULT_WIN_HEIGHT);
+    glutInitWindowPosition(config::WIN_POS_X, config::WIN_POS_Y);
+    glutInitWindowSize(config::WIN_WIDTH, config::WIN_HEIGHT);
     glutCreateWindow(config::WIN_TITLE);
     glutSetKeyRepeat(GLUT_KEY_REPEAT_OFF);
     glutDisplayFunc(render);
     glutReshapeFunc(resize);
     glutTimerFunc(config::RENDER_TICK_MILLIS, update_camera, 0);
-    glutKeyboardFunc([](unsigned char const key, int, int) {
-        switch (key) {
-            using enum config::kb_keys;
-            case KEY_MOVE_UP:
-            case KEY_MOVE_LEFT:
-            case KEY_MOVE_DOWN:
-            case KEY_MOVE_RIGHT:
-                state::kb.press(key);
-                glutPostRedisplay();
-                break;
-            case KEY_NEXT_POLYGON_MODE:
-                using state::polygon_mode;
-                switch (polygon_mode) {
-                    case GL_POINT:
-                        polygon_mode = GL_LINE;
-                        break;
-                    case GL_LINE:
-                        polygon_mode = GL_FILL;
-                        break;
-                    case GL_FILL:
-                        polygon_mode = GL_POINT;
-                        break;
-                    default:
-                        __builtin_unreachable();
-                }
-                break;
-            default:
-                break;
-        }
-    });
+    glutKeyboardFunc(key_down);
     glutKeyboardUpFunc([](unsigned char const key, int, int) {
         switch (key) {
             using enum config::kb_keys;
@@ -95,8 +62,9 @@ renderer::renderer() {
             case KEY_MOVE_LEFT:
             case KEY_MOVE_DOWN:
             case KEY_MOVE_RIGHT:
+            case KEY_TOGGLE_AXIS:
+            case KEY_NEXT_POLYGON_MODE:
                 state::kb.release(key);
-                glutPostRedisplay();
                 break;
             default:
                 break;
@@ -106,11 +74,12 @@ renderer::renderer() {
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
     glClearColor(
-        state::bg_color.r,
-        state::bg_color.g,
-        state::bg_color.b,
-        state::bg_color.a
+        config::BG_COLOR.r,
+        config::BG_COLOR.g,
+        config::BG_COLOR.b,
+        config::BG_COLOR.a
     );
+    glPolygonMode(GL_FRONT, config::POLYGON_MODE);
 
     display_info();
 }
@@ -137,7 +106,9 @@ auto render() noexcept -> void {
         camera.up.x,     camera.up.y,     camera.up.z
     );
     glPolygonMode(GL_FRONT, state::polygon_mode);
-    render_axis();
+    if (state::enable_axis) {
+        render_axis();
+    }
     render_group(state::world_ptr->root);
     glutSwapBuffers();
 }
@@ -250,6 +221,38 @@ auto resize(int const width, int height) noexcept -> void {
         camera_proj[2]
     );
     glMatrixMode(GL_MODELVIEW);
+}
+
+auto key_down(unsigned char const key, int, int) noexcept -> void {
+    state::kb.press(key);
+    switch (key) {
+        using enum config::kb_keys;
+        case KEY_TOGGLE_AXIS:
+            state::enable_axis = !state::enable_axis;
+            break;
+        case KEY_NEXT_POLYGON_MODE:
+            using state::polygon_mode;
+            switch (polygon_mode) {
+                case GL_POINT:
+                    polygon_mode = GL_LINE;
+                    break;
+                case GL_LINE:
+                    polygon_mode = GL_FILL;
+                    break;
+                case GL_FILL:
+                    polygon_mode = GL_POINT;
+                    break;
+                default:
+                    __builtin_unreachable();
+            }
+            break;
+        default:
+            break;
+    }
+}
+
+auto key_up(unsigned char const key, int, int) noexcept -> void {
+    state::kb.release(key);
 }
 
 auto display_info() -> void {
