@@ -6,7 +6,7 @@
 namespace engine::render {
 
 struct transform {
-    enum class kind {
+    enum class kind_t {
         translate,
         rotate,
         scale

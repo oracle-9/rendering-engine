@@ -12,7 +12,7 @@ auto parse_transform(rapidxml::xml_node<> const* const node) noexcept
     -> cpp::result<render::transform, parse_err>
 {
     using namespace std::string_view_literals;
-    using enum decltype(render::transform::kind); // disambiguate.
+    using enum render::transform::kind_t;
 
     auto static constexpr translate_str = "translate"sv;
     auto static constexpr rotate_str = "rotate"sv;
