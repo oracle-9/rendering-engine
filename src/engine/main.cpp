@@ -15,7 +15,7 @@ auto display_help() -> void;
 
 auto main(int argc, char* argv[]) -> int {
     using namespace brief_int::literals;
-    using engine::config::prog_name;
+    using engine::config::PROG_NAME;
 
     if (argc > 2) {
         pretty_print_err("too many options provided.\n");
@@ -71,7 +71,7 @@ auto display_help() -> void {
         "    {prog} --input=<input_file>\n"
         "        Render the world described in the XML file named\n"
         "        <input_file>.\n",
-        "prog"_a = config::prog_name
+        "prog"_a = config::PROG_NAME
     );
 }
 

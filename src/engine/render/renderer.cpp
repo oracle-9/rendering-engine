@@ -261,7 +261,7 @@ auto key_up(unsigned char const key, int, int) noexcept -> void {
 }
 
 auto display_info() -> void {
-    using engine::config::prog_name;
+    using engine::config::PROG_NAME;
 
     // reinterpret_cast is needed to silence some fmt + unsigned char warnings.
     pretty_print(

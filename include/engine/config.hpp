@@ -11,7 +11,7 @@ namespace engine {
 
 namespace config {
 
-auto inline constexpr prog_name = std::string_view{"engine"};
+auto inline constexpr PROG_NAME = std::string_view{"engine"};
 
 } // namespace config
 

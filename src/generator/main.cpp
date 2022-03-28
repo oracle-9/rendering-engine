@@ -47,7 +47,7 @@ auto display_help() -> void;
 
 auto main(int argc, char* argv[]) -> int {
     using generator::cli_actions;
-    using generator::config::prog_name;
+    using generator::config::PROG_NAME;
 
     if (argc < 2) {
         pretty_print_err("no command provided.\n");
@@ -85,8 +85,6 @@ auto main(int argc, char* argv[]) -> int {
 }
 
 namespace generator {
-
-std::string_view const prog_name = "generator";
 
 std::unordered_map<
     std::string_view,
@@ -229,7 +227,7 @@ auto display_help() -> void {
         "        plane <side_len> <num_divs>\n"
         "            Generate a plane with <len> units in length and\n"
         "            <num_divs> divisions along each axis.\n",
-        "prog"_a = prog_name
+        "prog"_a = config::PROG_NAME
     );
 }
 

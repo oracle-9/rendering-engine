@@ -4,6 +4,6 @@
 
 namespace generator::config {
 
-auto inline constexpr prog_name = std::string_view{"generator"};
+auto inline constexpr PROG_NAME = std::string_view{"generator"};
 
 } // namespace generator::config
