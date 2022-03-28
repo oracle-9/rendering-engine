@@ -23,8 +23,6 @@ using namespace std::string_view_literals;
 
 namespace generator {
 
-extern const std::string_view prog_name;
-
 extern const std::unordered_map<
     std::string_view,
     auto (*)(std::span<char const*>) -> void
@@ -49,7 +47,7 @@ auto display_help() -> void;
 
 auto main(int argc, char* argv[]) -> int {
     using generator::cli_actions;
-    using generator::prog_name;
+    using generator::config::prog_name;
 
     if (argc < 2) {
         pretty_print_err("no command provided.\n");

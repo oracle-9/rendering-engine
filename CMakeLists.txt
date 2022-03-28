@@ -37,6 +37,7 @@ list(
     "${INCLUDE_PATH}/generator/primitives/cone.hpp"
     "${INCLUDE_PATH}/generator/primitives/plane.hpp"
     "${INCLUDE_PATH}/generator/primitives/sphere.hpp"
+    "${INCLUDE_PATH}/generator/config.hpp"
     "${INCLUDE_PATH}/generator/module.hpp"
     "${INCLUDE_PATH}/util/coord_conv.hpp"
     "${INCLUDE_PATH}/util/number.hpp"
