@@ -3,7 +3,6 @@
 #include "generator/module.hpp"
 #include "spdlog/sinks/stdout_color_sinks.h"
 #include "util/parse_number.hpp"
-#include "util/pretty_print.hpp"
 #include "util/try.hpp"
 
 #include <brief_int.hpp>

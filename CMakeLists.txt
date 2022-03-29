@@ -42,7 +42,6 @@ list(
     "${INCLUDE_PATH}/util/coord_conv.hpp"
     "${INCLUDE_PATH}/util/number.hpp"
     "${INCLUDE_PATH}/util/parse_number.hpp"
-    "${INCLUDE_PATH}/util/pretty_print.hpp"
     "${INCLUDE_PATH}/util/try.hpp"
 )
 
