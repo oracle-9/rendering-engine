@@ -54,10 +54,6 @@ auto main(int argc, char* argv[]) -> int {
     using generator::cli_actions;
     namespace config = generator::config;
 
-    spdlog::set_default_logger(spdlog::stderr_color_mt("stderr"));
-    spdlog::set_level(spdlog::level::debug);
-    spdlog::flush_on(spdlog::level::err);
-
     auto log_prefix = fmt::format(
         fmt::emphasis::bold | fg(fmt::terminal_color::white),
         "{}",
@@ -65,6 +61,9 @@ auto main(int argc, char* argv[]) -> int {
     );
     log_prefix += " [%^%l%$] <%!>: %v";
 
+    spdlog::set_default_logger(spdlog::stderr_color_mt("stderr"));
+    spdlog::set_level(spdlog::level::debug);
+    spdlog::flush_on(spdlog::level::err);
     spdlog::set_pattern(std::move(log_prefix));
 
     if (argc < 2) {
