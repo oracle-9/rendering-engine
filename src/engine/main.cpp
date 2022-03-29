@@ -68,6 +68,7 @@ auto main(int argc, char* argv[]) -> int {
                 "errno set with value '{}'", std::strerror(local_errno)
             );
         }
+        spdlog::critical("aborting.");
         return EXIT_FAILURE;
     }
 
