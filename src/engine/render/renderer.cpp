@@ -265,15 +265,15 @@ auto key_up(unsigned char const key, int, int) noexcept -> void {
 auto display_info() -> void {
     // reinterpret_cast is needed to silence some fmt + unsigned char warnings.
     spdlog::info(
-        "Vendor: {}",
+        "vendor: {}.",
         reinterpret_cast<char const*>(glGetString(GL_VENDOR))
     );
     spdlog::info(
-        "Renderer: {}",
+        "renderer: {}.",
         reinterpret_cast<char const*>(glGetString(GL_RENDERER))
     );
     spdlog::info(
-        "Version: {}",
+        "version: {}.",
         reinterpret_cast<char const*>(glGetString(GL_VERSION))
     );
 }

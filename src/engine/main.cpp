@@ -32,7 +32,7 @@ auto main(int argc, char* argv[]) -> int {
     spdlog::set_pattern(std::move(log_prefix));
 
     if (argc > 2) {
-        spdlog::error("too many options provided.\n");
+        spdlog::error("too many options provided.");
         spdlog::critical("aborting.");
         return EXIT_FAILURE;
     }
@@ -47,7 +47,7 @@ auto main(int argc, char* argv[]) -> int {
         engine::display_help();
         return EXIT_SUCCESS;
     } else if (not cmd.starts_with("--input=")) {
-        spdlog::error("unrecognized command '{}'.\n", cmd);
+        spdlog::error("unrecognized command '{}'.", cmd);
         spdlog::critical("aborting.");
         return EXIT_FAILURE;
     }
@@ -71,7 +71,7 @@ auto main(int argc, char* argv[]) -> int {
         return EXIT_FAILURE;
     }
 
-    spdlog::info("successfully parsed world '{}'.\n", input_filename);
+    spdlog::info("successfully parsed world '{}'.", input_filename);
     engine::render::get().set_world(*world).run();
 }
 
