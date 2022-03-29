@@ -52,7 +52,7 @@ auto display_help() -> void;
 
 auto main(int argc, char* argv[]) -> int {
     using generator::cli_actions;
-    using generator::config::PROG_NAME;
+    namespace config = generator::config;
 
     spdlog::set_default_logger(spdlog::stderr_color_mt("stderr"));
     spdlog::set_level(spdlog::level::debug);
@@ -61,7 +61,7 @@ auto main(int argc, char* argv[]) -> int {
     auto log_prefix = fmt::format(
         fmt::emphasis::bold | fg(fmt::terminal_color::white),
         "{}",
-        PROG_NAME
+        config::PROG_NAME
     );
     log_prefix += " [%^%l%$] <%!>: %v";
 
