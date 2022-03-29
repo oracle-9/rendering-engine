@@ -1,4 +1,7 @@
+#define SPDLOG_ACTIVE_LEVEL SPDLOG_LEVEL_TRACE
+
 #include "generator/module.hpp"
+#include "spdlog/sinks/stdout_color_sinks.h"
 #include "util/parse_number.hpp"
 #include "util/pretty_print.hpp"
 #include "util/try.hpp"
@@ -8,10 +11,13 @@
 #include <concepts>
 #include <cstdlib>
 #include <cstring>
+#include <fmt/color.h>
 #include <fmt/core.h>
 #include <fmt/format.h>
 #include <fmt/os.h>
 #include <span>
+#include <spdlog/sinks/stdout_color_sinks-inl.h>
+#include <spdlog/spdlog.h>
 #include <stdexcept>
 #include <string_view>
 #include <type_traits>
@@ -49,15 +55,30 @@ auto main(int argc, char* argv[]) -> int {
     using generator::cli_actions;
     using generator::config::PROG_NAME;
 
+    spdlog::set_default_logger(spdlog::stderr_color_mt("stderr"));
+    spdlog::set_level(spdlog::level::debug);
+    spdlog::flush_on(spdlog::level::err);
+
+    auto log_prefix = fmt::format(
+        fmt::emphasis::bold | fg(fmt::terminal_color::white),
+        "{}",
+        PROG_NAME
+    );
+    log_prefix += " [%^%l%$] <%!>: %v";
+
+    spdlog::set_pattern(std::move(log_prefix));
+
     if (argc < 2) {
-        pretty_print_err("no command provided.\n");
+        spdlog::error("no command provided.");
+        spdlog::critical("aborting.");
         return EXIT_FAILURE;
     }
 
     auto const cmd = std::string_view{argv[1]};
     auto const maybe_action = cli_actions.find(cmd);
     if (maybe_action == cli_actions.end()) {
-        pretty_print_err("unrecognized command '{}'.\n", cmd);
+        spdlog::error("unrecognized command '{}'.", cmd);
+        spdlog::critical("aborting.");
         return EXIT_FAILURE;
     }
 
@@ -69,17 +90,18 @@ auto main(int argc, char* argv[]) -> int {
         errno = 0;
         maybe_action->second(args);
     } catch (std::exception const& e) {
-        using namespace fmt::literals;
         int const local_errno = errno;
-        pretty_print_err(
-            "failed {primitive} generation with error '{err}'",
-            "primitive"_a = cmd,
-            "err"_a = e.what()
+        spdlog::error(
+            "failed {primitive} generation with error '{err}'.",
+            fmt::arg("primitive", cmd),
+            fmt::arg("err", e.what())
         );
         if (local_errno != 0) {
-            fmt::print(stderr, ": '{}'", std::strerror(local_errno));
+            spdlog::error(
+                "errno set with value '{}'", std::strerror(local_errno)
+            );
         }
-        fmt::print(stderr, ".\n");
+        spdlog::critical("aborting.");
         return EXIT_FAILURE;
     }
 }
@@ -201,7 +223,6 @@ auto check_num_args(usize const expected, usize const actual) -> void {
 }
 
 auto display_help() -> void {
-    using namespace fmt::literals;
     fmt::print(
         "Usage:\n"
         "    {prog} (-h | --help)\n"
@@ -227,7 +248,7 @@ auto display_help() -> void {
         "        plane <side_len> <num_divs>\n"
         "            Generate a plane with <len> units in length and\n"
         "            <num_divs> divisions along each axis.\n",
-        "prog"_a = config::PROG_NAME
+        fmt::arg("prog", config::PROG_NAME)
     );
 }
 

@@ -168,7 +168,7 @@ foreach(TARGET generator engine)
 endforeach()
 
 # Generator linked libraries
-target_link_libraries(generator fmt::fmt)
+target_link_libraries(generator fmt::fmt spdlog::spdlog)
 
 # Engine linked libraries
 target_link_libraries(
