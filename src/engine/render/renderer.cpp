@@ -1,14 +1,16 @@
+#define SPDLOG_ACTIVE_LEVEL SPDLOG_LEVEL_TRACE
+
 #include "engine/render/renderer.hpp"
 
 #include "engine/config.hpp"
 #include "engine/render/keyboard.hpp"
 #include "engine/render/world/world.hpp"
-#include "util/pretty_print.hpp"
 
 #include <GL/freeglut.h>
 #include <algorithm>
 #include <fmt/core.h>
 #include <glm/gtc/type_ptr.hpp>
+#include <spdlog/spdlog.h>
 
 namespace engine::render {
 
@@ -261,19 +263,17 @@ auto key_up(unsigned char const key, int, int) noexcept -> void {
 }
 
 auto display_info() -> void {
-    using engine::config::PROG_NAME;
-
     // reinterpret_cast is needed to silence some fmt + unsigned char warnings.
-    pretty_print(
-        "Vendor: {}\n",
+    spdlog::info(
+        "Vendor: {}",
         reinterpret_cast<char const*>(glGetString(GL_VENDOR))
     );
-    pretty_print(
-        "Renderer: {}\n",
+    spdlog::info(
+        "Renderer: {}",
         reinterpret_cast<char const*>(glGetString(GL_RENDERER))
     );
-    pretty_print(
-        "Version: {}\n",
+    spdlog::info(
+        "Version: {}",
         reinterpret_cast<char const*>(glGetString(GL_VERSION))
     );
 }

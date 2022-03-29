@@ -1,12 +1,14 @@
 #include "engine/module.hpp"
-#include "util/pretty_print.hpp"
 
 #include <brief_int.hpp>
 #include <cerrno>
-#include <cstdio>
 #include <cstdlib>
 #include <cstring>
+#include <fmt/color.h>
 #include <fmt/core.h>
+#include <fmt/format.h>
+#include <spdlog/sinks/stdout_color_sinks-inl.h>
+#include <spdlog/spdlog.h>
 #include <string_view>
 
 namespace engine {
@@ -15,15 +17,28 @@ auto display_help() -> void;
 
 auto main(int argc, char* argv[]) -> int {
     using namespace brief_int::literals;
-    using engine::config::PROG_NAME;
+    namespace config = engine::config;
+
+    auto log_prefix = fmt::format(
+        fmt::emphasis::bold | fg(fmt::terminal_color::white),
+        "{}",
+        config::PROG_NAME
+    );
+    log_prefix += " [%^%l%$] <%!>: %v";
+
+    spdlog::set_default_logger(spdlog::stderr_color_mt("stderr"));
+    spdlog::set_level(spdlog::level::debug);
+    spdlog::flush_on(spdlog::level::err);
+    spdlog::set_pattern(std::move(log_prefix));
 
     if (argc > 2) {
-        pretty_print_err("too many options provided.\n");
+        spdlog::error("too many options provided.\n");
+        spdlog::critical("aborting.");
         return EXIT_FAILURE;
     }
 
     if (argc == 1) {
-        // No XML file was provided, render a default world.
+        spdlog::info("no XML file was provided, rendering a default world.");
         engine::render::get().run();
     }
 
@@ -32,7 +47,8 @@ auto main(int argc, char* argv[]) -> int {
         engine::display_help();
         return EXIT_SUCCESS;
     } else if (not cmd.starts_with("--input=")) {
-        pretty_print_err("unrecognized command '{}'.\n", cmd);
+        spdlog::error("unrecognized command '{}'.\n", cmd);
+        spdlog::critical("aborting.");
         return EXIT_FAILURE;
     }
     char const* const input_filename = cmd.data() + cmd.find('=') + 1_uz;
@@ -42,27 +58,26 @@ auto main(int argc, char* argv[]) -> int {
 
     if (world.has_error()) {
         int const local_errno = errno;
-        pretty_print_err(
-            "failed '{}' world generation with error '{}'",
-            input_filename,
-            world.error()
+        spdlog::error(
+            "failed '{xml_filename}' world generation with error '{err}'",
+            fmt::arg("xml_filename", input_filename),
+            fmt::arg("err", world.error())
         );
         if (local_errno != 0) {
-            fmt::print(stderr, ": '{}'", std::strerror(local_errno));
+            spdlog::error(
+                "errno set with value '{}'", std::strerror(local_errno)
+            );
         }
-        fmt::print(stderr, ".\n");
         return EXIT_FAILURE;
     }
 
-    pretty_print("successfully parsed world '{}'.\n", input_filename);
-    std::fflush(stdout);
+    spdlog::info("successfully parsed world '{}'.\n", input_filename);
     engine::render::get().set_world(*world).run();
 }
 
 namespace engine {
 
 auto display_help() -> void {
-    using namespace fmt::literals;
     fmt::print(
         "Usage:\n"
         "    {prog} (-h | --help)\n"
@@ -71,7 +86,7 @@ auto display_help() -> void {
         "    {prog} --input=<input_file>\n"
         "        Render the world described in the XML file named\n"
         "        <input_file>.\n",
-        "prog"_a = config::PROG_NAME
+        fmt::arg("prog", config::PROG_NAME)
     );
 }
 
