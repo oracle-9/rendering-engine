@@ -27,9 +27,9 @@ auto parse_camera(rapidxml::xml_node<> const* const node) noexcept
     );
 
     return render::camera {
-        .pos    = TRY_RESULT(parse_xyz<double>(pos_node)),
-        .lookat = TRY_RESULT(parse_xyz<double>(lookat_node)),
-        .up     = TRY_RESULT(parse_xyz<double>(up_node)),
+        .pos    = TRY_RESULT(util::parse_xyz(pos_node)),
+        .lookat = TRY_RESULT(util::parse_xyz(lookat_node)),
+        .up     = TRY_RESULT(util::parse_xyz(up_node)),
         .projection = TRY_RESULT(parse_projection(proj_node)),
     };
 }

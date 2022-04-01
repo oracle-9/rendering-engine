@@ -103,9 +103,11 @@ list(
     "${SRC_PATH}/engine/parse/xml/group/transform/transform_list.cpp"
     "${SRC_PATH}/engine/parse/xml/group/transform/transform.cpp"
     "${SRC_PATH}/engine/parse/xml/group/group.cpp"
+    "${SRC_PATH}/engine/parse/xml/util/xyz.cpp"
     "${SRC_PATH}/engine/parse/xml/world.cpp"
     "${SRC_PATH}/engine/render/renderer.cpp"
     "${SRC_PATH}/engine/main.cpp"
+    "${SRC_PATH}/util/coord_conv.cpp"
 )
 
 add_executable(engine ${ENGINE_HEADERS} ${ENGINE_SOURCES})

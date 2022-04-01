@@ -93,7 +93,7 @@ auto inline const WORLD = world {
 
 enum : unsigned int { RENDER_TICK_MILLIS = 16 }; // 60 FPS
 
-auto inline constexpr CAM_TRANSL_FACTOR = 0.06;
+auto inline constexpr CAM_TRANSL_FACTOR = 0.06f;
 
 } // namespace render::config
 

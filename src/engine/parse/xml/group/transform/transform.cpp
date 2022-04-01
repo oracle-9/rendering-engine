@@ -26,7 +26,7 @@ auto parse_transform(rapidxml::xml_node<> const* const node) noexcept
     if (transform_name == translate_str) {
         return render::transform {
             .kind = translate,
-            .translate = TRY_RESULT(parse_xyz<float>(node)),
+            .translate = TRY_RESULT(util::parse_xyz(node)),
         };
     } else if (transform_name == rotate_str) {
         return render::transform {
@@ -36,7 +36,7 @@ auto parse_transform(rapidxml::xml_node<> const* const node) noexcept
     } else if (transform_name == scale_str) {
         return render::transform {
             .kind = scale,
-            .scale = TRY_RESULT(parse_xyz<float>(node)),
+            .scale = TRY_RESULT(util::parse_xyz(node)),
         };
     } else {
         return cpp::fail(parse_err::unknown_transform);
