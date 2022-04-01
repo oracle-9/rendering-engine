@@ -15,6 +15,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/mat4x4.hpp>
+#include <nonnull_ptr.hpp>
 #include <spdlog/spdlog.h>
 
 namespace engine::render {
@@ -40,7 +41,7 @@ auto line_width = config::LINE_WIDTH;
 auto kb = keyboard{};
 
 auto default_world_mut = config::WORLD;
-auto* world_ptr = &default_world_mut;
+auto world_ptr = ptr::nonnull_ptr_to(default_world_mut);
 
 } // namespace state
 
