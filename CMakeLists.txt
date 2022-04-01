@@ -133,6 +133,9 @@ add_subdirectory(${GLM_PATH})
 # GLUT
 find_package(GLUT REQUIRED)
 
+# nonnull_ptr
+set(NONNULL_PTR_PATH "${LIB_PATH}/nonnull_ptr")
+
 # OpenGL
 find_package(OpenGL REQUIRED)
 
@@ -153,6 +156,7 @@ list(
     ${FMT_PATH}
     ${GLM_PATH}
     ${GLUT_INCLUDE_DIRS}
+    ${NONNULL_PTR_PATH}
     ${OPENGL_INCLUDE_DIRS}
     ${RAPIDXML_PATH}
     ${RESULT_PATH}
