@@ -5,7 +5,7 @@
 #include <memory>
 #include <type_traits>
 
-namespace nonnull_ptr {
+namespace ptr {
 
 template <typename T>
     requires (not std::is_reference_v<T>)
@@ -52,4 +52,4 @@ auto nonnull_ptr_to(T& val) noexcept -> nonnull_ptr<T> {
     return nonnull_ptr{std::addressof(val)};
 }
 
-} // namespace nonnull_ptr
+} // namespace ptr
