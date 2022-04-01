@@ -43,7 +43,7 @@ auto main(int argc, char* argv[]) -> int {
     }
 
     auto const cmd = std::string_view{argv[1]};
-    if (cmd == "-h" || cmd == "--help") {
+    if (cmd == "-h" or cmd == "--help") {
         engine::display_help();
         return EXIT_SUCCESS;
     } else if (not cmd.starts_with("--input=")) {
