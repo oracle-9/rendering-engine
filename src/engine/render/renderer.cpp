@@ -5,11 +5,16 @@
 #include "engine/config.hpp"
 #include "engine/render/keyboard.hpp"
 #include "engine/render/world/world.hpp"
+#include "util/coord_conv.hpp"
 
 #include <GL/freeglut.h>
 #include <algorithm>
+#include <cctype>
 #include <fmt/core.h>
+#include <glm/ext/scalar_constants.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <glm/mat4x4.hpp>
 #include <spdlog/spdlog.h>
 
 namespace engine::render {
@@ -24,17 +29,19 @@ auto key_up(unsigned char key, int x, int y) noexcept -> void;
 auto display_info() -> void;
 
 namespace state {
-    auto bg_color = config::BG_COLOR;
-    auto fg_color = config::FG_COLOR;
 
-    auto enable_axis = config::ENABLE_AXIS;
-    auto polygon_mode = static_cast<GLenum>(config::POLYGON_MODE);
-    auto line_width = config::LINE_WIDTH;
+auto bg_color = config::BG_COLOR;
+auto fg_color = config::FG_COLOR;
 
-    auto kb = keyboard{};
+auto enable_axis = config::ENABLE_AXIS;
+auto polygon_mode = static_cast<GLenum>(config::POLYGON_MODE);
+auto line_width = config::LINE_WIDTH;
 
-    auto default_world_mut = config::WORLD;
-    auto* world_ptr = &default_world_mut;
+auto kb = keyboard{};
+
+auto default_world_mut = config::WORLD;
+auto* world_ptr = &default_world_mut;
+
 } // namespace state
 
 auto get() -> renderer& {
@@ -89,11 +96,21 @@ auto render() noexcept -> void {
     auto const& camera = state::world_ptr->camera;
     glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
     glLoadIdentity();
+
+    // TODO: Use glm transforms instead of GLUT to avoid casting.
+    // glMultMatrixf(
+    //     glm::value_ptr(
+    //         glm::lookAt(camera.pos, camera.lookat, camera.up)
+    //     )
+    // );
+    // glTranslatef(-camera.pos.x, -camera.pos.y, -camera.pos.z);
+
     gluLookAt(
-        camera.pos.x,    camera.pos.y,    camera.pos.z,
-        camera.lookat.x, camera.lookat.y, camera.lookat.z,
-        camera.up.x,     camera.up.y,     camera.up.z
+        static_cast<double>(camera.pos.x), static_cast<double>(camera.pos.y), static_cast<double>(camera.pos.z),
+        static_cast<double>(camera.lookat.x), static_cast<double>(camera.lookat.y), static_cast<double>(camera.lookat.z),
+        static_cast<double>(camera.up.x), static_cast<double>(camera.up.y), static_cast<double>(camera.up.z)
     );
+
     glPolygonMode(GL_FRONT, state::polygon_mode);
     glLineWidth(state::line_width);
     if (state::enable_axis) {
@@ -110,18 +127,36 @@ auto update_camera(int) noexcept -> void {
     auto const& kb = state::kb;
     auto& camera_pos = state::world_ptr->camera.pos;
 
-    if (kb.pressed(KEY_MOVE_UP) and not kb.pressed(KEY_MOVE_DOWN)) {
-        camera_pos.y += config::CAM_TRANSL_FACTOR;
-    } else if (kb.pressed(KEY_MOVE_DOWN) and not kb.pressed(KEY_MOVE_UP)) {
-        camera_pos.y -= config::CAM_TRANSL_FACTOR;
-    }
+    // TODO: skip camera movement if no key is presssed.
+    // if (not kb.pressed(KEY_MOVE_LEFT)
+    //     and not kb.pressed(KEY_MOVE_RIGHT)
+    //     and not kb.pressed(KEY_MOVE_UP)
+    //     and not kb.pressed(KEY_MOVE_DOWN)
+    // ) {
+    //     goto SKIP_CAMERA_MOVE;
+    // }
+
+    ::util::cartesian_to_spherical_inplace(camera_pos);
 
     if (kb.pressed(KEY_MOVE_LEFT) and not kb.pressed(KEY_MOVE_RIGHT)) {
-        camera_pos.x -= config::CAM_TRANSL_FACTOR;
+        camera_pos[2] -= config::CAM_ROTATE_ANGLE;
     } else if (kb.pressed(KEY_MOVE_RIGHT) and not kb.pressed(KEY_MOVE_LEFT)) {
-        camera_pos.x += config::CAM_TRANSL_FACTOR;
+        camera_pos[2] += config::CAM_ROTATE_ANGLE;
     }
 
+    // TODO: prevent wrap arounds.
+    if (kb.pressed(KEY_MOVE_UP) and not kb.pressed(KEY_MOVE_DOWN)) {
+        // camera_pos[1] = std::max(0.f, camera_pos[1] - config::CAM_ROTATE_ANGLE);
+        camera_pos[1] -= config::CAM_ROTATE_ANGLE;
+    } else if (kb.pressed(KEY_MOVE_DOWN) and not kb.pressed(KEY_MOVE_UP)) {
+        // camera_pos[1] = std::min(glm::pi<float>(), camera_pos[1] + config::CAM_ROTATE_ANGLE);
+        camera_pos[1] += config::CAM_ROTATE_ANGLE;
+    }
+
+    ::util::spherical_to_cartesian_inplace(camera_pos);
+
+    // TODO: skip camera movement if no key is presssed.
+    // SKIP_CAMERA_MOVE:
     glutPostRedisplay();
     glutTimerFunc(config::RENDER_TICK_MILLIS, update_camera, 0);
 }
@@ -210,10 +245,10 @@ auto resize(int const width, int height) noexcept -> void {
     glLoadIdentity();
     glViewport(0, 0, width, height);
     gluPerspective(
-        camera_proj[0],
+        static_cast<double>(camera_proj[0]),
         static_cast<double>(width) / static_cast<double>(height),
-        camera_proj[1],
-        camera_proj[2]
+        static_cast<double>(camera_proj[1]),
+        static_cast<double>(camera_proj[2])
     );
     glMatrixMode(GL_MODELVIEW);
 }
@@ -223,7 +258,7 @@ auto key_down(unsigned char const key, int, int) noexcept -> void {
     switch (key) {
         using enum config::kb_keys;
         case KEY_TOGGLE_AXIS:
-            state::enable_axis = !state::enable_axis;
+            state::enable_axis = not state::enable_axis;
             break;
         case KEY_NEXT_POLYGON_MODE:
             using state::polygon_mode;
@@ -258,7 +293,10 @@ auto key_down(unsigned char const key, int, int) noexcept -> void {
     }
 }
 
-auto key_up(unsigned char const key, int, int) noexcept -> void {
+auto key_up(unsigned char key, int, int) noexcept -> void {
+    if (std::isalpha(key)) {
+        key = static_cast<unsigned char>(tolower(key));
+    }
     state::kb.release(key);
 }
 
