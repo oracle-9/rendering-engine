@@ -184,7 +184,7 @@ try {
     // We need to make sure the vertices are represented in a cartesian
     // coordinate system before we forward them to OpenGL.
     for (auto&& vertex : vertices) {
-        ::util::to_cartesian_inplace(vertex);
+        ::util::cylindrical_to_cartesian_inplace(vertex);
         output_file.print("{} {} {}\n", vertex.x, vertex.y, vertex.z);
     }
 
