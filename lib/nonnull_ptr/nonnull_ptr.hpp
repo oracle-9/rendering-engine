@@ -44,6 +44,11 @@ class nonnull_ptr {
     constexpr operator T&() noexcept {
         return *this->ptr;
     }
+
+    [[nodiscard]]
+    auto constexpr operator->() noexcept -> T* {
+        return this->ptr;
+    }
 };
 
 template <typename T>
