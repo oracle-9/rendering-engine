@@ -31,17 +31,17 @@ auto display_info() -> void;
 
 namespace state {
 
-auto bg_color = config::BG_COLOR;
-auto fg_color = config::FG_COLOR;
+auto static bg_color = config::BG_COLOR;
+auto static fg_color = config::FG_COLOR;
 
-auto enable_axis = config::ENABLE_AXIS;
-auto polygon_mode = static_cast<GLenum>(config::POLYGON_MODE);
-auto line_width = config::LINE_WIDTH;
+auto static enable_axis = config::ENABLE_AXIS;
+auto static polygon_mode = static_cast<GLenum>(config::POLYGON_MODE);
+auto static line_width = config::LINE_WIDTH;
 
-auto kb = keyboard{};
+auto static kb = keyboard{};
 
-auto default_world_mut = config::WORLD;
-auto world_ptr = ptr::nonnull_ptr_to(default_world_mut);
+auto static default_world_mut = config::WORLD;
+auto static world_ptr = ptr::nonnull_ptr_to(default_world_mut);
 
 } // namespace state
 
