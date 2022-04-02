@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cassert>
+#include <compare>
 #include <cstddef>
 #include <memory>
 #include <type_traits>
@@ -34,6 +35,9 @@ class nonnull_ptr {
     auto operator=(nonnull_ptr&&) -> nonnull_ptr& = default;
 
     ~nonnull_ptr() = default;
+
+    [[nodiscard]]
+    auto friend operator<=>(nonnull_ptr, nonnull_ptr) = default;
 
     [[nodiscard]]
     constexpr operator T*() noexcept {
