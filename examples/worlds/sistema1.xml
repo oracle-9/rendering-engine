@@ -1,89 +1,86 @@
 <world> <!-- a world can have a camera, a set of lights, and a single group -->
 	
     <camera> 
-	    <position x="3" y="10" z="4" />
+	    <position x="500" y="10" z="500" />
 	    <lookAt x="0" y="0" z="0" />
 	    <up x="0" y="1" z="0" /> <!-- optional, use these values as default-->
-        <projection fov="60" near="1" far="1000" /> <!-- optional, use these values as default-->
+        <projection fov="60" near="10" far="500000" /> <!-- optional, use these values as default-->
     </camera>
 
     <group>
-        <transform> 
-            <translate x="0.1" y="0" z="0" />
-        </transform>
         <models> 
-            <model file="sol.3d" />
+            <model file="examples/models/sol.3d" />
         </models>
         <group> 
             <transform> 
-                <translate x="5.8" y="0" z="5.8" />
+                <translate x="130" y="0" z="0" />
             </transform>
 			<models> 
-				<model file="mercurio.3d" />
+				<model file="examples/models/mercurio.3d" />
 			</models>
         </group>
         <group> 
             <transform> 
-                <translate x="10.8" y="0" z="10.8" />
+                <translate x="270" y="0" z="0" />
             </transform>
 			<models> 
-				<model file="venus.3d" />
+				<model file="examples/models/venus.3d" />
 			</models>
         </group>
         <group> 
             <transform> 
-                <translate x="15" y="0" z="15" />
+                <translate x="372.5" y="0" z="0" />
             </transform>
 			<models> 
-				<model file="terra.3d" />
+				<model file="examples/models/terra.3d" />
 			</models>
             <group> 
                 <transform> 
-                    <translate x="2.5" y="0" z="2.5" /> <!-- em relação à terra -->
+                    <translate x="62.5" y="0" z="0" /> <!-- em relação à terra -->
                 </transform>
                 <models> 
-                    <model file="lua.3d" /> <!-- generator box 2 3 box.3d -->
+                    <model file="examples/models/lua.3d" /> <!-- generator box 2 3 box.3d -->
                 </models>
             </group>
         </group>
         <group> 
             <transform> 
-                <translate x="22.8" y="0" z="22.8" />
+                <translate x="570" y="0" z="0" />
             </transform>
             <models> 
-                <model file="marte.3d" />
+                <model file="examples/models/marte.3d" />
             </models>
         </group>
         <group> 
             <transform> 
-                <translate x="77.8" y="0" z="77.8" />
+                <translate x="1945" y="0" z="0" />
             </transform>
             <models> 
-                <model file="jupiter.3d" />
+                <model file="examples/models/jupiter.3d" />
             </models>
         </group>
         <group> 
             <transform> 
-                <translate x="142.7" y="0" z="142.7" />
+                <translate x="3567.5" y="0" z="0" />
             </transform>
             <models> 
-                <model file="saturno.3d" />
+                <model file="examples/models/saturno.3d" />
             </models>
         </group>
         <group> 
             <transform> 
-                <translate x="286.9" y="0" z="286.9" />
+                <translate x="7177.5" y="0" z="0" />
             </transform>
             <models> 
-                <model file="urano.3d" />
+                <model file="examples/models/urano.3d" />
             </models>
         </group>
         <group> 
             <transform> 
-                <translate x="449.6" y="0" z="449.6" />
+                <translate x="11325" y="0" z="0" />
             </transform>
             <models> 
-                <model file="neptuno.3d" />
+                <model file="examples/models/neptuno.3d" />
             </models>
         </group>
 	</group>

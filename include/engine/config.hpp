@@ -65,6 +65,8 @@ enum kb_keys : unsigned char {
     KEY_MOVE_LEFT_FAST = 'A',
     KEY_MOVE_DOWN_FAST = 'S',
     KEY_MOVE_RIGHT_FAST = 'D',
+    KEY_MOVE_CLOSER = 'e',
+    KEY_MOVE_FURTHER = 'q',
     KEY_TOGGLE_AXIS = '.',
     KEY_NEXT_POLYGON_MODE = 'm',
     KEY_THINNER_LINES = '_',
@@ -94,6 +96,7 @@ auto inline const WORLD = world {
 enum : unsigned int { RENDER_TICK_MILLIS = 16 }; // 60 FPS
 
 auto inline constexpr CAM_ROTATE_ANGLE = 0.01f;
+auto inline constexpr CAM_ZOOM_STEP = 1.0f;
 
 } // namespace render::config
 

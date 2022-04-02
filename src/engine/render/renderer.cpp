@@ -154,6 +154,15 @@ auto update_camera(int) noexcept -> void {
         camera_pos[1] += config::CAM_ROTATE_ANGLE;
     }
 
+    // Zoom in and out
+    if (kb.pressed(KEY_MOVE_CLOSER) and not kb.pressed(KEY_MOVE_FURTHER)) {
+        camera_pos[0] -= config::CAM_ZOOM_STEP;
+        if (camera_pos[0] < config::CAM_ZOOM_STEP)
+            camera_pos[0] = config::CAM_ZOOM_STEP;
+    } else if (kb.pressed(KEY_MOVE_FURTHER) and not kb.pressed(KEY_MOVE_CLOSER)) {
+        camera_pos[0] += config::CAM_ZOOM_STEP;
+    }
+
     ::util::spherical_to_cartesian_inplace(camera_pos);
 
     // TODO: skip camera movement if no key is presssed.

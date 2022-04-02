@@ -4,7 +4,6 @@ build
 CMakeFiles
 compile_commands.json
 engine_input
-models
 
 # Prerequisites
 *.d
