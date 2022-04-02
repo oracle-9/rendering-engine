@@ -58,16 +58,12 @@ auto inline constexpr LINE_WIDTH_STEP = 1.f;
 enum : GLenum { POLYGON_MODE = GL_LINE };
 
 enum kb_keys : unsigned char {
-    KEY_MOVE_UP = 'w',
-    KEY_MOVE_LEFT = 'a',
-    KEY_MOVE_DOWN = 's',
-    KEY_MOVE_RIGHT = 'd',
-    KEY_MOVE_UP_FAST = 'W',
-    KEY_MOVE_LEFT_FAST = 'A',
-    KEY_MOVE_DOWN_FAST = 'S',
-    KEY_MOVE_RIGHT_FAST = 'D',
-    KEY_MOVE_CLOSER = 'e',
-    KEY_MOVE_FURTHER = 'q',
+    KEY_ROTATE_UP = 'w',
+    KEY_ROTATE_LEFT = 'a',
+    KEY_ROTATE_DOWN = 's',
+    KEY_ROTATE_RIGHT = 'd',
+    KEY_ZOOM_IN = 'e',
+    KEY_ZOOM_OUT = 'q',
     KEY_TOGGLE_AXIS = '.',
     KEY_NEXT_POLYGON_MODE = 'm',
     KEY_THINNER_LINES = '_',

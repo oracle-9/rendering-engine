@@ -128,10 +128,10 @@ auto update_camera(int) noexcept -> void {
     auto& camera_pos = state::world_ptr->camera.pos;
 
     // TODO: skip camera movement if no key is presssed.
-    // if (not kb.pressed(KEY_MOVE_LEFT)
-    //     and not kb.pressed(KEY_MOVE_RIGHT)
-    //     and not kb.pressed(KEY_MOVE_UP)
-    //     and not kb.pressed(KEY_MOVE_DOWN)
+    // if (not kb.pressed(KEY_ROTATE_LEFT)
+    //     and not kb.pressed(KEY_ROTATE_RIGHT)
+    //     and not kb.pressed(KEY_ROTATE_UP)
+    //     and not kb.pressed(KEY_ROTATE_DOWN)
     // ) {
     //     goto SKIP_CAMERA_MOVE;
     // }
@@ -139,27 +139,33 @@ auto update_camera(int) noexcept -> void {
     ::util::cartesian_to_spherical_inplace(camera_pos);
 
     // Rotate left/right.
-    if (kb.pressed(KEY_MOVE_LEFT) and not kb.pressed(KEY_MOVE_RIGHT)) {
+    if (kb.pressed(KEY_ROTATE_LEFT) and not kb.pressed(KEY_ROTATE_RIGHT)) {
         camera_pos[2] -= config::CAM_ROTATE_STEP;
-    } else if (kb.pressed(KEY_MOVE_RIGHT) and not kb.pressed(KEY_MOVE_LEFT)) {
+    } else if (kb.pressed(KEY_ROTATE_RIGHT) and not kb.pressed(KEY_ROTATE_LEFT)) {
         camera_pos[2] += config::CAM_ROTATE_STEP;
     }
 
     // Rotate up/down.
     // TODO: prevent wrap arounds.
-    if (kb.pressed(KEY_MOVE_UP) and not kb.pressed(KEY_MOVE_DOWN)) {
+    if (kb.pressed(KEY_ROTATE_UP) and not kb.pressed(KEY_ROTATE_DOWN)) {
         // camera_pos[1] = std::max(0.f, camera_pos[1] - config::CAM_ROTATE_ANGLE);
         camera_pos[1] -= config::CAM_ROTATE_STEP;
-    } else if (kb.pressed(KEY_MOVE_DOWN) and not kb.pressed(KEY_MOVE_UP)) {
+    } else if (kb.pressed(KEY_ROTATE_DOWN) and not kb.pressed(KEY_ROTATE_UP)) {
         // camera_pos[1] = std::min(glm::pi<float>(), camera_pos[1] + config::CAM_ROTATE_ANGLE);
         camera_pos[1] += config::CAM_ROTATE_STEP;
     }
 
     // Zoom in/out.
-    if (kb.pressed(KEY_MOVE_CLOSER) and not kb.pressed(KEY_MOVE_FURTHER)) {
-        camera_pos[0] = std::max(config::CAM_ZOOM_MAX, camera_pos[0] - config::CAM_ZOOM_STEP);
-    } else if (kb.pressed(KEY_MOVE_FURTHER) and not kb.pressed(KEY_MOVE_CLOSER)) {
-        camera_pos[0] = std::min(config::CAM_ZOOM_MIN, camera_pos[0] + config::CAM_ZOOM_STEP);
+    if (kb.pressed(KEY_ZOOM_IN) and not kb.pressed(KEY_ZOOM_OUT)) {
+        camera_pos[0] = std::max(
+            config::CAM_ZOOM_MAX,
+            camera_pos[0] - config::CAM_ZOOM_STEP
+        );
+    } else if (kb.pressed(KEY_ZOOM_OUT) and not kb.pressed(KEY_ZOOM_IN)) {
+        camera_pos[0] = std::min(
+            config::CAM_ZOOM_MIN,
+            camera_pos[0] + config::CAM_ZOOM_STEP
+        );
     }
 
     ::util::spherical_to_cartesian_inplace(camera_pos);
