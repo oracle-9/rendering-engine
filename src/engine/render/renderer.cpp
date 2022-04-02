@@ -121,7 +121,6 @@ auto render() noexcept -> void {
     glutSwapBuffers();
 }
 
-// TODO: implement rotation and zoom.
 auto update_camera(int) noexcept -> void {
     using enum config::kb_keys;
 
@@ -139,28 +138,28 @@ auto update_camera(int) noexcept -> void {
 
     ::util::cartesian_to_spherical_inplace(camera_pos);
 
+    // Rotate left/right.
     if (kb.pressed(KEY_MOVE_LEFT) and not kb.pressed(KEY_MOVE_RIGHT)) {
-        camera_pos[2] -= config::CAM_ROTATE_ANGLE;
+        camera_pos[2] -= config::CAM_ROTATE_STEP;
     } else if (kb.pressed(KEY_MOVE_RIGHT) and not kb.pressed(KEY_MOVE_LEFT)) {
-        camera_pos[2] += config::CAM_ROTATE_ANGLE;
+        camera_pos[2] += config::CAM_ROTATE_STEP;
     }
 
+    // Rotate up/down.
     // TODO: prevent wrap arounds.
     if (kb.pressed(KEY_MOVE_UP) and not kb.pressed(KEY_MOVE_DOWN)) {
         // camera_pos[1] = std::max(0.f, camera_pos[1] - config::CAM_ROTATE_ANGLE);
-        camera_pos[1] -= config::CAM_ROTATE_ANGLE;
+        camera_pos[1] -= config::CAM_ROTATE_STEP;
     } else if (kb.pressed(KEY_MOVE_DOWN) and not kb.pressed(KEY_MOVE_UP)) {
         // camera_pos[1] = std::min(glm::pi<float>(), camera_pos[1] + config::CAM_ROTATE_ANGLE);
-        camera_pos[1] += config::CAM_ROTATE_ANGLE;
+        camera_pos[1] += config::CAM_ROTATE_STEP;
     }
 
-    // Zoom in and out
+    // Zoom in/out.
     if (kb.pressed(KEY_MOVE_CLOSER) and not kb.pressed(KEY_MOVE_FURTHER)) {
-        camera_pos[0] -= config::CAM_ZOOM_STEP;
-        if (camera_pos[0] < config::CAM_ZOOM_STEP)
-            camera_pos[0] = config::CAM_ZOOM_STEP;
+        camera_pos[0] = std::max(config::CAM_ZOOM_MAX, camera_pos[0] - config::CAM_ZOOM_STEP);
     } else if (kb.pressed(KEY_MOVE_FURTHER) and not kb.pressed(KEY_MOVE_CLOSER)) {
-        camera_pos[0] += config::CAM_ZOOM_STEP;
+        camera_pos[0] = std::min(config::CAM_ZOOM_MIN, camera_pos[0] + config::CAM_ZOOM_STEP);
     }
 
     ::util::spherical_to_cartesian_inplace(camera_pos);
