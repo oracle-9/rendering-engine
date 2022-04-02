@@ -4,7 +4,7 @@
 	    <position x="500" y="10" z="500" />
 	    <lookAt x="0" y="0" z="0" />
 	    <up x="0" y="1" z="0" /> <!-- optional, use these values as default-->
-        <projection fov="60" near="10" far="500000" /> <!-- optional, use these values as default-->
+        <projection fov="60" near="10" far="30000" /> <!-- optional, use these values as default-->
     </camera>
 
     <group>
@@ -13,7 +13,7 @@
         </models>
         <group> 
             <transform> 
-                <translate x="130" y="0" z="0" />
+                <translate x="142.5" y="0" z="0" />
             </transform>
 			<models> 
 				<model file="examples/models/mercurio.3d" />
@@ -36,7 +36,7 @@
 			</models>
             <group> 
                 <transform> 
-                    <translate x="96" y="0" z="0" /> <!-- em relação à terra -->
+                    <translate x="38.4" y="0" z="0" /> <!-- em relação à terra -->
                 </transform>
                 <models> 
                     <model file="examples/models/lua.3d" /> <!-- generator box 2 3 box.3d -->
@@ -53,7 +53,7 @@
         </group>
         <group> 
             <transform> 
-                <translate x="1945" y="0" z="0" />
+                <translate x="1950" y="0" z="0" />
             </transform>
             <models> 
                 <model file="examples/models/jupiter.3d" />
@@ -61,7 +61,7 @@
         </group>
         <group> 
             <transform> 
-                <translate x="3567.5" y="0" z="0" />
+                <translate x="3592.5" y="0" z="0" />
             </transform>
             <models> 
                 <model file="examples/models/saturno.3d" />
