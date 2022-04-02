@@ -96,7 +96,7 @@ auto inline constexpr CAM_ROTATE_STEP = 0.01f;
 
 auto inline constexpr CAM_ZOOM_STEP = 1.0f;
 auto inline constexpr CAM_ZOOM_MIN
-    = std::numeric_limits<float>::max() - CAM_ZOOM_STEP;
+    = std::numeric_limits<float>::max() - 2.f * CAM_ZOOM_STEP;
 auto inline constexpr CAM_ZOOM_MAX = 0.001f;
 
 } // namespace render::config
