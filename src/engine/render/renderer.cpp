@@ -103,11 +103,13 @@ auto render() noexcept -> void {
     // );
     // glTranslatef(-camera.pos.x, -camera.pos.y, -camera.pos.z);
 
+#   define DBL(x) static_cast<double>(x)
     gluLookAt(
-        static_cast<double>(camera.pos.x), static_cast<double>(camera.pos.y), static_cast<double>(camera.pos.z),
-        static_cast<double>(camera.lookat.x), static_cast<double>(camera.lookat.y), static_cast<double>(camera.lookat.z),
-        static_cast<double>(camera.up.x), static_cast<double>(camera.up.y), static_cast<double>(camera.up.z)
+        DBL(camera.pos.x),    DBL(camera.pos.y),    DBL(camera.pos.z),
+        DBL(camera.lookat.x), DBL(camera.lookat.y), DBL(camera.lookat.z),
+        DBL(camera.up.x),     DBL(camera.up.y),     DBL(camera.up.z)
     );
+#   undef DBL
 
     glPolygonMode(GL_FRONT, state::polygon_mode);
     glLineWidth(state::line_width);
