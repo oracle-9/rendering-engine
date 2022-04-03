@@ -4,6 +4,7 @@
 
 #include <GL/freeglut.h>
 #include <array>
+#include <glm/ext/scalar_constants.hpp>
 #include <glm/vec4.hpp>
 #include <limits>
 #include <string_view>
@@ -93,6 +94,8 @@ auto inline const WORLD = world {
 enum : unsigned int { RENDER_TICK_MILLIS = 16 }; // 60 FPS
 
 auto inline constexpr CAM_ROTATE_STEP = 0.01f;
+auto inline constexpr CAM_VERT_ANGLE_MIN = 0.001f;
+auto inline constexpr CAM_VERT_ANGLE_MAX = glm::pi<float>() - 0.001f;
 
 auto inline constexpr CAM_ZOOM_STEP = 1.0f;
 auto inline constexpr CAM_ZOOM_MIN

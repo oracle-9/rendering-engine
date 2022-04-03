@@ -125,53 +125,61 @@ auto update_camera(int) noexcept -> void {
     using enum config::kb_keys;
 
     auto const& kb = state::kb;
-    auto& camera_pos = state::world_ptr->camera.pos;
 
-    // TODO: skip camera movement if no key is presssed.
-    // if (not kb.pressed(KEY_ROTATE_LEFT)
-    //     and not kb.pressed(KEY_ROTATE_RIGHT)
-    //     and not kb.pressed(KEY_ROTATE_UP)
-    //     and not kb.pressed(KEY_ROTATE_DOWN)
-    // ) {
-    //     goto SKIP_CAMERA_MOVE;
-    // }
+    if (not kb.pressed(KEY_ROTATE_UP)
+        and not kb.pressed(KEY_ROTATE_LEFT)
+        and not kb.pressed(KEY_ROTATE_DOWN)
+        and not kb.pressed(KEY_ROTATE_RIGHT)
+        and not kb.pressed(KEY_ZOOM_IN)
+        and not kb.pressed(KEY_ZOOM_OUT)
+    ) {
+        // Skip camera update if no key is presssed.
+        glutTimerFunc(config::RENDER_TICK_MILLIS, update_camera, 0);
+        return;
+    }
 
-    ::util::cartesian_to_spherical_inplace(camera_pos);
+    auto& camera = state::world_ptr->camera;
+    auto relative_pos = camera.pos - camera.lookat;
+
+    ::util::cartesian_to_spherical_inplace(relative_pos);
 
     // Rotate left/right.
     if (kb.pressed(KEY_ROTATE_LEFT) and not kb.pressed(KEY_ROTATE_RIGHT)) {
-        camera_pos[2] -= config::CAM_ROTATE_STEP;
+        relative_pos[2] -= config::CAM_ROTATE_STEP;
     } else if (kb.pressed(KEY_ROTATE_RIGHT) and not kb.pressed(KEY_ROTATE_LEFT)) {
-        camera_pos[2] += config::CAM_ROTATE_STEP;
+        relative_pos[2] += config::CAM_ROTATE_STEP;
     }
 
     // Rotate up/down.
-    // TODO: prevent wrap arounds.
     if (kb.pressed(KEY_ROTATE_UP) and not kb.pressed(KEY_ROTATE_DOWN)) {
-        // camera_pos[1] = std::max(0.f, camera_pos[1] - config::CAM_ROTATE_ANGLE);
-        camera_pos[1] -= config::CAM_ROTATE_STEP;
+        relative_pos[1] = std::max(
+            config::CAM_VERT_ANGLE_MIN,
+            relative_pos[1] - config::CAM_ROTATE_STEP
+        );
     } else if (kb.pressed(KEY_ROTATE_DOWN) and not kb.pressed(KEY_ROTATE_UP)) {
-        // camera_pos[1] = std::min(glm::pi<float>(), camera_pos[1] + config::CAM_ROTATE_ANGLE);
-        camera_pos[1] += config::CAM_ROTATE_STEP;
+        relative_pos[1] = std::min(
+            config::CAM_VERT_ANGLE_MAX,
+            relative_pos[1] + config::CAM_ROTATE_STEP
+        );
     }
 
     // Zoom in/out.
     if (kb.pressed(KEY_ZOOM_IN) and not kb.pressed(KEY_ZOOM_OUT)) {
-        camera_pos[0] = std::max(
+        relative_pos[0] = std::max(
             config::CAM_ZOOM_MAX,
-            camera_pos[0] - config::CAM_ZOOM_STEP
+            relative_pos[0] - config::CAM_ZOOM_STEP
         );
     } else if (kb.pressed(KEY_ZOOM_OUT) and not kb.pressed(KEY_ZOOM_IN)) {
-        camera_pos[0] = std::min(
+        relative_pos[0] = std::min(
             config::CAM_ZOOM_MIN,
-            camera_pos[0] + config::CAM_ZOOM_STEP
+            relative_pos[0] + config::CAM_ZOOM_STEP
         );
     }
 
-    ::util::spherical_to_cartesian_inplace(camera_pos);
+    ::util::spherical_to_cartesian_inplace(relative_pos);
 
-    // TODO: skip camera movement if no key is presssed.
-    // SKIP_CAMERA_MOVE:
+    camera.pos = relative_pos + camera.lookat;
+
     glutPostRedisplay();
     glutTimerFunc(config::RENDER_TICK_MILLIS, update_camera, 0);
 }
