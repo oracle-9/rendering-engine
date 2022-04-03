@@ -30,17 +30,13 @@ auto key_up(unsigned char key, int x, int y) noexcept -> void;
 auto display_info() -> void;
 
 namespace state {
-
-auto static bg_color = config::BG_COLOR;
-auto static fg_color = config::FG_COLOR;
-
 auto static enable_axis = config::ENABLE_AXIS;
-auto static polygon_mode = static_cast<GLenum>(config::POLYGON_MODE);
-auto static line_width = config::LINE_WIDTH;
+auto static polygon_mode = static_cast<GLenum>(config::DEFAULT_POLYGON_MODE);
+auto static line_width = config::DEFAULT_LINE_WIDTH;
 
 auto static kb = keyboard{};
 
-auto static default_world_mut = config::WORLD;
+auto static default_world_mut = config::DEFAULT_WORLD;
 auto static world_ptr = ptr::nonnull_ptr_to(default_world_mut);
 
 } // namespace state
@@ -71,13 +67,13 @@ renderer::renderer() {
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
     glClearColor(
-        config::BG_COLOR.r,
-        config::BG_COLOR.g,
-        config::BG_COLOR.b,
-        config::BG_COLOR.a
+        config::DEFAULT_BG_COLOR.r,
+        config::DEFAULT_BG_COLOR.g,
+        config::DEFAULT_BG_COLOR.b,
+        config::DEFAULT_BG_COLOR.a
     );
-    glPolygonMode(GL_FRONT, config::POLYGON_MODE);
-    glLineWidth(config::LINE_WIDTH);
+    glPolygonMode(GL_FRONT, config::DEFAULT_POLYGON_MODE);
+    glLineWidth(config::DEFAULT_LINE_WIDTH);
     display_info();
 }
 
@@ -99,6 +95,7 @@ auto render() noexcept -> void {
     glLoadIdentity();
 
     // TODO: Use glm transforms instead of GLUT to avoid casting.
+
     // glMultMatrixf(
     //     glm::value_ptr(
     //         glm::lookAt(camera.pos, camera.lookat, camera.up)
@@ -204,7 +201,7 @@ auto render_axis() noexcept -> void {
 
     glEnd();
 
-    glColor3fv(glm::value_ptr(state::fg_color));
+    glColor3fv(glm::value_ptr(config::DEFAULT_FG_COLOR));
 }
 
 // TODO: Implement non-recursively.

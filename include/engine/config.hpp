@@ -38,25 +38,25 @@ auto constexpr ASPECT_RATIO
     = static_cast<double>(WIN_WIDTH)
     / static_cast<double>(WIN_WIDTH);
 
-// pleasant black.
-auto inline constexpr BG_COLOR = glm::vec4 {
+// Pleasant black.
+auto inline constexpr DEFAULT_BG_COLOR = glm::vec4 {
     0.08f, // R
     0.08f, // G
     0.08f, // B
     1.f,   // A
 };
 
-// white.
-auto inline constexpr FG_COLOR = glm::vec4{1.f, 1.f, 1.f, 1.f};
+// White.
+auto inline constexpr DEFAULT_FG_COLOR = glm::vec4{1.f, 1.f, 1.f, 1.f};
 
 auto inline constexpr ENABLE_AXIS = false;
 
-auto inline constexpr LINE_WIDTH = 1.f;
+auto inline constexpr DEFAULT_LINE_WIDTH = 1.f;
 auto inline constexpr LINE_WIDTH_MIN = 1.f;
 auto inline constexpr LINE_WIDTH_MAX = 5.f;
 auto inline constexpr LINE_WIDTH_STEP = 1.f;
 
-enum : GLenum { POLYGON_MODE = GL_LINE };
+enum : GLenum { DEFAULT_POLYGON_MODE = GL_LINE };
 
 enum kb_keys : unsigned char {
     KEY_ROTATE_UP = 'w',
@@ -81,7 +81,7 @@ auto inline constexpr AXIS_COLOR = std::to_array<glm::vec3>({
     {0.f, 0.f, 1.f}, // z axis (blue)
 });
 
-auto inline const WORLD = world {
+auto inline const DEFAULT_WORLD = world {
     .camera = {
         .pos = {9., 3., 30.},
         .lookat = {0., 0., 0.},
