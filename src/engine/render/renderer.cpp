@@ -11,7 +11,6 @@
 #include <algorithm>
 #include <cctype>
 #include <fmt/core.h>
-#include <glm/ext/scalar_constants.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/mat4x4.hpp>
