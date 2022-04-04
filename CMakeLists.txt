@@ -149,6 +149,9 @@ set(RESULT_PATH "${LIB_PATH}/result")
 set(SPDLOG_PATH "${LIB_PATH}/spdlog")
 add_subdirectory(${SPDLOG_PATH})
 
+# brief_int
+set(TINY_OBJ_LOADER_PATH "${LIB_PATH}/tiny_obj_loader")
+
 list(
     APPEND
     LIB_INCLUDE_PATHS
@@ -161,6 +164,7 @@ list(
     ${RAPIDXML_PATH}
     ${RESULT_PATH}
     ${SPDLOG_PATH}
+    ${TINY_OBJ_LOADER_PATH}
 )
 
 foreach(TARGET generator engine)
