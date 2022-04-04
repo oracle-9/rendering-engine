@@ -1,9 +1,6 @@
 # Project-specific
-bin
 build
-CMakeFiles
 compile_commands.json
-engine_input
 
 # Prerequisites
 *.d
