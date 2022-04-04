@@ -1,5 +1,7 @@
 #pragma once
 
+#include <utility>
+
 #define TRY_NULLABLE(nullable_expr) ({                                         \
     auto _nullable_val = nullable_expr;                                        \
     if (_nullable_val == nullptr) {                                            \
@@ -21,7 +23,7 @@
     if (not _option_val.has_value()) {                                         \
         return {};                                                             \
     }                                                                          \
-    *_option_val;                                                              \
+    std::move(*_option_val);                                                   \
 })
 
 #define TRY_OPTION_OR(option_expr, stmt) ({                                    \
@@ -29,7 +31,7 @@
     if (not _option_val.has_value()) {                                         \
         stmt;                                                                  \
     }                                                                          \
-    *_option_val;                                                              \
+    std::move(*_option_val);                                                   \
 })
 
 #define TRY_RESULT(result_expr) ({                                             \
@@ -37,7 +39,7 @@
     if (_result_val.has_error()) {                                             \
         return cpp::fail(_result_val.error());                                 \
     }                                                                          \
-    *_result_val;                                                              \
+    std::move(*_result_val);                                                   \
 })
 
 #define TRY_RESULT_OR(result_expr, stmt) ({                                    \
@@ -45,5 +47,5 @@
     if (_result_val.has_error()) {                                             \
         stmt;                                                                  \
     }                                                                          \
-    *_result_val;                                                              \
+    std::move(*_result_val);                                                   \
 })
