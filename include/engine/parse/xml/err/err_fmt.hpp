@@ -2,10 +2,7 @@
 
 #include "engine/parse/xml/err/err.hpp"
 
-#include <array>
 #include <fmt/format.h>
-#include <string_view>
-#include <type_traits>
 
 template <>
 struct fmt::formatter<engine::parse::xml::parse_err> {
@@ -18,40 +15,53 @@ struct fmt::formatter<engine::parse::xml::parse_err> {
     template <typename FormatContext>
     auto constexpr format(parse_err const err, FormatContext& ctx) {
         return format_to(ctx.out(), "{}", [err] {
-            using namespace brief_int::literals;
+            switch (err) {
+                using enum ::engine::parse::xml::parse_err;
 
-            auto static constexpr to_string = std::to_array<std::string_view>({
-                "ran out of memory",
-                "input/output error",
+                case no_mem:
+                    return "ran out of memory";
+                case io_err:
+                    return "input/output error";
 
-                "XML syntax error",
-                "malformed number",
+                case syntax_err:
+                    return "XML syntax error";
+                case malformed_num:
+                    return "malformed number";
 
-                "no world node found",
-                "no camera node found",
-                "no root group node found",
+                case no_world_node:
+                    return "no world node found";
+                case no_camera_node:
+                    return "no camera node found";
+                case no_group_node:
+                    return "no root group node found";
 
-                "no camera position node found",
-                "no camera lookat node found",
-                "no camera up node found",
-                "no camera projection node found",
+                case no_camera_pos_node:
+                    return "no camera position node found";
+                case no_camera_lookat_node:
+                    return "no camera lookat node found";
+                case no_camera_up_node:
+                    return "no camera up node found";
+                case no_camera_proj_node:
+                    return "no camera projection node found";
 
-                "unrecognized group child node",
+                case unknown_group_child_node:
+                    return "unrecognized group child node";
 
-                "unrecognized transformation",
+                case unknown_transform:
+                    return "unrecognized transformation";
 
-                "no model filename attribute",
-                "model points to nonexistent file",
-            });
-
-            auto const idx
-                = static_cast<std::underlying_type_t<parse_err>>(err);
-
-            if (idx >= 0_uz && idx <= 14_uz) {
-                return to_string[idx];
+                case no_model_filename:
+                    return "no model filename attribute";
+                case ambiguous_model_ext:
+                    return "model filename extension is ambiguous - must be "
+                        "either .3d or .obj";
+                case no_model_file:
+                    return "model points to nonexistent file";
+                case obj_loader_err:
+                    return "object loader failed";
+                default:
+                    __builtin_unreachable();
             }
-
-            __builtin_unreachable();
         }());
     }
 };

@@ -4,8 +4,6 @@
 
 namespace engine::parse::xml {
 
-// NOTE: changing the order of the enumerators requires a change in the
-// string formatting implementation.
 enum class parse_err : brief_int::usize {
     no_mem,
     io_err,
@@ -27,7 +25,9 @@ enum class parse_err : brief_int::usize {
     unknown_transform,
 
     no_model_filename,
+    ambiguous_model_ext,
     no_model_file,
+    obj_loader_err,
 };
 
 } // namespace engine::parse::xml
