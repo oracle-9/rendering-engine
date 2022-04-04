@@ -2,10 +2,7 @@
 
 #include "generator/err/err.hpp"
 
-#include <array>
 #include <fmt/format.h>
-#include <string_view>
-#include <type_traits>
 
 template <>
 struct fmt::formatter<generator::generator_err> {
@@ -18,31 +15,34 @@ struct fmt::formatter<generator::generator_err> {
     template <typename FormatContext>
     auto constexpr format(generator_err const err, FormatContext& ctx) {
         return format_to(ctx.out(), "{}", [err] {
-            using namespace brief_int::literals;
+            switch (err) {
+                using enum ::generator::generator_err;
+                case no_mem:
+                    return "ran out of memory";
+                case io_err:
+                    return "input/output error";
 
-            auto static constexpr to_string = std::to_array<std::string_view>({
-                "ran out of memory",
-                "input/output error",
+                case box_zero_divs:
+                    return "attempted to generate a box with zero divisions";
 
-                "attempted to generate a box with zero divisions",
+                case cone_lt_three_slices:
+                    return "attempted to generate a cone with less than three "
+                        "slices";
+                case cone_zero_stacks:
+                    return "attempted to generate a cone with zero stacks";
 
-                "attempted to generate a cone with less than three slices",
-                "attempted to generate a cone with zero stacks",
+                case plane_zero_divs:
+                    return "attempted to generate a plane with zero divisions";
 
-                "attempted to generate a plane with zero divisions",
-
-                "attempted to generate a sphere with less than three slices",
-                "attempted to generate a sphere with less than two stacks",
-            });
-
-            auto const idx
-                = static_cast<std::underlying_type_t<generator_err>>(err);
-
-            if (idx >= 0_uz || idx <= 7_uz) {
-                return to_string[idx];
+                case sphere_lt_three_slices:
+                    return "attempted to generate a sphere with less than "
+                        "three slices";
+                case sphere_lt_two_stacks:
+                    return "attempted to generate a sphere with less than two "
+                        "stacks";
+                default:
+                    __builtin_unreachable();
             }
-
-            __builtin_unreachable();
         }());
     }
 };
