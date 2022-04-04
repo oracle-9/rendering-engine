@@ -29,6 +29,7 @@ auto key_up(unsigned char key, int x, int y) noexcept -> void;
 auto display_info() -> void;
 
 namespace state {
+
 auto static enable_axis = config::ENABLE_AXIS;
 auto static polygon_mode = static_cast<GLenum>(config::DEFAULT_POLYGON_MODE);
 auto static line_width = config::DEFAULT_LINE_WIDTH;
