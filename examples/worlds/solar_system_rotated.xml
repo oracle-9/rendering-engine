@@ -16,7 +16,7 @@
         <!-- Mercury -->
         <group>
             <transform>
-                <rotate angle="45" x="0" y ="1" z = "0" />
+                <rotate angle="45" x="0" y="1" z="0" />
                 <translate x="142.5" y="0" z="0" />
             </transform>
             <models>
@@ -27,7 +27,7 @@
         <!-- Venus -->
         <group>
             <transform>
-                <rotate angle="90" x="0" y ="1" z = "0" />
+                <rotate angle="90" x="0" y="1" z="0" />
                 <translate x="270" y="0" z="0" />
             </transform>
             <models>
@@ -38,7 +38,7 @@
         <group>
             <!-- Earth -->
             <transform>
-                <rotate angle="135" x="0" y ="1" z = "0" />
+                <rotate angle="135" x="0" y="1" z="0" />
                 <translate x="372.5" y="0" z="0" />
             </transform>
             <models>
@@ -48,8 +48,8 @@
             <!-- Moon -->
             <group>
                 <transform>
-                    <rotate angle="45" x="0" y ="0" z = "1" />
-                    <rotate angle="-90" x="0" y ="1" z = "0" />
+                    <rotate angle="45" x="0" y="0" z="1" />
+                    <rotate angle="-90" x="0" y="1" z="0" />
                     <translate x="38.4" y="0" z="0" />
                 </transform>
                 <models>
@@ -61,7 +61,7 @@
         <!-- Mars -->
         <group>
             <transform>
-                <rotate angle="180" x="0" y ="1" z = "0" />
+                <rotate angle="180" x="0" y="1" z="0" />
                 <translate x="570" y="0" z="0" />
             </transform>
             <models>
@@ -72,7 +72,7 @@
         <!-- Jupiter -->
         <group>
             <transform>
-                <rotate angle="215" x="0" y ="1" z = "0" />
+                <rotate angle="215" x="0" y="1" z="0" />
                 <translate x="1950" y="0" z="0" />
             </transform>
             <models>
@@ -83,7 +83,7 @@
         <!-- Saturn -->
         <group>
             <transform>
-                <rotate angle="230" x="0" y ="1" z = "0" />
+                <rotate angle="230" x="0" y="1" z="0" />
                 <translate x="3592.5" y="0" z="0" />
             </transform>
             <models>
@@ -94,7 +94,7 @@
         <!-- Uranus -->
         <group>
             <transform>
-                <rotate angle="275" x="0" y ="1" z = "0" />
+                <rotate angle="275" x="0" y="1" z="0" />
                 <translate x="7177.5" y="0" z="0" />
             </transform>
             <models>
@@ -105,7 +105,7 @@
         <!-- Neptune -->
         <group>
             <transform>
-                <rotate angle="320" x="0" y ="1" z = "0" />
+                <rotate angle="320" x="0" y="1" z="0" />
                 <translate x="11325" y="0" z="0" />
             </transform>
             <models>
