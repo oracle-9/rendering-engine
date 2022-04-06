@@ -117,8 +117,8 @@ try {
         // First we generate the center of the base of the cone, which is
         // (conveniently) the point (0, 0, 0).
         vertices.emplace_back(0.f, 0.f, 0.f);
-        vertices.emplace_back(radius, 0.f, curr_angle);
         vertices.emplace_back(radius, 0.f, next_angle);
+        vertices.emplace_back(radius, 0.f, curr_angle);
 
         // Next, we generate the "body" of the slice, that is, the "walls" of
         // the slice that constitute the "walls" of the cone.
@@ -160,13 +160,13 @@ try {
 
             // First we generate the first half of the slice wall.
             vertices.emplace_back(next_radius, next_height, next_angle);
-            vertices.emplace_back(curr_radius, curr_height, next_angle);
             vertices.emplace_back(next_radius, next_height, curr_angle);
+            vertices.emplace_back(curr_radius, curr_height, next_angle);
 
             // Then we generate the second.
             vertices.emplace_back(curr_radius, curr_height, curr_angle);
-            vertices.emplace_back(next_radius, next_height, curr_angle);
             vertices.emplace_back(curr_radius, curr_height, next_angle);
+            vertices.emplace_back(next_radius, next_height, curr_angle);
         }
 
         // Finally, we generate the upper wall of the slice.
@@ -174,8 +174,8 @@ try {
         // Reminder that radius_factor is equivalent to the radius of the last
         // (upper) stack.
         vertices.push_back(apex);
-        vertices.emplace_back(radius_factor, top_height, next_angle);
         vertices.emplace_back(radius_factor, top_height, curr_angle);
+        vertices.emplace_back(radius_factor, top_height, next_angle);
     }
 
     // Print the total amount of vertices on the first line.
