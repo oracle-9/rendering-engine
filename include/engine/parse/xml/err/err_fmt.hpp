@@ -3,6 +3,7 @@
 #include "engine/parse/xml/err/err.hpp"
 
 #include <fmt/format.h>
+#include <intrinsics/branching.hpp>
 
 template <>
 struct fmt::formatter<engine::parse::xml::parse_err> {
@@ -60,7 +61,7 @@ struct fmt::formatter<engine::parse::xml::parse_err> {
                 case obj_loader_err:
                     return "object loader failed";
                 default:
-                    __builtin_unreachable();
+                    intrinsics::unreachable();
             }
         }());
     }

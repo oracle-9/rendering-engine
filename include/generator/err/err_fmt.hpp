@@ -3,6 +3,7 @@
 #include "generator/err/err.hpp"
 
 #include <fmt/format.h>
+#include <intrinsics/branching.hpp>
 
 template <>
 struct fmt::formatter<generator::generator_err> {
@@ -41,7 +42,7 @@ struct fmt::formatter<generator::generator_err> {
                     return "attempted to generate a sphere with less than two "
                         "stacks";
                 default:
-                    __builtin_unreachable();
+                    intrinsics::unreachable();
             }
         }());
     }

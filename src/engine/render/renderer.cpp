@@ -14,6 +14,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/mat4x4.hpp>
+#include <intrinsics/branching.hpp>
 #include <nonnull_ptr.hpp>
 #include <spdlog/spdlog.h>
 
@@ -85,8 +86,8 @@ auto renderer::set_world(world& world) noexcept -> renderer& {
 [[noreturn]]
 auto renderer::run() noexcept -> void {
     glutMainLoop();
-    __builtin_unreachable(); // glutMainLoop is noreturn,
-                             // but isn't marked as such.
+    intrinsics::unreachable(); // glutMainLoop is noreturn,
+                               // but isn't marked as such.
 }
 
 auto render() noexcept -> void {
@@ -296,7 +297,7 @@ auto key_down(unsigned char const key, int, int) noexcept -> void {
                     polygon_mode = GL_POINT;
                     break;
                 default:
-                    __builtin_unreachable();
+                    intrinsics::unreachable();
             }
             glutPostRedisplay();
             break;
