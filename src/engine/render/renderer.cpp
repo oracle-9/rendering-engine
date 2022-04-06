@@ -281,6 +281,7 @@ auto key_down(unsigned char const key, int, int) noexcept -> void {
         using enum config::kb_keys;
         case KEY_TOGGLE_AXIS:
             state::enable_axis = not state::enable_axis;
+            glutPostRedisplay();
             break;
         case KEY_NEXT_POLYGON_MODE:
             using state::polygon_mode;
@@ -297,18 +298,21 @@ auto key_down(unsigned char const key, int, int) noexcept -> void {
                 default:
                     __builtin_unreachable();
             }
+            glutPostRedisplay();
             break;
         case KEY_THINNER_LINES:
             state::line_width = std::max(
                 state::line_width - config::LINE_WIDTH_STEP,
                 config::LINE_WIDTH_MIN
             );
+            glutPostRedisplay();
             break;
         case KEY_THICKER_LINES:
             state::line_width = std::min(
                 state::line_width + config::LINE_WIDTH_STEP,
                 config::LINE_WIDTH_MAX
             );
+            glutPostRedisplay();
             break;
         default:
             break;
