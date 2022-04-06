@@ -133,6 +133,9 @@ add_subdirectory(${GLM_PATH})
 # GLUT
 find_package(GLUT REQUIRED)
 
+# intrinsics
+set(INTRINSICS_PATH "${LIB_PATH}/intrinsics")
+
 # nonnull_ptr
 set(NONNULL_PTR_PATH "${LIB_PATH}/nonnull_ptr")
 
@@ -159,6 +162,7 @@ list(
     ${FMT_PATH}
     ${GLM_PATH}
     ${GLUT_INCLUDE_DIRS}
+    ${INTRINSICS_PATH}
     ${NONNULL_PTR_PATH}
     ${OPENGL_INCLUDE_DIRS}
     ${RAPIDXML_PATH}
@@ -171,7 +175,7 @@ foreach(TARGET generator engine)
     target_include_directories(
         ${TARGET}
         SYSTEM
-        PRIVATE ${LIB_INCLUDE_PATHS}
+        PRIVATE ${LIB_PATH} ${LIB_INCLUDE_PATHS}
     )
 endforeach()
 
