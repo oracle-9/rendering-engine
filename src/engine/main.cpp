@@ -40,6 +40,7 @@ auto main(int argc, char* argv[]) -> int {
     if (argc == 1) {
         spdlog::info("no XML file was provided, rendering a default world.");
         engine::render::get().run();
+        return EXIT_SUCCESS;
     }
 
     auto const cmd = std::string_view{argv[1]};
