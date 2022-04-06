@@ -16,7 +16,6 @@ class renderer {
   public:
     auto set_world(world& world) noexcept -> renderer&;
 
-    [[noreturn]]
     auto run() noexcept -> void;
 };
 

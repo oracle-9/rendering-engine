@@ -59,6 +59,10 @@ renderer::renderer() {
     glutInitWindowPosition(config::WIN_POS_X, config::WIN_POS_Y);
     glutInitWindowSize(config::WIN_WIDTH, config::WIN_HEIGHT);
     glutCreateWindow(config::WIN_TITLE);
+    glutSetOption(
+        GLUT_ACTION_ON_WINDOW_CLOSE,
+        GLUT_ACTION_GLUTMAINLOOP_RETURNS
+    );
     glutSetKeyRepeat(GLUT_KEY_REPEAT_OFF);
     glutDisplayFunc(render);
     glutReshapeFunc(resize);
@@ -83,11 +87,8 @@ auto renderer::set_world(world& world) noexcept -> renderer& {
     return *this;
 }
 
-[[noreturn]]
 auto renderer::run() noexcept -> void {
     glutMainLoop();
-    intrinsics::unreachable(); // glutMainLoop is noreturn,
-                               // but isn't marked as such.
 }
 
 auto render() noexcept -> void {
