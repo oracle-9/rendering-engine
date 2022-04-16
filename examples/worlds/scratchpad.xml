@@ -7,7 +7,7 @@
     </camera>
     <group>
         <models>
-            <model file="examples/models/triceratop.obj" />
+            <model file="examples/models/triceratops.obj" />
         </models>
     </group>
 </world>
