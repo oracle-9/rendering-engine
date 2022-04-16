@@ -35,7 +35,7 @@ static_assert(
         "calculating aspect ratio."
 );
 
-auto constexpr ASPECT_RATIO
+auto inline constexpr ASPECT_RATIO
     = static_cast<double>(WIN_WIDTH)
     / static_cast<double>(WIN_HEIGHT);
 
