@@ -152,7 +152,7 @@ set(RESULT_PATH "${LIB_PATH}/result")
 set(SPDLOG_PATH "${LIB_PATH}/spdlog")
 add_subdirectory(${SPDLOG_PATH})
 
-# brief_int
+# tinyobjloader
 set(TINY_OBJ_LOADER_PATH "${LIB_PATH}/tiny_obj_loader")
 
 list(
