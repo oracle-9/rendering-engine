@@ -57,8 +57,12 @@ auto parse_xml(char const* const xml_filepath) noexcept
     );
 
     return std::pair {
-        render::world{TRY_RESULT(parse_group(group_node))},
-        render::camera{TRY_RESULT(parse_camera(camera_node))},
+        render::world{
+            .root =  TRY_RESULT(parse_group(group_node))
+        },
+        render::camera{
+            TRY_RESULT(parse_camera(camera_node))
+        },
     };
 }
 
