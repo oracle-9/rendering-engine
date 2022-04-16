@@ -37,7 +37,7 @@ static_assert(
 
 auto constexpr ASPECT_RATIO
     = static_cast<double>(WIN_WIDTH)
-    / static_cast<double>(WIN_WIDTH);
+    / static_cast<double>(WIN_HEIGHT);
 
 // Pleasant black.
 auto inline constexpr DEFAULT_BG_COLOR = glm::vec4 {
