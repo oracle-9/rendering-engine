@@ -55,14 +55,14 @@ auto main(int argc, char* argv[]) -> int {
     char const* const input_filename = cmd.data() + cmd.find('=') + 1_uz;
 
     errno = 0;
-    auto world = engine::parse::xml::parse_world(input_filename);
+    auto world_and_cam = engine::parse::xml::parse_world(input_filename);
 
-    if (world.has_error()) {
+    if (world_and_cam.has_error()) {
         int const local_errno = errno;
         spdlog::error(
             "failed '{xml_filename}' world generation with error '{err}'",
             fmt::arg("xml_filename", input_filename),
-            fmt::arg("err", world.error())
+            fmt::arg("err", world_and_cam.error())
         );
         if (local_errno != 0) {
             spdlog::error(
@@ -74,7 +74,11 @@ auto main(int argc, char* argv[]) -> int {
     }
 
     spdlog::info("successfully parsed world '{}'.", input_filename);
-    engine::render::get().set_world(*world).run();
+
+    engine::render::get()
+        .set_world(world_and_cam->first)
+        .set_camera(world_and_cam->second)
+        .run();
 }
 
 namespace engine {

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "engine/render/world/camera.hpp"
 #include "engine/render/world/world.hpp"
 
 #include <GL/freeglut.h>
@@ -81,15 +82,14 @@ auto inline constexpr AXIS_COLOR = std::to_array<glm::vec3>({
     {0.f, 0.f, 1.f}, // z axis (blue)
 });
 
-auto inline const DEFAULT_WORLD = world {
-    .camera = {
-        .pos = {9., 3., 30.},
-        .lookat = {0., 0., 0.},
-        .up = {0., 1., 0.},
-        .projection = {90., 0.5, 1000.}
-    },
-    .root = {},
+auto inline constexpr DEFAULT_CAMERA = camera {
+    .pos = {9., 3., 30.},
+    .lookat = {0., 0., 0.},
+    .up = {0., 1., 0.},
+    .projection = {90., 0.5, 1000.},
 };
+
+auto inline const DEFAULT_WORLD = world {};
 
 enum : unsigned int { RENDER_TICK_MILLIS = 16 }; // 60 FPS
 

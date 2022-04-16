@@ -4,6 +4,7 @@
 
 #include "engine/config.hpp"
 #include "engine/render/keyboard.hpp"
+#include "engine/render/world/camera.hpp"
 #include "engine/render/world/world.hpp"
 #include "util/coord_conv.hpp"
 
@@ -39,6 +40,9 @@ auto static kb = keyboard{};
 
 auto static default_world_mut = config::DEFAULT_WORLD;
 auto static world_ptr = ptr::nonnull_ptr_to(default_world_mut);
+
+auto static default_camera_mut = config::DEFAULT_CAMERA;
+auto static camera_ptr = ptr::nonnull_ptr_to(default_camera_mut);
 
 } // namespace state
 
@@ -87,12 +91,17 @@ auto renderer::set_world(world& world) noexcept -> renderer& {
     return *this;
 }
 
+auto renderer::set_camera(camera& camera) noexcept -> renderer& {
+    state::camera_ptr = &camera;
+    return *this;
+}
+
 auto renderer::run() noexcept -> void {
     glutMainLoop();
 }
 
 auto render() noexcept -> void {
-    auto const& camera = state::world_ptr->camera;
+    auto const& camera = *state::camera_ptr;
     glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
     glLoadIdentity();
 
@@ -139,7 +148,7 @@ auto update_camera(int) noexcept -> void {
         return;
     }
 
-    auto& camera = state::world_ptr->camera;
+    auto& camera = *state::camera_ptr;
     auto relative_pos = camera.pos - camera.lookat;
 
     ::util::cartesian_to_spherical_inplace(relative_pos);
@@ -263,7 +272,7 @@ auto resize(int const width, int height) noexcept -> void {
         height = 1;
     }
 
-    auto const& camera_proj = state::world_ptr->camera.projection;
+    auto const& camera_proj = state::camera_ptr->projection;
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();

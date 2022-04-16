@@ -28,7 +28,10 @@ auto open_xml_file(char const* const xml_filepath) noexcept
 namespace engine::parse::xml {
 
 auto parse_world(char const* const xml_filepath) noexcept
-    -> cpp::result<render::world, parse_err>
+    -> cpp::result<
+        std::pair<render::world, render::camera>,
+        parse_err
+    >
 {
     auto input_file = TRY_RESULT(open_xml_file(xml_filepath));
     auto xml_doc = rapidxml::xml_document{};
@@ -53,9 +56,9 @@ auto parse_world(char const* const xml_filepath) noexcept
         return cpp::fail(parse_err::no_group_node);
     );
 
-    return render::world {
-        .camera = TRY_RESULT(parse_camera(camera_node)),
-        .root = TRY_RESULT(parse_group(group_node)),
+    return std::pair {
+        render::world{TRY_RESULT(parse_group(group_node))},
+        render::camera{TRY_RESULT(parse_camera(camera_node))},
     };
 }
 
