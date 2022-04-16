@@ -89,7 +89,7 @@ auto inline constexpr DEFAULT_CAMERA = camera {
     .projection = {90., 0.5, 1000.},
 };
 
-auto inline const DEFAULT_WORLD = world {};
+auto inline const DEFAULT_WORLD = world{};
 
 enum : unsigned int { RENDER_TICK_MILLIS = 16 }; // 60 FPS
 
