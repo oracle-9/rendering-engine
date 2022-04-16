@@ -15,10 +15,10 @@
 
 namespace engine::parse::xml {
 
-auto parse_3d(char const* model_filename) noexcept
+auto static parse_3d(char const* model_filename) noexcept
     -> cpp::result<render::model, parse_err>;
 
-auto parse_obj(char const* model_filename) noexcept
+auto static parse_obj(char const* model_filename) noexcept
     -> cpp::result<render::model, parse_err>;
 
 auto parse_model(rapidxml::xml_node<> const* const node) noexcept
@@ -48,7 +48,7 @@ auto parse_model(rapidxml::xml_node<> const* const node) noexcept
     }
 }
 
-auto parse_3d(char const* const model_filename) noexcept
+auto static parse_3d(char const* const model_filename) noexcept
     -> cpp::result<render::model, parse_err>
 try {
     using namespace brief_int;
@@ -99,7 +99,7 @@ try {
     return cpp::fail(parse_err::no_mem);
 }
 
-auto parse_obj(char const* const model_filename) noexcept
+auto static parse_obj(char const* const model_filename) noexcept
     -> cpp::result<render::model, parse_err>
 try {
     using namespace brief_int;

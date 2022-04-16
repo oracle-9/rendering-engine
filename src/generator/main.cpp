@@ -31,10 +31,10 @@ namespace generator {
 extern const std::unordered_map<
     std::string_view,
     auto (*)(std::span<char const*>) -> void
->  cli_actions;
+> cli_actions;
 
 template <::util::number N, std::invocable F>
-auto try_parse_number(
+auto static try_parse_number(
     std::string_view s,
     F&& get_err_msg
 ) -> N
@@ -43,10 +43,10 @@ auto try_parse_number(
         std::invoke_result_t<F>
     >;
 
-auto try_parse_u32(std::string_view s) -> u32;
-auto try_parse_float(std::string_view s) -> float;
-auto check_num_args(usize expected, usize actual) -> void;
-auto display_help() -> void;
+auto static try_parse_u32(std::string_view s) -> u32;
+auto static try_parse_float(std::string_view s) -> float;
+auto static check_num_args(usize expected, usize actual) -> void;
+auto static display_help() -> void;
 
 } // namespace generator
 
@@ -183,7 +183,7 @@ std::unordered_map<
 };
 
 template <::util::number N, std::invocable F>
-auto try_parse_number(
+auto static try_parse_number(
     std::string_view const s,
     F&& get_err_msg
 ) -> N
@@ -198,21 +198,21 @@ auto try_parse_number(
     );
 }
 
-auto try_parse_u32(std::string_view const s) -> u32 {
+auto static try_parse_u32(std::string_view const s) -> u32 {
     return try_parse_number<u32>(
         s,
         [s] { return fmt::format("failed parsing '{}' into u32", s); }
     );
 }
 
-auto try_parse_float(std::string_view const s) -> float {
+auto static try_parse_float(std::string_view const s) -> float {
     return try_parse_number<float>(
         s,
         [s] { return fmt::format("failed parsing '{}' into float", s); }
     );
 }
 
-auto check_num_args(usize const expected, usize const actual) -> void {
+auto static check_num_args(usize const expected, usize const actual) -> void {
     if (expected != actual) {
         throw std::invalid_argument {
             fmt::format("expected {} arguments, but got {}", expected, actual)
@@ -220,7 +220,7 @@ auto check_num_args(usize const expected, usize const actual) -> void {
     }
 }
 
-auto display_help() -> void {
+auto static display_help() -> void {
     fmt::print(
         "Usage:\n"
         "    {prog} (-h | --help)\n"

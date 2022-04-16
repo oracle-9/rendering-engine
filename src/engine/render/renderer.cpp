@@ -21,14 +21,14 @@
 
 namespace engine::render {
 
-auto render() noexcept -> void;
-auto update_camera(int) noexcept -> void;
-auto render_axis() noexcept -> void;
-auto render_group(group const& root) noexcept -> void;
-auto resize(int width, int height) noexcept -> void;
-auto key_down(unsigned char key, int x, int y) noexcept -> void;
-auto key_up(unsigned char key, int x, int y) noexcept -> void;
-auto display_info() -> void;
+auto static render() noexcept -> void;
+auto static update_camera(int) noexcept -> void;
+auto static render_axis() noexcept -> void;
+auto static render_group(group const& root) noexcept -> void;
+auto static resize(int width, int height) noexcept -> void;
+auto static key_down(unsigned char key, int x, int y) noexcept -> void;
+auto static key_up(unsigned char key, int x, int y) noexcept -> void;
+auto static display_info() -> void;
 
 namespace state {
 
@@ -100,7 +100,7 @@ auto renderer::run() noexcept -> void {
     glutMainLoop();
 }
 
-auto render() noexcept -> void {
+auto static render() noexcept -> void {
     auto const& camera = *state::camera_ptr;
     glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
     glLoadIdentity();
@@ -131,7 +131,7 @@ auto render() noexcept -> void {
     glutSwapBuffers();
 }
 
-auto update_camera(int) noexcept -> void {
+auto static update_camera(int) noexcept -> void {
     using enum config::kb_keys;
 
     auto const& kb = state::kb;
@@ -194,7 +194,7 @@ auto update_camera(int) noexcept -> void {
     glutTimerFunc(config::RENDER_TICK_MILLIS, update_camera, 0);
 }
 
-auto render_axis() noexcept -> void {
+auto static render_axis() noexcept -> void {
     glBegin(GL_LINES);
 
     // x axis.
@@ -218,7 +218,7 @@ auto render_axis() noexcept -> void {
 }
 
 // TODO: Implement non-recursively.
-auto render_group(group const& root) noexcept -> void {
+auto static render_group(group const& root) noexcept -> void {
     glPushMatrix();
 
     for (auto const& transform : root.transforms) {
@@ -266,7 +266,7 @@ auto render_group(group const& root) noexcept -> void {
     glPopMatrix();
 }
 
-auto resize(int const width, int height) noexcept -> void {
+auto static resize(int const width, int height) noexcept -> void {
     // Prevent a divide by zero when window is too short.
     if (height == 0) {
         height = 1;
@@ -286,7 +286,7 @@ auto resize(int const width, int height) noexcept -> void {
     glMatrixMode(GL_MODELVIEW);
 }
 
-auto key_down(unsigned char const key, int, int) noexcept -> void {
+auto static key_down(unsigned char const key, int, int) noexcept -> void {
     state::kb.press(key);
     switch (key) {
         using enum config::kb_keys;
@@ -330,14 +330,14 @@ auto key_down(unsigned char const key, int, int) noexcept -> void {
     }
 }
 
-auto key_up(unsigned char key, int, int) noexcept -> void {
+auto static key_up(unsigned char key, int, int) noexcept -> void {
     if (std::isalpha(key)) {
         key = static_cast<unsigned char>(tolower(key));
     }
     state::kb.release(key);
 }
 
-auto display_info() -> void {
+auto static display_info() -> void {
     // reinterpret_cast is needed to silence some fmt + unsigned char warnings.
     spdlog::info(
         "vendor: {}.",

@@ -12,7 +12,7 @@
 #include <string_view>
 
 namespace engine {
-auto display_help() -> void;
+auto static display_help() -> void;
 } // namespace engine
 
 auto main(int argc, char* argv[]) -> int {
@@ -84,7 +84,7 @@ auto main(int argc, char* argv[]) -> int {
 
 namespace engine {
 
-auto display_help() -> void {
+auto static display_help() -> void {
     fmt::print(
         "Usage:\n"
         "    {prog} (-h | --help)\n"
