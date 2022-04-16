@@ -9,7 +9,7 @@
 
 namespace engine::parse::xml {
 
-auto parse_world(char const* xml_filepath) noexcept
+auto parse_xml(char const* xml_filepath) noexcept
     -> cpp::result<
         std::pair<render::world, render::camera>,
         parse_err

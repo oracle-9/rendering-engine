@@ -55,7 +55,7 @@ auto main(int argc, char* argv[]) -> int {
     char const* const input_filename = cmd.data() + cmd.find('=') + 1_uz;
 
     errno = 0;
-    auto world_and_cam = engine::parse::xml::parse_world(input_filename);
+    auto world_and_cam = engine::parse::xml::parse_xml(input_filename);
 
     if (world_and_cam.has_error()) {
         int const local_errno = errno;
@@ -75,7 +75,8 @@ auto main(int argc, char* argv[]) -> int {
 
     spdlog::info("successfully parsed world '{}'.", input_filename);
 
-    engine::render::get()
+    engine::render
+        ::get()
         .set_world(world_and_cam->first)
         .set_camera(world_and_cam->second)
         .run();

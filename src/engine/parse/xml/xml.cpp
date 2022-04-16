@@ -1,4 +1,4 @@
-#include "engine/parse/xml/world.hpp"
+#include "engine/parse/xml/xml.hpp"
 
 #include "engine/parse/xml/camera/camera.hpp"
 #include "engine/parse/xml/group/group.hpp"
@@ -27,7 +27,7 @@ auto open_xml_file(char const* const xml_filepath) noexcept
 
 namespace engine::parse::xml {
 
-auto parse_world(char const* const xml_filepath) noexcept
+auto parse_xml(char const* const xml_filepath) noexcept
     -> cpp::result<
         std::pair<render::world, render::camera>,
         parse_err
