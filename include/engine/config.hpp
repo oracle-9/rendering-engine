@@ -51,6 +51,7 @@ auto inline constexpr DEFAULT_BG_COLOR = glm::vec4 {
 auto inline constexpr DEFAULT_FG_COLOR = glm::vec4{1.f, 1.f, 1.f, 1.f};
 
 auto inline constexpr ENABLE_AXIS = false;
+auto inline constexpr ENABLE_LOOKAT_INDICATOR = false;
 
 auto inline constexpr DEFAULT_LINE_WIDTH = 1.f;
 auto inline constexpr LINE_WIDTH_MIN = 1.f;
@@ -66,10 +67,11 @@ enum kb_keys : unsigned char {
     KEY_ROTATE_RIGHT = 'd',
     KEY_ZOOM_IN = 'e',
     KEY_ZOOM_OUT = 'q',
-    KEY_TOGGLE_AXIS = '.',
+    KEY_TOGGLE_AXIS = 'x',
+    KEY_TOGGLE_LOOKAT_INDICATOR = '.',
     KEY_NEXT_POLYGON_MODE = 'm',
-    KEY_THINNER_LINES = '_',
-    KEY_THICKER_LINES = '*',
+    KEY_THINNER_LINES = '+',
+    KEY_THICKER_LINES = '-',
 };
 
 auto inline constexpr Y_AXIS_HALF_LEN = 50.f;
@@ -81,6 +83,9 @@ auto inline constexpr AXIS_COLOR = std::to_array<glm::vec3>({
     {0.f, 1.f, 0.f}, // y axis (green)
     {0.f, 0.f, 1.f}, // z axis (blue)
 });
+
+// Yellow.
+auto inline constexpr LOOKAT_INDICATOR_COLOR = glm::vec3{1.f, 1.f, 0.f};
 
 auto inline constexpr DEFAULT_CAMERA = camera {
     .pos = {9., 3., 30.},

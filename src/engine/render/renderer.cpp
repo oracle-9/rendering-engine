@@ -24,6 +24,7 @@ namespace engine::render {
 auto static render() noexcept -> void;
 auto static update_camera(int) noexcept -> void;
 auto static render_axis() noexcept -> void;
+auto static render_lookat_indicator() noexcept -> void;
 auto static render_group(group const& root) noexcept -> void;
 auto static resize(int width, int height) noexcept -> void;
 auto static key_down(unsigned char key, int x, int y) noexcept -> void;
@@ -33,6 +34,7 @@ auto static display_info() -> void;
 namespace state {
 
 auto static enable_axis = config::ENABLE_AXIS;
+auto static enable_lookat_indicator = config::ENABLE_LOOKAT_INDICATOR;
 auto static polygon_mode = static_cast<GLenum>(config::DEFAULT_POLYGON_MODE);
 auto static line_width = config::DEFAULT_LINE_WIDTH;
 
@@ -127,6 +129,9 @@ auto static render() noexcept -> void {
     if (state::enable_axis) {
         render_axis();
     }
+    if (state::enable_lookat_indicator) {
+        render_lookat_indicator();
+    }
     render_group(state::world_ptr->root);
     glutSwapBuffers();
 }
@@ -217,6 +222,12 @@ auto static render_axis() noexcept -> void {
     glColor3fv(glm::value_ptr(config::DEFAULT_FG_COLOR));
 }
 
+auto static render_lookat_indicator() noexcept -> void {
+    glColor3fv(glm::value_ptr(config::LOOKAT_INDICATOR_COLOR));
+    glutSolidSphere(0.5, 15, 15);
+    glColor3fv(glm::value_ptr(config::DEFAULT_FG_COLOR));
+}
+
 // TODO: Implement non-recursively.
 auto static render_group(group const& root) noexcept -> void {
     glPushMatrix();
@@ -290,6 +301,10 @@ auto static key_down(unsigned char const key, int, int) noexcept -> void {
         using enum config::kb_keys;
         case KEY_TOGGLE_AXIS:
             state::enable_axis = not state::enable_axis;
+            glutPostRedisplay();
+            break;
+        case KEY_TOGGLE_LOOKAT_INDICATOR:
+            state::enable_lookat_indicator = not state::enable_lookat_indicator;
             glutPostRedisplay();
             break;
         case KEY_NEXT_POLYGON_MODE:
