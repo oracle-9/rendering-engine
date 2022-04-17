@@ -250,11 +250,9 @@ auto static render_group(group const& root) noexcept -> void {
     }
 
     for (auto const& model : root.models) {
-        auto const* i = model.coords.data();
-        auto const* const end = i + model.coords.size();
         glBegin(GL_TRIANGLES);
-        for ( ; i != end; i += 3) {
-            glVertex3fv(i);
+        for (auto const& vertex : model.vertices) {
+            glVertex3fv(glm::value_ptr(vertex));
         }
         glEnd();
     }

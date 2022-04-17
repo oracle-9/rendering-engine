@@ -6,6 +6,7 @@
 
 #include <brief_int.hpp>
 #include <fstream>
+#include <glm/vec3.hpp>
 #include <new>
 #include <stdexcept>
 #include <string_view>
@@ -68,15 +69,13 @@ try {
         return cpp::fail(parse_err::malformed_num);
     }
 
-    auto coords = std::vector<float>{};
-    coords.reserve(num_vertices * 3_uz);
+    auto vertices = std::vector<glm::vec3>{};
+    vertices.reserve(num_vertices);
 
     float x, y, z;
     while (model_file >> x >> y >> z) {
         // read 3 by 3 to ensure there are no trailing coordinates.
-        coords.push_back(x);
-        coords.push_back(y);
-        coords.push_back(z);
+        vertices.emplace_back(x, y, z);
     }
     if (model_file.bad()) {
         return cpp::fail(parse_err::io_err);
@@ -90,7 +89,7 @@ try {
 
     SUCCESS:
     return render::model {
-        .coords = std::move(coords)
+        .vertices = std::move(vertices)
     };
 
 } catch (std::bad_alloc const&) {
@@ -124,26 +123,28 @@ try {
         return cpp::fail(parse_err::obj_loader_err);
     }
 
-    auto coords = std::vector<float>{};
+    auto vertices = std::vector<glm::vec3>{};
 
     auto num_vertices = 0_uz;
     for (auto const& shape : shapes) {
-        num_vertices += shape.mesh.indices.size() * 3_uz;
+        num_vertices += shape.mesh.indices.size();
     }
 
-    coords.reserve(num_vertices);
+    vertices.reserve(num_vertices);
 
     for (auto const& shape : shapes) {
         for (auto const& idx : shape.mesh.indices) {
             auto const vertex_idx = static_cast<usize>(idx.vertex_index) * 3_uz;
-            coords.push_back(attrib.vertices[vertex_idx]);
-            coords.push_back(attrib.vertices[vertex_idx + 1_uz]);
-            coords.push_back(attrib.vertices[vertex_idx + 2_uz]);
+            vertices.emplace_back(
+                attrib.vertices[vertex_idx],
+                attrib.vertices[vertex_idx + 1_uz],
+                attrib.vertices[vertex_idx + 2_uz]
+            );
         }
     }
 
     return render::model {
-        .coords = std::move(coords)
+        .vertices = std::move(vertices)
     };
 
 } catch (std::bad_alloc const&) {

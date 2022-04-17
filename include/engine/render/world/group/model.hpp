@@ -1,11 +1,12 @@
 #pragma once
 
+#include <glm/vec3.hpp>
 #include <vector>
 
 namespace engine::render {
 
 struct model {
-    std::vector<float> coords;
+    std::vector<glm::vec3> vertices;
 };
 
 } // namespace engine::render
