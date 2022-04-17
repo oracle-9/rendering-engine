@@ -1,19 +1,16 @@
 #include "generator/primitives/box.hpp"
 
-#include <glm/vec3.hpp>
+#include "util/try.hpp"
+
 #include <new>
 #include <stdexcept>
-#include <vector>
 
 using namespace brief_int;
 
 namespace generator {
 
-auto generate_box(
-    float const side_len,
-    u32 const num_divs,
-    fmt::ostream& output_file
-) noexcept -> cpp::result<void, generator_err>
+auto generate_box(float const side_len, u32 const num_divs) noexcept
+    -> cpp::result<std::vector<glm::vec3>, generator_err>
 try {
     using namespace brief_int::literals;
 
@@ -270,26 +267,38 @@ try {
         }
     }
 
-    // Print the total amount of vertices on the first line.
-    output_file.print("{}\n", total_vertex_count);
-
     // To ensure the box is centered at the origin, we need to perform a
-    // translation of -side_len/2.
+    // translation of -side_len / 2.
     for (
         // Stores half of the box side length.
         auto const half_side_len = side_len / 2.f;
         auto&& vertex : vertices
     ) {
         vertex -= half_side_len;
-        output_file.print("{} {} {}\n", vertex.x, vertex.y, vertex.z);
     }
 
-    return {};
+    return vertices;
 
 } catch (std::bad_alloc const&) {
     return cpp::fail(generator_err::no_mem);
 } catch (std::length_error const&) {
     return cpp::fail(generator_err::no_mem);
+}
+
+auto generate_and_print_box(
+    float const side_len,
+    u32 const num_divs,
+    fmt::ostream& output_file
+) noexcept -> cpp::result<void, generator_err>
+try {
+    auto const& vertices = TRY_RESULT(generate_box(side_len, num_divs));
+    output_file.print("{}\n", vertices.size());
+    for (auto const& vertex : vertices) {
+        output_file.print("{} {} {}\n", vertex.x, vertex.y, vertex.z);
+    }
+    return {};
+} catch (...) {
+    return cpp::fail(generator_err::io_err);
 }
 
 } // namespace generator

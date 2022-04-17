@@ -13,7 +13,6 @@
 #include <fmt/color.h>
 #include <fmt/core.h>
 #include <fmt/format.h>
-#include <fmt/os.h>
 #include <span>
 #include <spdlog/sinks/stdout_color_sinks-inl.h>
 #include <spdlog/spdlog.h>
@@ -130,8 +129,9 @@ std::unordered_map<
             auto const num_slices = try_parse_u32(args[1]);
             auto const num_stacks = try_parse_u32(args[2]);
             auto output_file = fmt::output_file(args[3]);
-            auto const result
-                = generate_sphere(radius, num_slices, num_stacks, output_file);
+            auto const result = generate_and_print_sphere(
+                radius, num_slices, num_stacks, output_file
+            );
             if (result.has_error()) {
                 throw std::runtime_error(fmt::format("{}", result.error()));
             }
@@ -144,7 +144,8 @@ std::unordered_map<
             auto const side_len = try_parse_float(args[0]);
             auto const num_divs = try_parse_u32(args[1]);
             auto output_file = fmt::output_file(args[2]);
-            auto const result = generate_box(side_len, num_divs, output_file);
+            auto const result
+                = generate_and_print_box(side_len, num_divs, output_file);
             if (result.has_error()) {
                 throw std::runtime_error(fmt::format("{}", result.error()));
             }
@@ -159,7 +160,7 @@ std::unordered_map<
             auto const num_slices = try_parse_u32(args[2]);
             auto const num_stacks = try_parse_u32(args[3]);
             auto output_file = fmt::output_file(args[4]);
-            auto const result = generate_cone(
+            auto const result = generate_and_print_cone(
                 radius, height, num_slices, num_stacks, output_file
             );
             if (result.has_error()) {
@@ -174,7 +175,8 @@ std::unordered_map<
             auto const side_len = try_parse_float(args[0]);
             auto const num_divs = try_parse_u32(args[1]);
             auto output_file = fmt::output_file(args[2]);
-            auto const result = generate_plane(side_len, num_divs, output_file);
+            auto const result
+                = generate_and_print_plane(side_len, num_divs, output_file);
             if (result.has_error()) {
                 throw std::runtime_error(fmt::format("{}", result.error()));
             }

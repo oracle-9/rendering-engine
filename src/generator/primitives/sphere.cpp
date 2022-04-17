@@ -1,11 +1,11 @@
 #include "generator/primitives/sphere.hpp"
 
+#include "util/try.hpp"
+
 #include <glm/ext/scalar_constants.hpp>
 #include <glm/trigonometric.hpp>
-#include <glm/vec3.hpp>
 #include <new>
 #include <stdexcept>
-#include <vector>
 
 using namespace brief_int;
 
@@ -14,9 +14,8 @@ namespace generator {
 auto generate_sphere(
     float const radius,
     u32 const num_slices,
-    u32 const num_stacks,
-    fmt::ostream& output_file
-) noexcept -> cpp::result<void, generator_err>
+    u32 const num_stacks
+) noexcept -> cpp::result<std::vector<glm::vec3>, generator_err>
 try {
     using namespace brief_int::literals;
 
@@ -117,17 +116,31 @@ try {
         }
     }
 
-    output_file.print("{}\n",total_vertex_count);
-    for (auto&& vertex : vertices) {
-        output_file.print("{} {} {}\n", vertex.x, vertex.y, vertex.z);
-    }
-
-    return {};
+    return vertices;
 
 } catch (std::bad_alloc const&) {
     return cpp::fail(generator_err::no_mem);
 } catch (std::length_error const&) {
     return cpp::fail(generator_err::no_mem);
+}
+
+auto generate_and_print_sphere(
+    float const radius,
+    u32 const num_slices,
+    u32 const num_stacks,
+    fmt::ostream& output_file
+) noexcept -> cpp::result<void, generator_err>
+try {
+    auto const& vertices = TRY_RESULT(
+        generate_sphere(radius, num_slices, num_stacks)
+    );
+    output_file.print("{}\n", vertices.size());
+    for (auto const& vertex : vertices) {
+        output_file.print("{} {} {}\n", vertex.x, vertex.y, vertex.z);
+    }
+    return {};
+} catch (...) {
+    return cpp::fail(generator_err::io_err);
 }
 
 } // namespace generator

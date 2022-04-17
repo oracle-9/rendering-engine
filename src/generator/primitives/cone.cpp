@@ -1,12 +1,11 @@
 #include "generator/primitives/cone.hpp"
 
 #include "util/coord_conv.hpp"
+#include "util/try.hpp"
 
 #include <glm/ext/scalar_constants.hpp>
-#include <glm/vec3.hpp>
 #include <new>
 #include <stdexcept>
-#include <vector>
 
 using namespace brief_int;
 
@@ -16,9 +15,8 @@ auto generate_cone(
     float const radius,
     float const height,
     u32 const num_slices,
-    u32 const num_stacks,
-    fmt::ostream& output_file
-) noexcept -> cpp::result<void, generator_err>
+    u32 const num_stacks
+) noexcept -> cpp::result<std::vector<glm::vec3>, generator_err>
 try {
     using namespace brief_int::literals;
 
@@ -178,22 +176,38 @@ try {
         vertices.emplace_back(radius_factor, top_height, next_angle);
     }
 
-    // Print the total amount of vertices on the first line.
-    output_file.print("{}\n", total_vertex_count);
-
     // We need to make sure the vertices are represented in a cartesian
     // coordinate system before we forward them to OpenGL.
     for (auto&& vertex : vertices) {
         ::util::cylindrical_to_cartesian_inplace(vertex);
-        output_file.print("{} {} {}\n", vertex.x, vertex.y, vertex.z);
     }
 
-    return {};
+    return vertices;
 
 } catch (std::bad_alloc const&) {
     return cpp::fail(generator_err::no_mem);
 } catch (std::length_error const&) {
     return cpp::fail(generator_err::no_mem);
+}
+
+auto generate_and_print_cone(
+    float const radius,
+    float const height,
+    u32 const num_slices,
+    u32 const num_stacks,
+    fmt::ostream& output_file
+) noexcept -> cpp::result<void, generator_err>
+try {
+    auto const& vertices = TRY_RESULT(
+        generate_cone(radius, height, num_slices, num_stacks)
+    );
+    output_file.print("{}\n", vertices.size());
+    for (auto const& vertex : vertices) {
+        output_file.print("{} {} {}\n", vertex.x, vertex.y, vertex.z);
+    }
+    return {};
+} catch (...) {
+    return cpp::fail(generator_err::io_err);
 }
 
 } // namespace generator

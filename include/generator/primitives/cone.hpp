@@ -4,11 +4,20 @@
 
 #include <brief_int.hpp>
 #include <fmt/os.h>
+#include <glm/vec3.hpp>
 #include <result.hpp>
+#include <vector>
 
 namespace generator {
 
 auto generate_cone(
+    float radius,
+    float height,
+    brief_int::u32 num_slices,
+    brief_int::u32 num_stacks
+) noexcept -> cpp::result<std::vector<glm::vec3>, generator_err>;
+
+auto generate_and_print_cone(
     float radius,
     float height,
     brief_int::u32 num_slices,
