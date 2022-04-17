@@ -61,17 +61,17 @@ auto inline constexpr LINE_WIDTH_STEP = 1.f;
 enum : GLenum { DEFAULT_POLYGON_MODE = GL_LINE };
 
 enum kb_keys : unsigned char {
-    KEY_ROTATE_UP = 'w',
-    KEY_ROTATE_LEFT = 'a',
-    KEY_ROTATE_DOWN = 's',
+    KEY_ROTATE_UP    = 'w',
+    KEY_ROTATE_LEFT  = 'a',
+    KEY_ROTATE_DOWN  = 's',
     KEY_ROTATE_RIGHT = 'd',
-    KEY_ZOOM_IN = 'e',
+    KEY_ZOOM_IN  = 'e',
     KEY_ZOOM_OUT = 'q',
     KEY_TOGGLE_AXIS = 'x',
     KEY_TOGGLE_LOOKAT_INDICATOR = '.',
     KEY_NEXT_POLYGON_MODE = 'm',
-    KEY_THINNER_LINES = '+',
-    KEY_THICKER_LINES = '-',
+    KEY_THINNER_LINES = '-',
+    KEY_THICKER_LINES = '+',
 };
 
 auto inline constexpr Y_AXIS_HALF_LEN = 50.f;
