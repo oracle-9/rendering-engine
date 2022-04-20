@@ -37,16 +37,12 @@ class nonnull_ptr {
     ~nonnull_ptr() = default;
 
     [[nodiscard]]
-    auto friend operator<=>(nonnull_ptr, nonnull_ptr) = default;
-
-    [[nodiscard]]
     constexpr operator T*() noexcept {
         return this->ptr;
     }
 
-    [[nodiscard]]
-    constexpr operator T&() noexcept {
-        return *this->ptr;
+    auto constexpr operator*() noexcept -> T& {
+        return *(this->ptr);
     }
 
     [[nodiscard]]
