@@ -91,7 +91,8 @@ try {
         auto const half_side_len = side_len / 2.f;
         auto&& vertex : vertices
     ) {
-        vertex -= half_side_len;
+        vertex.x -= half_side_len;
+        vertex.z -= half_side_len;
     }
 
     return vertices;
