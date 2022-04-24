@@ -1,6 +1,9 @@
 # Project-specific
 build
 compile_commands.json
+*.3d
+*.obj
+examples/worlds/scratchpad.xml
 
 # Prerequisites
 *.d
