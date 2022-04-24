@@ -7,9 +7,9 @@
 #include <new>
 #include <stdexcept>
 
-using namespace brief_int;
-
 namespace generator {
+
+using namespace brief_int;
 
 auto generate_cone(
     float const radius,

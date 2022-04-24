@@ -5,9 +5,9 @@
 #include <new>
 #include <stdexcept>
 
-using namespace brief_int;
-
 namespace generator {
+
+using namespace brief_int;
 
 auto generate_box(float const side_len, u32 const num_divs) noexcept
     -> cpp::result<std::vector<glm::vec3>, generator_err>
