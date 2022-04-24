@@ -6,7 +6,7 @@
 namespace engine::parse::xml {
 
 auto parse_rotate(rapidxml::xml_node<> const* const node) noexcept
-    -> cpp::result<glm::vec4, parse_err>
+    -> cpp::result<glm::vec4, ParseErr>
 {
     return glm::vec4 {
         TRY_RESULT(parse_number_attr<float>(node, "angle")),

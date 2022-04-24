@@ -1,33 +1,31 @@
 #pragma once
 
-#include <brief_int.hpp>
-
 namespace engine::parse::xml {
 
-enum class parse_err : brief_int::usize {
-    no_mem,
-    io_err,
+enum class ParseErr {
+    NO_MEM,
+    IO_ERR,
 
-    syntax_err,
-    malformed_num,
+    SYNTAX_ERR,
+    MALFORMED_NUM,
 
-    no_world_node,
-    no_camera_node,
-    no_group_node,
+    NO_WORLD_NODE,
+    NO_CAMERA_NODE,
+    NO_GROUP_NODE,
 
-    no_camera_pos_node,
-    no_camera_lookat_node,
-    no_camera_up_node,
-    no_camera_proj_node,
+    NO_CAMERA_POS_NODE,
+    NO_CAMERA_LOOKAT_NODE,
+    NO_CAMERA_UP_NODE,
+    NO_CAMERA_PROJ_NODE,
 
-    unknown_group_child_node,
+    UNKNOWN_GROUP_CHILD_NODE,
 
-    unknown_transform,
+    UNKNOWN_TRANSFORM,
 
-    no_model_filename,
-    ambiguous_model_ext,
-    no_model_file,
-    obj_loader_err,
+    NO_MODEL_FILENAME,
+    AMBIGUOUS_MODEL_EXT,
+    NO_MODEL_FILE,
+    OBJ_LOADER_ERR,
 };
 
 } // namespace engine::parse::xml

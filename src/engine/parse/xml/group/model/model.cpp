@@ -17,22 +17,22 @@
 namespace engine::parse::xml {
 
 auto static parse_3d(char const* model_filename) noexcept
-    -> cpp::result<render::model, parse_err>;
+    -> cpp::result<render::Model, ParseErr>;
 
 auto static parse_obj(char const* model_filename) noexcept
-    -> cpp::result<render::model, parse_err>;
+    -> cpp::result<render::Model, ParseErr>;
 
 auto parse_model(rapidxml::xml_node<> const* const node) noexcept
-    -> cpp::result<render::model, parse_err>
+    -> cpp::result<render::Model, ParseErr>
 {
     auto const* const model_filename_attr = TRY_NULLABLE_OR(
         node->first_attribute("file"),
-        return cpp::fail(parse_err::no_model_filename);
+        return cpp::fail(ParseErr::NO_MODEL_FILENAME);
     );
 
     auto const* const model_filename = TRY_NULLABLE_OR(
         model_filename_attr->value(),
-        return cpp::fail(parse_err::no_model_filename);
+        return cpp::fail(ParseErr::NO_MODEL_FILENAME);
     );
 
     auto const model_filename_sized = std::string_view {
@@ -45,28 +45,27 @@ auto parse_model(rapidxml::xml_node<> const* const node) noexcept
     } else if (model_filename_sized.ends_with(".obj")) {
         return parse_obj(model_filename);
     } else {
-        return cpp::fail(parse_err::ambiguous_model_ext);
+        return cpp::fail(ParseErr::AMBIGUOUS_MODEL_EXT);
     }
 }
 
 auto static parse_3d(char const* const model_filename) noexcept
-    -> cpp::result<render::model, parse_err>
+    -> cpp::result<render::Model, ParseErr>
 try {
     using namespace brief_int;
-    using namespace brief_int::literals;
 
     auto model_file = std::ifstream{model_filename};
     if (not model_file) {
-        return cpp::fail(parse_err::no_model_file);
+        return cpp::fail(ParseErr::NO_MODEL_FILE);
     }
 
     usize num_vertices;
     model_file >> num_vertices;
     if (model_file.bad()) {
-        return cpp::fail(parse_err::io_err);
+        return cpp::fail(ParseErr::IO_ERR);
     }
     if (model_file.fail()) {
-        return cpp::fail(parse_err::malformed_num);
+        return cpp::fail(ParseErr::MALFORMED_NUM);
     }
 
     auto vertices = std::vector<glm::vec3>{};
@@ -78,35 +77,35 @@ try {
         vertices.emplace_back(x, y, z);
     }
     if (model_file.bad()) {
-        return cpp::fail(parse_err::io_err);
+        return cpp::fail(ParseErr::IO_ERR);
     }
     if (model_file.eof()) {
         goto SUCCESS;
     }
     if (model_file.fail()) {
-        return cpp::fail(parse_err::malformed_num);
+        return cpp::fail(ParseErr::MALFORMED_NUM);
     }
 
     SUCCESS:
-    return render::model {
+    return render::Model {
         .vertices = std::move(vertices)
     };
 
 } catch (std::bad_alloc const&) {
-    return cpp::fail(parse_err::no_mem);
+    return cpp::fail(ParseErr::NO_MEM);
 } catch (std::length_error const&) {
-    return cpp::fail(parse_err::no_mem);
+    return cpp::fail(ParseErr::NO_MEM);
 }
 
 auto static parse_obj(char const* const model_filename) noexcept
-    -> cpp::result<render::model, parse_err>
+    -> cpp::result<render::Model, ParseErr>
 try {
     using namespace brief_int;
     using namespace brief_int::literals;
 
     auto model_file = std::ifstream{model_filename};
     if (not model_file) {
-        return cpp::fail(parse_err::no_model_file);
+        return cpp::fail(ParseErr::NO_MODEL_FILE);
     }
 
     auto attrib = tinyobj::attrib_t{};
@@ -120,7 +119,7 @@ try {
             &attrib, &shapes, &materials, &err, &model_file
         ) or not err.empty()
     ) {
-        return cpp::fail(parse_err::obj_loader_err);
+        return cpp::fail(ParseErr::OBJ_LOADER_ERR);
     }
 
     auto vertices = std::vector<glm::vec3>{};
@@ -134,23 +133,23 @@ try {
 
     for (auto const& shape : shapes) {
         for (auto const& idx : shape.mesh.indices) {
-            auto const vertex_idx = static_cast<usize>(idx.vertex_index) * 3_uz;
+            auto const vertex_idx = static_cast<usize>(idx.vertex_index) * 3;
             vertices.emplace_back(
                 attrib.vertices[vertex_idx],
-                attrib.vertices[vertex_idx + 1_uz],
-                attrib.vertices[vertex_idx + 2_uz]
+                attrib.vertices[vertex_idx + 1],
+                attrib.vertices[vertex_idx + 2]
             );
         }
     }
 
-    return render::model {
+    return render::Model {
         .vertices = std::move(vertices)
     };
 
 } catch (std::bad_alloc const&) {
-    return cpp::fail(parse_err::no_mem);
+    return cpp::fail(ParseErr::NO_MEM);
 } catch (std::length_error const&) {
-    return cpp::fail(parse_err::no_mem);
+    return cpp::fail(ParseErr::NO_MEM);
 }
 
 } // namespace engine::parse::xml

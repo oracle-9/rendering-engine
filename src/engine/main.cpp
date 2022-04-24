@@ -52,7 +52,7 @@ auto main(int argc, char* argv[]) -> int {
         spdlog::critical("aborting.");
         return EXIT_FAILURE;
     }
-    char const* const input_filename = cmd.data() + cmd.find('=') + 1_uz;
+    char const* const input_filename = cmd.data() + cmd.find('=') + 1;
 
     errno = 0;
     auto world_and_cam = engine::parse::xml::parse_xml(input_filename);

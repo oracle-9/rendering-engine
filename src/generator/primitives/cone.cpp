@@ -20,12 +20,12 @@ auto generate_cone(
 try {
     using namespace brief_int::literals;
 
-    if (num_slices <= 2_u32) {
+    if (num_slices <= 2) {
         // A cone needs at least 3 slices to be properly generated.
         return cpp::fail(generator_err::cone_lt_three_slices);
     }
 
-    if (num_stacks == 0_u32) {
+    if (num_stacks == 0) {
         // A cone cannot have zero stacks, otherwise the expressions used to
         // calculate the radius factor (radius / num_stacks) and stack height
         // (height / num_stacks) will fail.
@@ -58,7 +58,7 @@ try {
     // in the inner loop.
     // This expression won't wrap around since num_stacks cannot be lower
     // than 1, which we have asserted already.
-    auto const num_stacks_minus_one = num_stacks - 1_u32;
+    auto const num_stacks_minus_one = num_stacks - 1;
 
     // Stores the distance from the base of the cone to the last stack
     // separator.
@@ -72,7 +72,7 @@ try {
 
     // The total amount of vertices the cone will contain.
     auto const total_vertex_count
-        = 6_uz // magic math number.
+        = 6 // magic math number.
         * static_cast<usize>(num_slices)
         * static_cast<usize>(num_stacks);
 
@@ -106,7 +106,7 @@ try {
         auto const curr_angle = static_cast<float>(i) * slice_angle;
 
         // Same, but for the next slice.
-        auto const next_angle = static_cast<float>(i + 1_u32) * slice_angle;
+        auto const next_angle = static_cast<float>(i + 1) * slice_angle;
 
         // The base of the cone is composed of num_slices triangles.
         // The next 3 lines of code generate the base of the current slice,
@@ -135,7 +135,7 @@ try {
             auto const j_f = static_cast<float>(j);
 
             // We do the same of j + 1.
-            auto const j_plus_1_f = static_cast<float>(j + 1_u32);
+            auto const j_plus_1_f = static_cast<float>(j + 1);
 
             // Stores the distance FROM the normal that intersects
             // the center of the base of the cone TO any vertex that constitutes

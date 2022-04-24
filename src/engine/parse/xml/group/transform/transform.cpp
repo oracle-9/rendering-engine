@@ -9,10 +9,10 @@
 namespace engine::parse::xml {
 
 auto parse_transform(rapidxml::xml_node<> const* const node) noexcept
-    -> cpp::result<render::transform, parse_err>
+    -> cpp::result<render::Transform, ParseErr>
 {
+    using enum render::Transform::Kind;
     using namespace std::string_view_literals;
-    using enum render::transform::kind_t;
 
     auto static constexpr translate_str = "translate"sv;
     auto static constexpr rotate_str = "rotate"sv;
@@ -24,22 +24,22 @@ auto parse_transform(rapidxml::xml_node<> const* const node) noexcept
     };
 
     if (transform_name == translate_str) {
-        return render::transform {
-            .kind = translate,
+        return render::Transform {
+            .kind = TRANSLATE,
             .translate = TRY_RESULT(util::parse_xyz(node)),
         };
     } else if (transform_name == rotate_str) {
-        return render::transform {
-            .kind = rotate,
+        return render::Transform {
+            .kind = ROTATE,
             .rotate = TRY_RESULT(parse_rotate(node)),
         };
     } else if (transform_name == scale_str) {
-        return render::transform {
-            .kind = scale,
+        return render::Transform {
+            .kind = SCALE,
             .scale = TRY_RESULT(util::parse_xyz(node)),
         };
     } else {
-        return cpp::fail(parse_err::unknown_transform);
+        return cpp::fail(ParseErr::UNKNOWN_TRANSFORM);
     }
 }
 

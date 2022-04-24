@@ -9,9 +9,9 @@
 namespace engine::parse::xml {
 
 auto parse_transform_list(rapidxml::xml_node<> const* const node) noexcept
-    -> cpp::result<std::vector<render::transform>, parse_err>
+    -> cpp::result<std::vector<render::Transform>, ParseErr>
 try {
-    auto transform_list = std::vector<render::transform>{};
+    auto transform_list = std::vector<render::Transform>{};
 
     for (
         auto const* transform = node->first_node();
@@ -24,9 +24,9 @@ try {
     return transform_list;
 
 } catch (std::bad_alloc const&) {
-    return cpp::fail(parse_err::no_mem);
+    return cpp::fail(ParseErr::NO_MEM);
 } catch (std::length_error const&) {
-    return cpp::fail(parse_err::no_mem);
+    return cpp::fail(ParseErr::NO_MEM);
 }
 
 } // engine::parse::xml

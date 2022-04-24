@@ -1,23 +1,24 @@
 #pragma once
 
+#include "engine/render/layout/world/camera.hpp"
+#include "engine/render/layout/world/world.hpp"
+
 namespace engine::render {
 
-// Forward declarations.
-struct camera;
-struct world;
-class renderer;
+class Renderer;
 
-auto get() -> renderer&;
+auto get() -> Renderer&;
 
-class renderer {
+class Renderer {
   private:
-    auto friend get() -> renderer&;
-    renderer();
+    auto friend get() -> Renderer&;
+
+    Renderer();
 
   public:
-    auto set_world(world& world) noexcept -> renderer&;
+    auto set_world(World& world) -> Renderer&;
 
-    auto set_camera(camera& camera) noexcept -> renderer&;
+    auto set_camera(Camera& camera) -> Renderer&;
 
     auto run() noexcept -> void;
 };

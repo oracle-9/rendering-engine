@@ -3,57 +3,22 @@
 #include "engine/render/renderer.hpp"
 
 #include "engine/config.hpp"
-#include "engine/render/keyboard.hpp"
-#include "engine/render/world/camera.hpp"
-#include "engine/render/world/world.hpp"
-#include "util/coord_conv.hpp"
+#include "engine/render/io_events.hpp"
+#include "engine/render/render.hpp"
+#include "engine/render/state.hpp"
 
-#include <GL/freeglut.h>
-#include <algorithm>
-#include <cctype>
-#include <fmt/core.h>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
-#include <glm/mat4x4.hpp>
-#include <intrinsics/branching.hpp>
-#include <nonnull_ptr.hpp>
 #include <spdlog/spdlog.h>
 
 namespace engine::render {
 
-auto static render() noexcept -> void;
-auto static update_camera(int) noexcept -> void;
-auto static render_axis() noexcept -> void;
-auto static render_lookat_indicator() noexcept -> void;
-auto static render_group(group const& root) noexcept -> void;
-auto static resize(int width, int height) noexcept -> void;
-auto static key_down(unsigned char key, int x, int y) noexcept -> void;
-auto static key_up(unsigned char key, int x, int y) noexcept -> void;
 auto static display_info() -> void;
 
-namespace state {
-
-auto static enable_axis = config::ENABLE_AXIS;
-auto static enable_lookat_indicator = config::ENABLE_LOOKAT_INDICATOR;
-auto static polygon_mode = static_cast<GLenum>(config::DEFAULT_POLYGON_MODE);
-auto static line_width = config::DEFAULT_LINE_WIDTH;
-
-auto static kb = keyboard{};
-
-auto static default_world_mut = config::DEFAULT_WORLD;
-auto static world_ptr = ptr::nonnull_ptr_to(default_world_mut);
-
-auto static default_camera_mut = config::DEFAULT_CAMERA;
-auto static camera_ptr = ptr::nonnull_ptr_to(default_camera_mut);
-
-} // namespace state
-
-auto get() -> renderer& {
-    auto static lazy_static = renderer{};
+auto get() -> Renderer& {
+    auto static lazy_static = Renderer{};
     return lazy_static;
 }
 
-renderer::renderer() {
+Renderer::Renderer() {
     // GLUT requires argc and argv to be passed to their init function,
     // which we don't want to forward.
     // Therefore, we create our own dummy values and forward those instead.
@@ -72,7 +37,7 @@ renderer::renderer() {
     glutSetKeyRepeat(GLUT_KEY_REPEAT_OFF);
     glutDisplayFunc(render);
     glutReshapeFunc(resize);
-    glutTimerFunc(config::RENDER_TICK_MILLIS, update_camera, 0);
+    glutTimerFunc(config::RENDER_TICK_MILLIS, [](int) { update_camera(); }, 0);
     glutKeyboardFunc(key_down);
     glutKeyboardUpFunc(key_up);
     glEnable(GL_DEPTH_TEST);
@@ -88,266 +53,23 @@ renderer::renderer() {
     display_info();
 }
 
-auto renderer::set_world(world& world) noexcept -> renderer& {
-    state::world_ptr = &world;
+auto Renderer::set_world(World& world) -> Renderer& {
+    if (auto* const world_ptr = &world;
+        world_ptr != state::world_ptr
+    ) {
+        state::world_ptr = world_ptr;
+        state::model_refs = state::build_model_refs(world);
+    }
     return *this;
 }
 
-auto renderer::set_camera(camera& camera) noexcept -> renderer& {
+auto Renderer::set_camera(Camera& camera) -> Renderer& {
     state::camera_ptr = &camera;
     return *this;
 }
 
-auto renderer::run() noexcept -> void {
+auto Renderer::run() noexcept -> void {
     glutMainLoop();
-}
-
-auto static render() noexcept -> void {
-    auto const& camera = *state::camera_ptr;
-    glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-    glLoadIdentity();
-
-    // TODO: Use glm transforms instead of GLUT to avoid casting.
-
-    // glMultMatrixf(
-    //     glm::value_ptr(
-    //         glm::lookAt(camera.pos, camera.lookat, camera.up)
-    //     )
-    // );
-    // glTranslatef(-camera.pos.x, -camera.pos.y, -camera.pos.z);
-
-#   define DBL(x) static_cast<double>(x)
-    gluLookAt(
-        DBL(camera.pos.x),    DBL(camera.pos.y),    DBL(camera.pos.z),
-        DBL(camera.lookat.x), DBL(camera.lookat.y), DBL(camera.lookat.z),
-        DBL(camera.up.x),     DBL(camera.up.y),     DBL(camera.up.z)
-    );
-#   undef DBL
-
-    glPolygonMode(GL_FRONT, state::polygon_mode);
-    glLineWidth(state::line_width);
-    if (state::enable_axis) {
-        render_axis();
-    }
-    if (state::enable_lookat_indicator) {
-        render_lookat_indicator();
-    }
-    render_group(state::world_ptr->root);
-    glutSwapBuffers();
-}
-
-auto static update_camera(int) noexcept -> void {
-    using enum config::kb_keys;
-
-    auto const& kb = state::kb;
-
-    if (not kb.pressed(KEY_ROTATE_UP)
-        and not kb.pressed(KEY_ROTATE_LEFT)
-        and not kb.pressed(KEY_ROTATE_DOWN)
-        and not kb.pressed(KEY_ROTATE_RIGHT)
-        and not kb.pressed(KEY_ZOOM_IN)
-        and not kb.pressed(KEY_ZOOM_OUT)
-    ) {
-        // Skip camera update if no key is presssed.
-        glutTimerFunc(config::RENDER_TICK_MILLIS, update_camera, 0);
-        return;
-    }
-
-    auto& camera = *state::camera_ptr;
-    auto relative_pos = camera.pos - camera.lookat;
-
-    ::util::cartesian_to_spherical_inplace(relative_pos);
-
-    // Rotate left/right.
-    if (kb.pressed(KEY_ROTATE_LEFT) and not kb.pressed(KEY_ROTATE_RIGHT)) {
-        relative_pos[2] -= config::CAM_ROTATE_STEP;
-    } else if (kb.pressed(KEY_ROTATE_RIGHT) and not kb.pressed(KEY_ROTATE_LEFT)) {
-        relative_pos[2] += config::CAM_ROTATE_STEP;
-    }
-
-    // Rotate up/down.
-    if (kb.pressed(KEY_ROTATE_UP) and not kb.pressed(KEY_ROTATE_DOWN)) {
-        relative_pos[1] = std::max(
-            config::CAM_VERT_ANGLE_MIN,
-            relative_pos[1] - config::CAM_ROTATE_STEP
-        );
-    } else if (kb.pressed(KEY_ROTATE_DOWN) and not kb.pressed(KEY_ROTATE_UP)) {
-        relative_pos[1] = std::min(
-            config::CAM_VERT_ANGLE_MAX,
-            relative_pos[1] + config::CAM_ROTATE_STEP
-        );
-    }
-
-    // Zoom in/out.
-    if (kb.pressed(KEY_ZOOM_IN) and not kb.pressed(KEY_ZOOM_OUT)) {
-        relative_pos[0] = std::max(
-            config::CAM_ZOOM_MAX,
-            relative_pos[0] - config::CAM_ZOOM_STEP
-        );
-    } else if (kb.pressed(KEY_ZOOM_OUT) and not kb.pressed(KEY_ZOOM_IN)) {
-        relative_pos[0] = std::min(
-            config::CAM_ZOOM_MIN,
-            relative_pos[0] + config::CAM_ZOOM_STEP
-        );
-    }
-
-    ::util::spherical_to_cartesian_inplace(relative_pos);
-
-    camera.pos = relative_pos + camera.lookat;
-
-    glutPostRedisplay();
-    glutTimerFunc(config::RENDER_TICK_MILLIS, update_camera, 0);
-}
-
-auto static render_axis() noexcept -> void {
-    glBegin(GL_LINES);
-
-    // x axis.
-    glColor3fv(glm::value_ptr(config::AXIS_COLOR[0]));
-    glVertex3f(-config::X_AXIS_HALF_LEN, 0.f, 0.f);
-    glVertex3f(config::X_AXIS_HALF_LEN, 0.f, 0.f);
-
-    // y axis.
-    glColor3fv(glm::value_ptr(config::AXIS_COLOR[1]));
-    glVertex3f(0.f, -config::Y_AXIS_HALF_LEN, 0.f);
-    glVertex3f(0.f, config::Y_AXIS_HALF_LEN, 0.f);
-
-    // z axis.
-    glColor3fv(glm::value_ptr(config::AXIS_COLOR[2]));
-    glVertex3f(0.f, 0.f, -config::Z_AXIS_HALF_LEN);
-    glVertex3f(0.f, 0.f, config::Z_AXIS_HALF_LEN);
-
-    glEnd();
-
-    glColor3fv(glm::value_ptr(config::DEFAULT_FG_COLOR));
-}
-
-auto static render_lookat_indicator() noexcept -> void {
-    glColor3fv(glm::value_ptr(config::LOOKAT_INDICATOR_COLOR));
-    glutSolidSphere(0.5, 15, 15);
-    glColor3fv(glm::value_ptr(config::DEFAULT_FG_COLOR));
-}
-
-// TODO: Implement non-recursively.
-auto static render_group(group const& root) noexcept -> void {
-    glPushMatrix();
-
-    for (auto const& transform : root.transforms) {
-        switch (transform.kind) {
-            using enum transform::kind_t;
-            case translate:
-                glTranslatef(
-                    transform.translate.x,
-                    transform.translate.y,
-                    transform.translate.z
-                );
-                break;
-            case rotate:
-                glRotatef(
-                    transform.rotate[0],
-                    transform.rotate[1],
-                    transform.rotate[2],
-                    transform.rotate[3]
-                );
-                break;
-            case scale:
-                glScalef(
-                    transform.scale.x,
-                    transform.scale.y,
-                    transform.scale.z
-                );
-                break;
-        }
-    }
-
-    for (auto const& model : root.models) {
-        glBegin(GL_TRIANGLES);
-        for (auto const& vertex : model.vertices) {
-            glVertex3fv(glm::value_ptr(vertex));
-        }
-        glEnd();
-    }
-
-    for (auto const& child_node : root.children) {
-        render_group(child_node);
-    }
-
-    glPopMatrix();
-}
-
-auto static resize(int const width, int height) noexcept -> void {
-    // Prevent a divide by zero when window is too short.
-    if (height == 0) {
-        height = 1;
-    }
-
-    auto const& camera_proj = state::camera_ptr->projection;
-
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    glViewport(0, 0, width, height);
-    gluPerspective(
-        static_cast<double>(camera_proj[0]),
-        static_cast<double>(width) / static_cast<double>(height),
-        static_cast<double>(camera_proj[1]),
-        static_cast<double>(camera_proj[2])
-    );
-    glMatrixMode(GL_MODELVIEW);
-}
-
-auto static key_down(unsigned char const key, int, int) noexcept -> void {
-    state::kb.press(key);
-    switch (key) {
-        using enum config::kb_keys;
-        case KEY_TOGGLE_AXIS:
-            state::enable_axis = not state::enable_axis;
-            glutPostRedisplay();
-            break;
-        case KEY_TOGGLE_LOOKAT_INDICATOR:
-            state::enable_lookat_indicator = not state::enable_lookat_indicator;
-            glutPostRedisplay();
-            break;
-        case KEY_NEXT_POLYGON_MODE:
-            using state::polygon_mode;
-            switch (polygon_mode) {
-                case GL_POINT:
-                    polygon_mode = GL_LINE;
-                    break;
-                case GL_LINE:
-                    polygon_mode = GL_FILL;
-                    break;
-                case GL_FILL:
-                    polygon_mode = GL_POINT;
-                    break;
-                default:
-                    intrinsics::unreachable();
-            }
-            glutPostRedisplay();
-            break;
-        case KEY_THINNER_LINES:
-            state::line_width = std::max(
-                state::line_width - config::LINE_WIDTH_STEP,
-                config::LINE_WIDTH_MIN
-            );
-            glutPostRedisplay();
-            break;
-        case KEY_THICKER_LINES:
-            state::line_width = std::min(
-                state::line_width + config::LINE_WIDTH_STEP,
-                config::LINE_WIDTH_MAX
-            );
-            glutPostRedisplay();
-            break;
-        default:
-            break;
-    }
-}
-
-auto static key_up(unsigned char key, int, int) noexcept -> void {
-    if (std::isalpha(key)) {
-        key = static_cast<unsigned char>(tolower(key));
-    }
-    state::kb.release(key);
 }
 
 auto static display_info() -> void {

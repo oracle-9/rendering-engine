@@ -1,6 +1,6 @@
 #include "engine/parse/xml/group/model/model_list.hpp"
 
-#include "engine/parse/xml/group/model/model.hpp"
+#include "engine/render/layout/world/group/model.hpp"
 #include "util/try.hpp"
 
 #include <new>
@@ -9,9 +9,9 @@
 namespace engine::parse::xml {
 
 auto parse_model_list(rapidxml::xml_node<> const* const node) noexcept
-    -> cpp::result<std::vector<render::model>, parse_err>
+    -> cpp::result<std::vector<render::Model>, ParseErr>
 try {
-    auto model_list = std::vector<render::model>{};
+    auto model_list = std::vector<render::Model>{};
 
     for (
         auto const* model = node->first_node();
@@ -24,9 +24,9 @@ try {
     return model_list;
 
 } catch (std::bad_alloc const&) {
-    return cpp::fail(parse_err::no_mem);
+    return cpp::fail(ParseErr::NO_MEM);
 } catch (std::length_error const&) {
-    return cpp::fail(parse_err::no_mem);
+    return cpp::fail(ParseErr::NO_MEM);
 }
 
 } // namespace engine::parse::xml
