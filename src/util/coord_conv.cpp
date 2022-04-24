@@ -6,7 +6,9 @@
 namespace util {
 
 [[nodiscard]]
-auto cartesian_to_cylindrical(glm::vec3 const& cartesian) noexcept -> glm::vec3 {
+auto cartesian_to_cylindrical(glm::vec3 const& cartesian) noexcept
+    -> glm::vec3
+{
     auto const x = cartesian[0];
     auto const y = cartesian[1];
     auto const z = cartesian[2];
@@ -18,7 +20,9 @@ auto cartesian_to_cylindrical(glm::vec3 const& cartesian) noexcept -> glm::vec3 
 }
 
 [[nodiscard]]
-auto cylindrical_to_cartesian(glm::vec3 const& cylindrical) noexcept -> glm::vec3 {
+auto cylindrical_to_cartesian(glm::vec3 const& cylindrical) noexcept
+    -> glm::vec3
+{
     auto const radial_dist = cylindrical[0];
     auto const y = cylindrical[1];
     auto const azimuth = cylindrical[2];
@@ -30,7 +34,9 @@ auto cylindrical_to_cartesian(glm::vec3 const& cylindrical) noexcept -> glm::vec
 }
 
 [[nodiscard]]
-auto cartesian_to_spherical(glm::vec3 const& cartesian) noexcept -> glm::vec3 {
+auto cartesian_to_spherical(glm::vec3 const& cartesian) noexcept
+    -> glm::vec3
+{
     auto const x = cartesian[0];
     auto const y = cartesian[1];
     auto const z = cartesian[2];
@@ -56,7 +62,9 @@ auto cartesian_to_spherical(glm::vec3 const& cartesian) noexcept -> glm::vec3 {
 }
 
 [[nodiscard]]
-auto spherical_to_cartesian(glm::vec3 const& spherical) noexcept -> glm::vec3 {
+auto spherical_to_cartesian(glm::vec3 const& spherical) noexcept
+    -> glm::vec3
+{
     auto const radius = spherical[0];
     auto const polar = spherical[1];
     auto const azimuth = spherical[2];
@@ -71,7 +79,9 @@ auto spherical_to_cartesian(glm::vec3 const& spherical) noexcept -> glm::vec3 {
 }
 
 [[nodiscard]]
-auto cylindrical_to_spherical(glm::vec3 const& cylindrical) noexcept -> glm::vec3 {
+auto cylindrical_to_spherical(glm::vec3 const& cylindrical) noexcept
+    -> glm::vec3
+{
     auto const radial_dist = cylindrical[0];
     auto const y = cylindrical[1];
     auto const azimuth = cylindrical[2];
@@ -85,7 +95,9 @@ auto cylindrical_to_spherical(glm::vec3 const& cylindrical) noexcept -> glm::vec
 }
 
 [[nodiscard]]
-auto spherical_to_cylindrical(glm::vec3 const& spherical) noexcept -> glm::vec3 {
+auto spherical_to_cylindrical(glm::vec3 const& spherical) noexcept
+    -> glm::vec3
+{
     auto const radius = spherical[0];
     auto const polar = spherical[1];
     auto const azimuth = spherical[2];
