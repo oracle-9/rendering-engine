@@ -1,111 +1,92 @@
 #pragma once
 
-#include "engine/render/world/camera.hpp"
-#include "engine/render/world/world.hpp"
+#include "engine/render/camera.hpp"
+#include "engine/render/layout/world/camera.hpp"
+#include "engine/render/layout/world/world.hpp"
 
 #include <GL/freeglut.h>
 #include <array>
-#include <glm/ext/scalar_constants.hpp>
+#include <glm/vec3.hpp>
 #include <glm/vec4.hpp>
-#include <limits>
 #include <string_view>
 
 namespace engine {
 
 namespace config {
 
-auto inline constexpr PROG_NAME = std::string_view{"engine"};
+extern constinit std::string_view const PROG_NAME;
 
 } // namespace config
 
 namespace render::config {
 
-char inline constexpr WIN_TITLE[] = "engine";
+// WARNING: requires a terminating NULL byte.
+extern constinit char const WIN_TITLE[];
 
-enum : int {
-    WIN_POS_X = 100,
-    WIN_POS_Y = 100,
-    WIN_WIDTH = 800,
-    WIN_HEIGHT = 800,
-};
+extern constinit int const WIN_POS_X;
+extern constinit int const WIN_POS_Y;
+extern constinit int const WIN_WIDTH;
+extern constinit int const WIN_HEIGHT;
+extern constinit double const ASPECT_RATIO;
 
-static_assert(
-    WIN_HEIGHT > 0,
-    "WIN_HEIGHT must be greater than zero to prevent divide by zero when "
-        "calculating aspect ratio."
-);
+extern constinit glm::vec4 const DEFAULT_BG_COLOR;
+extern constinit glm::vec4 const DEFAULT_FG_COLOR;
 
-auto inline constexpr ASPECT_RATIO
-    = static_cast<double>(WIN_WIDTH)
-    / static_cast<double>(WIN_HEIGHT);
+extern constinit bool const ENABLE_AXIS;
+extern constinit float const Y_AXIS_HALF_LEN;
+extern constinit float const Z_AXIS_HALF_LEN;
+extern constinit float const X_AXIS_HALF_LEN;
+extern constinit std::array<glm::vec3, 3> const AXIS_COLOR;
 
-// Pleasant black.
-auto inline constexpr DEFAULT_BG_COLOR = glm::vec4 {
-    0.08f, // R
-    0.08f, // G
-    0.08f, // B
-    1.f,   // A
-};
+extern constinit bool const ENABLE_LOOKAT_INDICATOR;
+extern constinit glm::vec3 const LOOKAT_INDICATOR_COLOR;
 
-// White.
-auto inline constexpr DEFAULT_FG_COLOR = glm::vec4{1.f, 1.f, 1.f, 1.f};
+extern constinit float const DEFAULT_LINE_WIDTH;
+extern constinit float const LINE_WIDTH_MIN;
+extern constinit float const LINE_WIDTH_MAX;
+extern constinit float const LINE_WIDTH_STEP;
 
-auto inline constexpr ENABLE_AXIS = false;
-auto inline constexpr ENABLE_LOOKAT_INDICATOR = false;
+extern constinit GLenum const DEFAULT_POLYGON_MODE;
 
-auto inline constexpr DEFAULT_LINE_WIDTH = 1.f;
-auto inline constexpr LINE_WIDTH_MIN = 1.f;
-auto inline constexpr LINE_WIDTH_MAX = 5.f;
-auto inline constexpr LINE_WIDTH_STEP = 1.f;
+enum KeyboardKeybinds : unsigned char {
+    KEY_MOVE_FORWARD  = 'w',
+    KEY_MOVE_LEFT     = 'a',
+    KEY_MOVE_BACKWARD = 's',
+    KEY_MOVE_RIGHT    = 'd',
 
-enum : GLenum { DEFAULT_POLYGON_MODE = GL_LINE };
-
-enum kb_keys : unsigned char {
     KEY_ROTATE_UP    = 'w',
     KEY_ROTATE_LEFT  = 'a',
     KEY_ROTATE_DOWN  = 's',
     KEY_ROTATE_RIGHT = 'd',
-    KEY_ZOOM_IN  = 'e',
+
+    KEY_ZOOM_IN = 'e',
     KEY_ZOOM_OUT = 'q',
+
     KEY_TOGGLE_AXIS = 'x',
     KEY_TOGGLE_LOOKAT_INDICATOR = '.',
     KEY_NEXT_POLYGON_MODE = 'm',
     KEY_THINNER_LINES = '-',
     KEY_THICKER_LINES = '+',
+    KEY_FOCUS_NEXT_MODEL = '\t',
+    KEY_EXIT_FOCUS_MODE = 27, // ESC key.
 };
 
-auto inline constexpr Y_AXIS_HALF_LEN = 50.f;
-auto inline constexpr Z_AXIS_HALF_LEN = 50.f;
-auto inline constexpr X_AXIS_HALF_LEN = 50.f;
+extern constinit unsigned int const RENDER_TICK_MILLIS;
 
-auto inline constexpr AXIS_COLOR = std::to_array<glm::vec3>({
-    {1.f, 0.f, 0.f}, // x axis (red)
-    {0.f, 1.f, 0.f}, // y axis (green)
-    {0.f, 0.f, 1.f}, // z axis (blue)
-});
+// WARNING: not constinit, do not rely on initialization order!
+extern World const DEFAULT_WORLD;
 
-// Yellow.
-auto inline constexpr LOOKAT_INDICATOR_COLOR = glm::vec3{1.f, 1.f, 0.f};
+extern constinit Camera const DEFAULT_CAMERA;
 
-auto inline constexpr DEFAULT_CAMERA = camera {
-    .pos = {9., 3., 30.},
-    .lookat = {0., 0., 0.},
-    .up = {0., 1., 0.},
-    .projection = {90., 0.5, 1000.},
-};
+extern constinit CameraMode const DEFAULT_CAMERA_MODE;
 
-auto inline const DEFAULT_WORLD = world{};
+extern constinit float const CAMERA_ROTATE_STEP;
+extern constinit float const CAMERA_VERT_ANGLE_MIN;
+extern constinit float const CAMERA_VERT_ANGLE_MAX;
 
-enum : unsigned int { RENDER_TICK_MILLIS = 16 }; // 60 FPS
-
-auto inline constexpr CAM_ROTATE_STEP = 0.01f;
-auto inline constexpr CAM_VERT_ANGLE_MIN = 0.001f;
-auto inline constexpr CAM_VERT_ANGLE_MAX = glm::pi<float>() - 0.001f;
-
-auto inline constexpr CAM_ZOOM_STEP = 1.0f;
-auto inline constexpr CAM_ZOOM_MIN
-    = std::numeric_limits<float>::max() - 2.f * CAM_ZOOM_STEP;
-auto inline constexpr CAM_ZOOM_MAX = 0.001f;
+extern constinit float const CAMERA_ZOOM_STEP;
+extern constinit float const CAMERA_ZOOM_MIN;
+extern constinit float const CAMERA_ZOOM_MAX;
 
 } // namespace render::config
 

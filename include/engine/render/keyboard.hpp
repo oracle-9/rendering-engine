@@ -1,30 +1,21 @@
 #pragma once
 
 #include <bitset>
-#include <brief_int.hpp>
 #include <limits>
 
 namespace engine::render {
 
-class keyboard {
+class Keyboard {
   private:
     std::bitset<std::numeric_limits<unsigned char>::max()> keys;
 
   public:
-    constexpr keyboard() : keys{} {}
-
     [[nodiscard]]
-    auto constexpr pressed(unsigned char const key) const noexcept -> bool {
-        return this->keys[static_cast<brief_int::usize>(key)];
-    }
+    auto pressed(unsigned char key) const noexcept -> bool;
 
-    auto press(unsigned char const key) noexcept -> void {
-        this->keys[static_cast<brief_int::usize>(key)] = true;
-    }
+    auto press(unsigned char key) noexcept -> void;
 
-    auto release(unsigned char const key) noexcept -> void {
-        this->keys[static_cast<brief_int::usize>(key)] = false;
-    }
+    auto release(unsigned char key) noexcept -> void;
 };
 
 } // namespace engine::render

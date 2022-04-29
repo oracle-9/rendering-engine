@@ -12,7 +12,7 @@ namespace engine::parse::xml {
 
 // TODO: Implement non-recursively.
 auto parse_group(rapidxml::xml_node<> const* const node) noexcept
-    -> cpp::result<render::group, parse_err>
+    -> cpp::result<render::Group, ParseErr>
 try {
     using namespace std::string_view_literals;
 
@@ -20,7 +20,7 @@ try {
     auto static constexpr models_str = "models"sv;
     auto static constexpr group_str = "group"sv;
 
-    auto root = render::group{};
+    auto root = render::Group{};
 
     for (
         auto const* child = node->first_node();
@@ -39,16 +39,16 @@ try {
         } else if (child_name == group_str) {
             root.children.push_back(TRY_RESULT(parse_group(child)));
         } else {
-            return cpp::fail(parse_err::unknown_group_child_node);
+            return cpp::fail(ParseErr::UNKNOWN_GROUP_CHILD_NODE);
         }
     }
 
     return root;
 
 } catch (std::bad_alloc const&) {
-    return cpp::fail(parse_err::no_mem);
+    return cpp::fail(ParseErr::NO_MEM);
 } catch (std::length_error const&) {
-    return cpp::fail(parse_err::no_mem);
+    return cpp::fail(ParseErr::NO_MEM);
 }
 
 } // namespace engine::parse::xml

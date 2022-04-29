@@ -6,59 +6,59 @@
 #include <intrinsics/branching.hpp>
 
 template <>
-struct fmt::formatter<engine::parse::xml::parse_err> {
-    using parse_err = ::engine::parse::xml::parse_err;
+struct fmt::formatter<engine::parse::xml::ParseErr> {
+    using ParseErr = ::engine::parse::xml::ParseErr;
 
     auto constexpr parse(format_parse_context& ctx) {
         return ctx.begin();
     }
 
     template <typename FormatContext>
-    auto constexpr format(parse_err const err, FormatContext& ctx) {
+    auto constexpr format(ParseErr const err, FormatContext& ctx) {
         return format_to(ctx.out(), "{}", [err] {
             switch (err) {
-                using enum ::engine::parse::xml::parse_err;
+                using enum ParseErr;
 
-                case no_mem:
+                case NO_MEM:
                     return "ran out of memory";
-                case io_err:
+                case IO_ERR:
                     return "input/output error";
 
-                case syntax_err:
+                case SYNTAX_ERR:
                     return "XML syntax error";
-                case malformed_num:
+                case MALFORMED_NUM:
                     return "malformed number";
 
-                case no_world_node:
+                case NO_WORLD_NODE:
                     return "no world node found";
-                case no_camera_node:
+                case NO_CAMERA_NODE:
                     return "no camera node found";
-                case no_group_node:
+                case NO_GROUP_NODE:
                     return "no root group node found";
 
-                case no_camera_pos_node:
+                case NO_CAMERA_POS_NODE:
                     return "no camera position node found";
-                case no_camera_lookat_node:
+                case NO_CAMERA_LOOKAT_NODE:
                     return "no camera lookat node found";
-                case no_camera_up_node:
+                case NO_CAMERA_UP_NODE:
                     return "no camera up node found";
-                case no_camera_proj_node:
+                case NO_CAMERA_PROJ_NODE:
                     return "no camera projection node found";
 
-                case unknown_group_child_node:
+                case UNKNOWN_GROUP_CHILD_NODE:
                     return "unrecognized group child node";
 
-                case unknown_transform:
+                case UNKNOWN_TRANSFORM:
                     return "unrecognized transformation";
 
-                case no_model_filename:
+                case NO_MODEL_FILENAME:
                     return "no model filename attribute";
-                case ambiguous_model_ext:
+                case AMBIGUOUS_MODEL_EXT:
                     return "model filename extension is ambiguous - must be "
                         "either .3d or .obj";
-                case no_model_file:
+                case NO_MODEL_FILE:
                     return "model points to nonexistent file";
-                case obj_loader_err:
+                case OBJ_LOADER_ERR:
                     return "object loader failed";
                 default:
                     intrinsics::unreachable();

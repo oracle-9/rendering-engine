@@ -9,6 +9,6 @@
 namespace engine::parse::xml {
 
 auto parse_projection(rapidxml::xml_node<> const* node) noexcept
-    -> cpp::result<glm::vec3, parse_err>;
+    -> cpp::result<glm::vec3, ParseErr>;
 
 } // namespace engine::parse::xml

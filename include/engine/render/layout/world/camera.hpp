@@ -4,7 +4,7 @@
 
 namespace engine::render {
 
-struct camera {
+struct Camera {
     glm::vec3 pos;
     glm::vec3 lookat;
     glm::vec3 up;

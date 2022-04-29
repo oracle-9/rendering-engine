@@ -16,7 +16,7 @@ auto constexpr parse_number_attr(
     rapidxml::xml_node<> const* const node,
     std::string_view const attr_name
 ) noexcept
-    -> cpp::result<N, parse_err>
+    -> cpp::result<N, ParseErr>
 {
     if (auto const* const attr
             = node->first_attribute(attr_name.data(), attr_name.length());
@@ -32,7 +32,7 @@ auto constexpr parse_number_attr(
                     attr->value_size(),
                 }
             ),
-            return cpp::fail(parse_err::malformed_num)
+            return cpp::fail(ParseErr::MALFORMED_NUM)
         );
     }
 }

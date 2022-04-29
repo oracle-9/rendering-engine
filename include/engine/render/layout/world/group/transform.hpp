@@ -5,11 +5,11 @@
 
 namespace engine::render {
 
-struct transform {
-    enum class kind_t {
-        translate,
-        rotate,
-        scale
+struct Transform {
+    enum class Kind {
+        TRANSLATE,
+        ROTATE,
+        SCALE
     } kind;
 
     union {

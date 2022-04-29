@@ -5,7 +5,7 @@
 
 namespace engine::render {
 
-struct model {
+struct Model {
     std::vector<glm::vec3> vertices;
 };
 

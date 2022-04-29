@@ -5,16 +5,16 @@
 #include <new>
 #include <stdexcept>
 
-using namespace brief_int;
-
 namespace generator {
+
+using namespace brief_int;
 
 auto generate_plane(float const side_len, u32 const num_divs) noexcept
     -> cpp::result<std::vector<glm::vec3>, generator_err>
 try {
     using namespace brief_int::literals;
 
-    if (num_divs == 0_u32) {
+    if (num_divs == 0) {
         // A plane cannot have zero divisions, otherwise the expression used to
         // calculate the division side length (side_len / num_divs) will fail.
         return cpp::fail(generator_err::plane_zero_divs);
@@ -27,8 +27,8 @@ try {
     // The total amount of vertices the cone will contain.
     auto const total_vertex_count
         = num_divs_uz * num_divs_uz // number of divisions in the plane.
-        * 2_uz                      // number of triangles in a division.
-        * 3_uz;                     // number of vertices in a triangle.
+        * 2                         // number of triangles in a division.
+        * 3;                        // number of vertices in a triangle.
 
     // We push every vertex to this vector.
     // At the end of the function call, it must contain total_vertex_count
@@ -59,7 +59,7 @@ try {
 
         // Stores the upper (with higher magnitude, not positionally above) z
         // coordinate of the current division.
-        auto const hi_z = static_cast<float>(row + 1_u32) * div_side_len;
+        auto const hi_z = static_cast<float>(row + 1) * div_side_len;
 
         for (auto col = 0_u32; col < num_divs; ++col) {
             // Stores the lower (with lower magnitude, not positionally below) x
@@ -68,7 +68,7 @@ try {
 
             // Stores the upper (with higher magnitude, not positionally above)
             // x coordinate of the current division.
-            auto const hi_x = static_cast<float>(col + 1_u32) * div_side_len;
+            auto const hi_x = static_cast<float>(col + 1) * div_side_len;
 
             // First we generate the first half of the division.
             vertices.emplace_back(lo_x, 0.f, lo_z);

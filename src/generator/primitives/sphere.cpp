@@ -7,9 +7,9 @@
 #include <new>
 #include <stdexcept>
 
-using namespace brief_int;
-
 namespace generator {
+
+using namespace brief_int;
 
 auto generate_sphere(
     float const radius,
@@ -19,12 +19,12 @@ auto generate_sphere(
 try {
     using namespace brief_int::literals;
 
-    if (num_slices <= 2_u32) {
+    if (num_slices <= 2) {
         // A sphere needs at least 3 slices to be properly generated.
         return cpp::fail(generator_err::sphere_lt_three_slices);
     }
 
-    if (num_stacks <= 1_u32) {
+    if (num_stacks <= 1) {
         // A sphere needs at least 2 stacks to be properly generated.
         return cpp::fail(generator_err::sphere_lt_two_stacks);
     }
@@ -36,8 +36,8 @@ try {
         = glm::pi<float>() / static_cast<float>(num_stacks);
 
     auto const total_vertex_count
-        = 6_uz
-        * static_cast<usize>(num_stacks - 1_u32)
+        = 6
+        * static_cast<usize>(num_stacks - 1)
         * static_cast<usize>(num_slices);
 
     auto vertices = std::vector<glm::vec3>{};
@@ -50,19 +50,19 @@ try {
             = half_pi - static_cast<float>(i) * stack_angle;
 
         auto const next_stack_angle
-            = half_pi - static_cast<float>(i + 1_u32) * stack_angle;
+            = half_pi - static_cast<float>(i + 1) * stack_angle;
 
         for (auto j = 0_u32; j < num_slices; ++j) {
             auto const curr_slice_angle
                 = static_cast<float>(j) * slice_angle;
 
             auto const next_slice_angle
-                = static_cast<float>(j + 1_u32) * slice_angle;
+                = static_cast<float>(j + 1) * slice_angle;
 
             using glm::cos;
             using glm::sin;
 
-            if (i < num_stacks - 1_u32) {
+            if (i < num_stacks - 1) {
                 vertices.emplace_back(
                     radius * cos(curr_stack_angle) * sin(curr_slice_angle),
                     radius * sin(curr_stack_angle),
@@ -96,7 +96,7 @@ try {
                 );
             }
 
-            if (i > 0_u32 && i < num_stacks - 1_u32) {
+            if (i > 0 && i < num_stacks - 1) {
                 vertices.emplace_back(
                     radius * cos(next_stack_angle) * sin(next_slice_angle),
                     radius * sin(next_stack_angle),
