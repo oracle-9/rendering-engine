@@ -126,6 +126,9 @@ set(BRIEF_INT_PATH "${LIB_PATH}/brief_int")
 set(FMT_PATH "${LIB_PATH}/fmt")
 add_subdirectory(${FMT_PATH})
 
+# Glew
+find_package(GLEW REQUIRED)
+
 # glm
 set(GLM_PATH "${LIB_PATH}/glm")
 add_subdirectory(${GLM_PATH})
@@ -160,6 +163,7 @@ list(
     LIB_INCLUDE_PATHS
     ${BRIEF_INT_PATH}
     ${FMT_PATH}
+    ${GLEW_INCLUDE_DIRS}
     ${GLM_PATH}
     ${GLUT_INCLUDE_DIRS}
     ${INTRINSICS_PATH}
@@ -186,6 +190,7 @@ target_link_libraries(generator fmt::fmt spdlog::spdlog)
 target_link_libraries(
     engine
     fmt::fmt
+    GLEW::GLEW
     glm::glm
     GLUT::GLUT
     ${GLUT_LIBRARY}     # overspecify libraries just in case.
