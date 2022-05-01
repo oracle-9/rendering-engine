@@ -1,6 +1,8 @@
 #include "engine/parse/xml/group/transform/transform.hpp"
 
 #include "engine/parse/xml/group/transform/rotate.hpp"
+#include "engine/parse/xml/group/transform/scale.hpp"
+#include "engine/parse/xml/group/transform/translate.hpp"
 #include "engine/parse/xml/util/xyz.hpp"
 #include "util/try.hpp"
 
@@ -11,7 +13,6 @@ namespace engine::parse::xml {
 auto parse_transform(rapidxml::xml_node<> const* const node) noexcept
     -> cpp::result<render::Transform, ParseErr>
 {
-    using enum render::Transform::Kind;
     using namespace std::string_view_literals;
 
     auto static constexpr translate_str = "translate"sv;
@@ -24,20 +25,11 @@ auto parse_transform(rapidxml::xml_node<> const* const node) noexcept
     };
 
     if (transform_name == translate_str) {
-        return render::Transform {
-            .kind = TRANSLATE,
-            .translate = TRY_RESULT(util::parse_xyz(node)),
-        };
+        return render::Translate{TRY_RESULT(parse_translate(node))};
     } else if (transform_name == rotate_str) {
-        return render::Transform {
-            .kind = ROTATE,
-            .rotate = TRY_RESULT(parse_rotate(node)),
-        };
+        return render::Rotate{TRY_RESULT(parse_rotate(node))};
     } else if (transform_name == scale_str) {
-        return render::Transform {
-            .kind = SCALE,
-            .scale = TRY_RESULT(util::parse_xyz(node)),
-        };
+        return render::Scale{TRY_RESULT(util::parse_xyz(node))};
     } else {
         return cpp::fail(ParseErr::UNKNOWN_TRANSFORM);
     }

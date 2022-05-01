@@ -1,3 +1,5 @@
+#include <GL/glew.h>
+
 #include "engine/render/render.hpp"
 
 #include "engine/config.hpp"
@@ -7,7 +9,6 @@
 #include "engine/render/state.hpp"
 #include "generator/primitives/box.hpp"
 
-#include <GL/glew.h>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/vec3.hpp>
 
@@ -117,47 +118,49 @@ auto static render_lookat_indicator() noexcept -> void {
 auto static render_group(Group const& root) noexcept -> void {
     glPushMatrix();
 
-    for (auto const& transform : root.transforms) {
-        switch (transform.kind) {
-            using enum Transform::Kind;
+    // TODO: FIX THIS!
+    // for (auto const& transform : root.transforms) {
+    //     switch (transform.kind) {
+    //         using enum Transform::Kind;
 
-            case TRANSLATE:
-                glTranslatef(
-                    transform.translate.x,
-                    transform.translate.y,
-                    transform.translate.z
-                );
-                break;
+    //         case TRANSLATE:
+    //             // TODO: FIX THIS, NOT WORKING WITH TIME!
+    //             glTranslatef(
+    //                 transform.translate.fixed.x,
+    //                 transform.translate.fixed.y,
+    //                 transform.translate.fixed.z
+    //             );
+    //             break;
 
-            case ROTATE:
-                // TODO: FIX THIS, NOT WORKING WITH TIME!
-                glRotatef(
-                    transform.rotate.rotate[0],
-                    transform.rotate.rotate[1],
-                    transform.rotate.rotate[2],
-                    transform.rotate.rotate[3]
-                );
-                break;
+    //         case ROTATE:
+    //             // TODO: FIX THIS, NOT WORKING WITH TIME!
+    //             glRotatef(
+    //                 transform.rotate.rotate[0],
+    //                 transform.rotate.rotate[1],
+    //                 transform.rotate.rotate[2],
+    //                 transform.rotate.rotate[3]
+    //             );
+    //             break;
 
-            case SCALE:
-                glScalef(
-                    transform.scale.x,
-                    transform.scale.y,
-                    transform.scale.z
-                );
-                break;
-        }
-    }
+    //         case SCALE:
+    //             glScalef(
+    //                 transform.scale.x,
+    //                 transform.scale.y,
+    //                 transform.scale.z
+    //             );
+    //             break;
+    //     }
+    // }
 
-    for (auto const& model : root.models) {
-        glBindBuffer(GL_ARRAY_BUFFER, state::bind[iii]);
-        glVertexPointer(3,GL_FLOAT,0,0);
-        glDrawArrays(GL_TRIANGLES,0,state::buffers[iii].size()/3);
-        iii++;
-    }
-    for (auto const& child_node : root.children) {
-        render_group(child_node);
-    }
+    // for (auto const& model : root.models) {
+    //     glBindBuffer(GL_ARRAY_BUFFER, state::bind[iii]);
+    //     glVertexPointer(3,GL_FLOAT,0,0);
+    //     glDrawArrays(GL_TRIANGLES,0,state::buffers[iii].size()/3);
+    //     iii++;
+    // }
+    // for (auto const& child_node : root.children) {
+    //     render_group(child_node);
+    // }
 
     glPopMatrix();
 }

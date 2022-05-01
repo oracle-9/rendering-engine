@@ -51,6 +51,14 @@ struct fmt::formatter<engine::parse::xml::ParseErr> {
                 case UNKNOWN_TRANSFORM:
                     return "unrecognized transformation";
 
+                case NO_TRANSLATE_ALIGN_ATTR:
+                    return "no translate align attribute found";
+                case UNKNOWN_TRANSLATE_ALIGN_ATTR_VALUE:
+                    return "unrecognized translate align attribute value";
+                case TRANSLATE_POINTS_LT_4:
+                    return "attempted to create a dynamic translate with less "
+                        "than 4 points";
+
                 case NO_MODEL_FILENAME:
                     return "no model filename attribute";
                 case AMBIGUOUS_MODEL_EXT:
