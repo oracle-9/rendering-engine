@@ -71,7 +71,7 @@
         <!-- Jupiter -->
         <group>
             <transform>
-                <rotate time="119" x="0" y="1" z="0"/>
+                <rotate time="29.75" x="0" y="1" z="0"/>
                 <translate x="1950" y="0" z="0" />
             </transform>
             <models>
@@ -82,7 +82,7 @@
         <!-- Saturn -->
         <group>
             <transform>
-                <rotate time="295" x="0" y="1" z="0"/>
+                <rotate time="73.75" x="0" y="1" z="0"/>
                 <translate x="3592.5" y="0" z="0" />
             </transform>
             <models>
@@ -93,7 +93,7 @@
         <!-- Uranus -->
         <group>
             <transform>
-                <rotate time="840" x="0" y="1" z="0"/>
+                <rotate time="210" x="0" y="1" z="0"/>
                 <translate x="7177.5" y="0" z="0" />
             </transform>
             <models>
@@ -104,7 +104,7 @@
         <!-- Neptune -->
         <group>
             <transform>
-                <rotate time="1648" x="0" y="1" z="0"/>
+                <rotate time="412" x="0" y="1" z="0"/>
                 <translate x="11325" y="0" z="0" />
             </transform>
             <models>
@@ -112,7 +112,7 @@
             </models>
         </group>
 
-        <!-- Comet 
+        <!-- Comet -->
         <group>
             <transform>
                 <translate time="60" >
@@ -131,8 +131,8 @@
                 </translate>
             </transform>
             <models>
-                <model file="examples/models/pot.3d" />
+                <model file="examples/models/comet.3d" />
             </models>
-        </group>-->
+        </group>
     </group>
 </world>
