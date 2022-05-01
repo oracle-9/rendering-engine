@@ -1,16 +1,18 @@
-#include <GL/glew.h>
 #include "engine/render/render.hpp"
 
 #include "engine/config.hpp"
 #include "engine/render/layout/world/group/group.hpp"
 #include "engine/render/layout/world/group/model.hpp"
-#include "engine/render/layout/world/group/transform.hpp"
+#include "engine/render/layout/world/group/transform/transform.hpp"
 #include "engine/render/state.hpp"
 #include "generator/primitives/box.hpp"
 
+#include <GL/glew.h>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/vec3.hpp>
+
 int iii = 0;
+
 namespace engine::render {
 
 auto static render_axis() noexcept -> void;
@@ -128,11 +130,12 @@ auto static render_group(Group const& root) noexcept -> void {
                 break;
 
             case ROTATE:
+                // TODO: FIX THIS, NOT WORKING WITH TIME!
                 glRotatef(
-                    transform.rotate[0],
-                    transform.rotate[1],
-                    transform.rotate[2],
-                    transform.rotate[3]
+                    transform.rotate.rotate[0],
+                    transform.rotate.rotate[1],
+                    transform.rotate.rotate[2],
+                    transform.rotate.rotate[3]
                 );
                 break;
 
@@ -145,10 +148,8 @@ auto static render_group(Group const& root) noexcept -> void {
                 break;
         }
     }
-    
 
     for (auto const& model : root.models) {
-
         glBindBuffer(GL_ARRAY_BUFFER, state::bind[iii]);
         glVertexPointer(3,GL_FLOAT,0,0);
         glDrawArrays(GL_TRIANGLES,0,state::buffers[iii].size()/3);
@@ -157,7 +158,6 @@ auto static render_group(Group const& root) noexcept -> void {
     for (auto const& child_node : root.children) {
         render_group(child_node);
     }
-    
 
     glPopMatrix();
 }

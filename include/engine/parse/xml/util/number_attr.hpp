@@ -22,8 +22,7 @@ auto constexpr parse_number_attr(
             = node->first_attribute(attr_name.data(), attr_name.length());
         attr == nullptr
     ) {
-        // if attribute isn't present, assume a value of zero.
-        return N{};
+        return cpp::fail(ParseErr::MALFORMED_NUM);
     } else {
         return TRY_OPTION_OR(
             ::util::parse_number<N>(
