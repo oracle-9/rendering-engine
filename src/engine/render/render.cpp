@@ -118,6 +118,87 @@ auto static render_lookat_indicator() noexcept -> void {
     glColor3fv(glm::value_ptr(config::DEFAULT_FG_COLOR));
 }
 
+void buildRotMatrix(float *x, float *y, float *z, float *m) {
+
+    m[0] = x[0]; m[1] = x[1]; m[2] = x[2]; m[3] = 0;
+    m[4] = y[0]; m[5] = y[1]; m[6] = y[2]; m[7] = 0;
+    m[8] = z[0]; m[9] = z[1]; m[10] = z[2]; m[11] = 0;
+    m[12] = 0; m[13] = 0; m[14] = 0; m[15] = 1;
+}
+
+void cross(float *a, float *b, float *res) {
+
+    res[0] = a[1]*b[2] - a[2]*b[1];
+    res[1] = a[2]*b[0] - a[0]*b[2];
+    res[2] = a[0]*b[1] - a[1]*b[0];
+}
+
+void normalize(float *a) {
+
+    float l = sqrt(a[0]*a[0] + a[1] * a[1] + a[2] * a[2]);
+    a[0] = a[0]/l;
+    a[1] = a[1]/l;
+    a[2] = a[2]/l;
+}
+
+void multMatrixVector(float *m, float *v, float *res) {
+    for (int j = 0; j < 4; ++j) {
+        res[j] = 0;
+        for (int k = 0; k < 4; ++k) {
+            res[j] += v[k] * m[j * 4 + k];
+        }
+    }
+}
+
+void getCatmullRomPoint(float t, glm::vec3 p0, glm::vec3 p1, glm::vec3 p2, glm::vec3 p3, float *pos, float *deriv) {
+    // catmull-rom matrix
+    float m[4][4] = {    {-0.5f,  1.5f, -1.5f,  0.5f},
+                        { 1.0f, -2.5f,  2.0f, -0.5f},
+                        {-0.5f,  0.0f,  0.5f,  0.0f},
+                        { 0.0f,  1.0f,  0.0f,  0.0f}};
+            
+    // Compute A = M * P
+    float A[3][4];
+    for (int i = 0; i < 3; i++) {
+        float pp[4] = { p0[i],p1[i],p2[i],p3[i] };
+        multMatrixVector(*m, pp, A[i]);
+    
+    // Compute pos = T * A
+        pos[i] = t * t * t * A[i][0] + t * t * A[i][1] + t * A[i][2] + A[i][3];
+
+    // compute deriv = T' * A
+        deriv[i] = 3 * t * t * A[i][0] + 2 * t * A[i][1] + A[i][2];
+    }
+}
+
+// given  global t, returns the point in the curve
+void getGlobalCatmullRomPoint(float gt,std::vector<glm::vec3> p, float *pos, float *deriv) {
+    float t = gt * p.size(); // this is the real global t
+    int index = floor(t);  // which segment
+    t = t - index; // where within  the segment
+
+    // indices store the points
+    int indices[4]; 
+    indices[0] = (index + p.size()-1)%p.size();    
+    indices[1] = (indices[0]+1)%p.size();
+    indices[2] = (indices[1]+1)%p.size(); 
+    indices[3] = (indices[2]+1)%p.size();
+
+    getCatmullRomPoint(t, p[indices[0]], p[indices[1]], p[indices[2]], p[indices[3]], pos, deriv);
+}
+
+void renderCatmullRomCurve(std::vector<glm::vec3> points) {
+    float pos[3];
+    float deriv[3];
+// draw curve using line segments with GL_LINE_LOOP
+    glBegin(GL_LINE_LOOP);
+    for (int i = 0; i <= 100; i += 1) {
+        getGlobalCatmullRomPoint(i*0.01,points,pos, deriv);
+        glVertex3f(pos[0], pos[1], pos[2]);
+    }
+    glEnd();
+}
+
 // TODO: Implement non-recursively.
 auto static render_group(Group const& root) noexcept -> void {
     glPushMatrix();
@@ -134,7 +215,29 @@ auto static render_group(Group const& root) noexcept -> void {
                         );
                     },
                     [](DynamicTranslate const& dynamic_translate) {
-                        // TODO: IMPLEMENT THIS!
+                        float pos[3];
+                        float deriv[3];
+                        static float yo[3] = { 0, 1, 0 };
+                        float z[3];
+                        float m[16];
+
+                        float gt = glutGet(GLUT_ELAPSED_TIME);
+                        float timer = dynamic_translate.time;
+                        float realt = gt / (timer * 1000);
+
+                        renderCatmullRomCurve(dynamic_translate.points);
+                        getGlobalCatmullRomPoint(realt,dynamic_translate.points, pos, deriv);
+
+                        glTranslatef(pos[0], pos[1], pos[2]);
+                        if(dynamic_translate.align){ // if assign = True 
+                            normalize(deriv);
+                            cross(deriv, yo, z);
+                            normalize(z);
+                            cross(z, deriv, yo);
+                            normalize(yo);
+                            buildRotMatrix(deriv, yo, z, m);
+                            glMultMatrixf(m);
+                        }
                     }
                 }, translate);
             },

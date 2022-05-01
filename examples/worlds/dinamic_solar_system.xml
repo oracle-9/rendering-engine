@@ -1,6 +1,6 @@
 <world>
     <camera>
-        <position x="500" y="10" z="500" />
+        <position x="500" y="500" z="500" />
         <lookAt x="0" y="0" z="0" />
         <up x="0" y="1" z="0" />
         <projection fov="60" near="10" far="30000" />
@@ -114,9 +114,11 @@
         <!-- Comet -->
         <group>
             <transform>
-                <translate time="60">
+                <translate time="60" align="True">
                     <point x="8000" y="0" z="-500" />
+                    <point x="10000" y="0" z="-250" />
                     <point x="12000" y="0" z="0" />
+                    <point x="10000" y="0" z="250" />
                     <point x="8000" y="0" z="500" />
                     <point x="2000" y="0" z="1500" />
                     <point x="-2000" y="0" z="1300" />
@@ -126,8 +128,11 @@
                     <point x="-2000" y="0" z="-1300" />
                     <point x="2000" y="0" z="-1500" />
                     <point x="8000" y="0" z="-500" />
-                    <point x="12000" y="0" z="0" />
+                    <point x="10000" y="0" z="-250" />
                 </translate>
+                <translate x="0" y="-50" z="0" />
+                <scale x="50" y="50" z="50" />
+                <rotate angle="-90" x="1" y="0" z="0" />
             </transform>
             <models>
                 <model file="examples/models/comet.3d" />
