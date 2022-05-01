@@ -6,13 +6,27 @@
 namespace engine::parse::xml {
 
 auto parse_rotate(rapidxml::xml_node<> const* const node) noexcept
-    -> cpp::result<glm::vec4, ParseErr>
+    -> cpp::result<render::Rotate, ParseErr>
 {
-    return glm::vec4 {
-        TRY_RESULT(parse_number_attr<float>(node, "angle")),
-        TRY_RESULT(parse_number_attr<float>(node, "x")),
-        TRY_RESULT(parse_number_attr<float>(node, "y")),
-        TRY_RESULT(parse_number_attr<float>(node, "z")),
+    using Kind = render::Rotate::Kind;
+
+    Kind kind;
+    auto fst = parse_number_attr<float>(node, "angle");
+    if (fst.has_value()) {
+        kind = Kind::Angle;
+    } else {
+        fst = parse_number_attr<float>(node, "time");
+        kind = Kind::Time;
+    }
+
+    return render::Rotate {
+        .kind = kind,
+        .rotate = {
+            TRY_RESULT(fst),
+            TRY_RESULT(parse_number_attr<float>(node, "x")),
+            TRY_RESULT(parse_number_attr<float>(node, "y")),
+            TRY_RESULT(parse_number_attr<float>(node, "z")),
+        }
     };
 }
 

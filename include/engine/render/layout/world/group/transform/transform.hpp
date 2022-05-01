@@ -1,5 +1,7 @@
 #pragma once
 
+#include "engine/render/layout/world/group/transform/rotate.hpp"
+
 #include <glm/vec3.hpp>
 #include <glm/vec4.hpp>
 
@@ -14,7 +16,7 @@ struct Transform {
 
     union {
         glm::vec3 translate;
-        glm::vec4 rotate;
+        Rotate rotate;
         glm::vec3 scale;
     };
 };
