@@ -1,3 +1,4 @@
+// For some reason this needs to be included first.
 #include <GL/glew.h>
 
 #include "engine/render/render.hpp"
@@ -6,11 +7,14 @@
 #include "engine/render/layout/world/group/group.hpp"
 #include "engine/render/layout/world/group/model.hpp"
 #include "engine/render/layout/world/group/transform/transform.hpp"
+#include "engine/render/layout/world/group/transform/rotate.hpp"
 #include "engine/render/state.hpp"
 #include "generator/primitives/box.hpp"
 
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/vec3.hpp>
+
+#include "util/overload.hpp"
 
 int iii = 0;
 
@@ -118,49 +122,63 @@ auto static render_lookat_indicator() noexcept -> void {
 auto static render_group(Group const& root) noexcept -> void {
     glPushMatrix();
 
-    // TODO: FIX THIS!
-    // for (auto const& transform : root.transforms) {
-    //     switch (transform.kind) {
-    //         using enum Transform::Kind;
+    for (auto const& transform : root.transforms) {
+        std::visit(util::overload {
+            [](Translate const& translate) {
+                std::visit(util::overload {
+                    [](StaticTranslate const& static_translate) {
+                        glTranslatef(
+                            static_translate.xyz.x,
+                            static_translate.xyz.y,
+                            static_translate.xyz.z
+                        );
+                    },
+                    [](DynamicTranslate const& dynamic_translate) {
+                        // TODO: IMPLEMENT THIS!
+                    }
+                }, translate);
+            },
+            [](Rotate const& rotate) {
+                switch (rotate.kind) {
+                    using enum Rotate::Kind;
 
-    //         case TRANSLATE:
-    //             // TODO: FIX THIS, NOT WORKING WITH TIME!
-    //             glTranslatef(
-    //                 transform.translate.fixed.x,
-    //                 transform.translate.fixed.y,
-    //                 transform.translate.fixed.z
-    //             );
-    //             break;
+                    case Angle:
+                        glRotatef(
+                            rotate.rotate[0],
+                            rotate.rotate[1],
+                            rotate.rotate[2],
+                            rotate.rotate[3]
+                        );
+                        break;
+                    case Time: {
+                        auto const gt = glutGet(GLUT_ELAPSED_TIME);
+                        auto const timer = rotate.rotate[0];
+                        auto const realt = gt / (timer * 1000);
+                        glRotatef(
+                            360 * realt,
+                            rotate.rotate[1],
+                            rotate.rotate[2],
+                            rotate.rotate[3]
+                        );
+                        break;
+                    }
+                }
+            },
+            [](Scale const& scale) {
+                glScalef(scale.x, scale.y, scale.z);
+            }
+        }, transform);
+    }
 
-    //         case ROTATE:
-    //             // TODO: FIX THIS, NOT WORKING WITH TIME!
-    //             glRotatef(
-    //                 transform.rotate.rotate[0],
-    //                 transform.rotate.rotate[1],
-    //                 transform.rotate.rotate[2],
-    //                 transform.rotate.rotate[3]
-    //             );
-    //             break;
-
-    //         case SCALE:
-    //             glScalef(
-    //                 transform.scale.x,
-    //                 transform.scale.y,
-    //                 transform.scale.z
-    //             );
-    //             break;
-    //     }
-    // }
-
-    // for (auto const& model : root.models) {
-    //     glBindBuffer(GL_ARRAY_BUFFER, state::bind[iii]);
-    //     glVertexPointer(3,GL_FLOAT,0,0);
-    //     glDrawArrays(GL_TRIANGLES,0,state::buffers[iii].size()/3);
-    //     iii++;
-    // }
-    // for (auto const& child_node : root.children) {
-    //     render_group(child_node);
-    // }
+    for (auto const& model : root.models) {
+        glBindBuffer(GL_ARRAY_BUFFER, state::bind[iii]);
+        glVertexPointer(3,GL_FLOAT,0,0);
+        glDrawArrays(GL_TRIANGLES,0,state::buffers[iii].size()/3);
+        iii++;
+    }
+    for (auto const& child_node : root.children) {
+        render_group(child_node);
+    }
 
     glPopMatrix();
 }

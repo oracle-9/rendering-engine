@@ -1,7 +1,6 @@
 #include "engine/parse/xml/group/transform/transform.hpp"
 
 #include "engine/parse/xml/group/transform/rotate.hpp"
-#include "engine/parse/xml/group/transform/scale.hpp"
 #include "engine/parse/xml/group/transform/translate.hpp"
 #include "engine/parse/xml/util/xyz.hpp"
 #include "util/try.hpp"

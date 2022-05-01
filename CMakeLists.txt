@@ -42,6 +42,7 @@ list(
     "${INCLUDE_PATH}/generator/module.hpp"
     "${INCLUDE_PATH}/util/coord_conv.hpp"
     "${INCLUDE_PATH}/util/number.hpp"
+    "${INCLUDE_PATH}/util/overload.hpp"
     "${INCLUDE_PATH}/util/parse_number.hpp"
     "${INCLUDE_PATH}/util/try.hpp"
 )
@@ -103,6 +104,7 @@ list(
     "${INCLUDE_PATH}/generator/primitives/sphere.hpp"
     "${INCLUDE_PATH}/util/coord_conv.hpp"
     "${INCLUDE_PATH}/util/number.hpp"
+    "${INCLUDE_PATH}/util/overload.hpp"
     "${INCLUDE_PATH}/util/parse_number.hpp"
     "${INCLUDE_PATH}/util/try.hpp"
 )
