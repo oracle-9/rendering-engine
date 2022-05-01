@@ -54,12 +54,7 @@ Renderer::Renderer() {
 }
 
 auto Renderer::set_world(World& world) -> Renderer& {
-    if (auto* const world_ptr = &world;
-        world_ptr != state::world_ptr
-    ) {
-        state::world_ptr = world_ptr;
-        state::model_refs = state::build_model_refs(world);
-    }
+    state::world_ptr = &world;
     return *this;
 }
 

@@ -2,6 +2,7 @@
 
 #include "engine/config.hpp"
 #include "engine/render/layout/world/group/group.hpp"
+#include "engine/render/layout/world/group/model.hpp"
 #include "engine/render/layout/world/group/transform.hpp"
 #include "engine/render/state.hpp"
 #include "generator/primitives/box.hpp"

@@ -59,23 +59,18 @@ auto key_down(unsigned char const key, int, int) noexcept -> void {
             break;
 
         case KEY_FOCUS_NEXT_MODEL:
-            if (auto const num_models = state::model_refs.size();
-                num_models > 0
-            ) {
-                switch (state::camera_mode) {
-                    using enum CameraMode;
+            switch (state::camera_mode) {
+                using enum CameraMode;
 
-                    case FREE_MODE:
-                        state::camera_mode = FOLLOW_MODE;
-                        break;
+                case FREE_MODE:
+                    state::camera_mode = FOLLOW_MODE;
+                    break;
 
-                    case FOLLOW_MODE:
-                        state::focused_model_idx
-                            = (state::focused_model_idx + 1) % num_models;
-                        break;
-                }
-                glutPostRedisplay();
+                case FOLLOW_MODE:
+                    state::camera_mode = FREE_MODE;
+                    break;
             }
+            glutPostRedisplay();
         break;
 
         case KEY_EXIT_FOCUS_MODE:
