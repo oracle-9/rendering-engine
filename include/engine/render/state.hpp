@@ -7,6 +7,7 @@
 
 #include <GL/freeglut.h>
 #include <nonnull_ptr.hpp>
+#include <vector>
 
 namespace engine::render::state {
 
@@ -25,5 +26,8 @@ extern ptr::nonnull_ptr<World> world_ptr;
 extern Camera default_camera_mut;
 extern ptr::nonnull_ptr<Camera> camera_ptr;
 extern CameraMode camera_mode;
+
+extern std::vector<std::vector<float>> buffers;
+extern GLuint bind[500];
 
 } // namespace engine::render::state

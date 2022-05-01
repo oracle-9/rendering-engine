@@ -33,6 +33,7 @@ list(
     APPEND GENERATOR_HEADERS
     "${INCLUDE_PATH}/generator/err/err_fmt.hpp"
     "${INCLUDE_PATH}/generator/err/err.hpp"
+    "${INCLUDE_PATH}/generator/primitives/bezier_patch.hpp"
     "${INCLUDE_PATH}/generator/primitives/box.hpp"
     "${INCLUDE_PATH}/generator/primitives/cone.hpp"
     "${INCLUDE_PATH}/generator/primitives/plane.hpp"
@@ -47,6 +48,7 @@ list(
 
 list(
     APPEND GENERATOR_SOURCES
+    "${SRC_PATH}/generator/primitives/bezier_patch.cpp"
     "${SRC_PATH}/generator/primitives/box.cpp"
     "${SRC_PATH}/generator/primitives/cone.cpp"
     "${SRC_PATH}/generator/primitives/plane.cpp"

@@ -13,6 +13,7 @@
 #include <fmt/color.h>
 #include <fmt/core.h>
 #include <fmt/format.h>
+#include <fstream>
 #include <span>
 #include <spdlog/sinks/stdout_color_sinks-inl.h>
 #include <spdlog/spdlog.h>
@@ -182,6 +183,26 @@ std::unordered_map<
             }
         }
     },
+    {
+        "bezier",
+        [](std::span<char const*> const args) {
+            check_num_args(3, args.size());
+            auto patch_input_file = std::ifstream(args[0]);
+            if (patch_input_file.fail()) {
+                throw std::runtime_error(
+                    fmt::format("failed opening file '{}'", args[0])
+                );
+            }
+            auto const tesselation = try_parse_u32(args[1]);
+            auto output_file = fmt::output_file(args[2]);
+            auto const result = generate_and_print_bezier_patch(
+                patch_input_file, tesselation, output_file
+            );
+            if (result.has_error()) {
+                throw std::runtime_error(fmt::format("{}", result.error()));
+            }
+        }
+    },
 };
 
 template <::util::number N, std::invocable F>
@@ -229,7 +250,7 @@ auto static display_help() -> void {
         "        Display this message.\n"
         "\n"
         "\n"
-        "    {prog} (sphere | box | cone | plane) <args>... <output_file>\n"
+        "    {prog} (sphere | box | cone | plane | bezier) <args>... <output_file>\n"
         "        Draw the specified primitive and store the resulting\n"
         "        vertices in a file named <output_file>.\n"
         "\n"
@@ -247,7 +268,11 @@ auto static display_help() -> void {
         "\n"
         "        plane <side_len> <num_divs>\n"
         "            Generate a plane with <len> units in length and\n"
-        "            <num_divs> divisions along each axis.\n",
+        "            <num_divs> divisions along each axis.\n"
+        "\n"
+        "        bezier <patch_file> <tesselation>\n"
+        "            Generate a bezier patch from <patch_file> with\n"
+        "            <tesselation> tesselation.\n",
         fmt::arg("prog", config::PROG_NAME)
     );
 }

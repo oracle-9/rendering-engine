@@ -23,6 +23,9 @@ struct fmt::formatter<generator::GeneratorErr> {
                 case IO_ERR:
                     return "input/output error";
 
+                case MALFORMED_NUM:
+                    return "malformed number";
+
                 case BOX_ZERO_DIVS:
                     return "attempted to generate a box with zero divisions";
 
@@ -41,6 +44,14 @@ struct fmt::formatter<generator::GeneratorErr> {
                 case SPHERE_LT_TWO_STACKS:
                     return "attempted to generate a sphere with less than two "
                         "stacks";
+
+                case BEZIER_LT_ONE_PATCH:
+                    return "attempted to generate a bezier patch with less than"
+                    " one patch";
+                case BEZIER_LT_ONE_CTRL_POINT:
+                    return "attempted to generate a bezier patch with less than"
+                        "one control point";
+
                 default:
                     intrinsics::unreachable();
             }

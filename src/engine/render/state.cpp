@@ -20,4 +20,8 @@ Camera default_camera_mut = config::DEFAULT_CAMERA;
 ptr::nonnull_ptr<Camera> camera_ptr = ptr::nonnull_ptr_to(default_camera_mut);
 enum CameraMode camera_mode;
 
+std::vector<std::vector<float>> buffers;
+
+GLuint bind[500];
+
 } // namespace engine::render::state
