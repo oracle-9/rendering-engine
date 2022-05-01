@@ -1,5 +1,5 @@
 #define SPDLOG_ACTIVE_LEVEL SPDLOG_LEVEL_TRACE
-
+#include <GL/glew.h>
 #include "engine/render/renderer.hpp"
 
 #include "engine/config.hpp"
@@ -9,6 +9,14 @@
 
 #include <spdlog/spdlog.h>
 
+
+
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/vec3.hpp>
+#include <glm/gtx/string_cast.hpp>
+#include <iostream>
+#include <vector>
+
 namespace engine::render {
 
 auto static display_info() -> void;
@@ -16,6 +24,24 @@ auto static display_info() -> void;
 auto get() -> Renderer& {
     auto static lazy_static = Renderer{};
     return lazy_static;
+}
+
+
+
+// TODO: Implement non-recursively.
+auto static tmp(Group const& root) noexcept -> void {
+    for (auto const& model : root.models) {
+        std::vector<float> BufferModel;
+        for (auto const& vertex : model.vertices) {
+            BufferModel.push_back(vertex[0]);
+            BufferModel.push_back(vertex[1]);
+            BufferModel.push_back(vertex[2]);
+        }
+        state::buffers.push_back(BufferModel);
+    }
+    for (auto const& child_node : root.children) {
+        tmp(child_node);
+    }
 }
 
 Renderer::Renderer() {
@@ -42,6 +68,10 @@ Renderer::Renderer() {
     glutKeyboardUpFunc(key_up);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
+
+    glewInit();
+    glEnableClientState(GL_VERTEX_ARRAY);
+
     glClearColor(
         config::DEFAULT_BG_COLOR.r,
         config::DEFAULT_BG_COLOR.g,
@@ -59,6 +89,8 @@ auto Renderer::set_world(World& world) -> Renderer& {
     ) {
         state::world_ptr = world_ptr;
         state::model_refs = state::build_model_refs(world);
+        tmp(state::world_ptr->root);
+        glEnableClientState(GL_VERTEX_ARRAY);
     }
     return *this;
 }

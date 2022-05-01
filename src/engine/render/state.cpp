@@ -47,4 +47,7 @@ auto build_model_refs(World const& world)
     return model_refs;
 }
 
+std::vector<std::vector<float>> buffers ;
+GLuint bind[500];
+
 } // namespace engine::render::state

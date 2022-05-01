@@ -36,4 +36,7 @@ extern brief_int::usize focused_model_idx;
 auto build_model_refs(World const& world)
     -> std::vector<ptr::nonnull_ptr<Model const>>;
 
+extern std::vector<std::vector<float>> buffers;
+extern GLuint bind[500];
+
 } // namespace engine::render::state

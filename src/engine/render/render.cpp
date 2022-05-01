@@ -1,3 +1,4 @@
+#include <GL/glew.h>
 #include "engine/render/render.hpp"
 
 #include "engine/config.hpp"
@@ -8,12 +9,13 @@
 
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/vec3.hpp>
-
+int iii = 0;
 namespace engine::render {
 
 auto static render_axis() noexcept -> void;
 auto static render_lookat_indicator() noexcept -> void;
 auto static render_group(Group const& root) noexcept -> void;
+
 
 auto render() noexcept -> void {
     auto const& camera = *state::camera_ptr;
@@ -46,6 +48,7 @@ auto render() noexcept -> void {
         render_lookat_indicator();
     }
     render_group(state::world_ptr->root);
+    iii = 0;
     glutSwapBuffers();
 }
 
@@ -141,18 +144,19 @@ auto static render_group(Group const& root) noexcept -> void {
                 break;
         }
     }
+    
 
     for (auto const& model : root.models) {
-        glBegin(GL_TRIANGLES);
-        for (auto const& vertex : model.vertices) {
-            glVertex3fv(glm::value_ptr(vertex));
-        }
-        glEnd();
-    }
 
+        glBindBuffer(GL_ARRAY_BUFFER, state::bind[iii]);
+        glVertexPointer(3,GL_FLOAT,0,0);
+        glDrawArrays(GL_TRIANGLES,0,state::buffers[iii].size()/3);
+        iii++;
+    }
     for (auto const& child_node : root.children) {
         render_group(child_node);
     }
+    
 
     glPopMatrix();
 }
