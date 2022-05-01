@@ -28,8 +28,8 @@ auto get() -> Renderer& {
 
 
 
-// TODO: Implement non-recursively.
-auto static tmp(Group const& root) noexcept -> void {
+
+auto static bufferVBOs(Group const& root) noexcept -> void {
     for (auto const& model : root.models) {
         std::vector<float> BufferModel;
         for (auto const& vertex : model.vertices) {
@@ -40,7 +40,7 @@ auto static tmp(Group const& root) noexcept -> void {
         state::buffers.push_back(BufferModel);
     }
     for (auto const& child_node : root.children) {
-        tmp(child_node);
+        bufferVBOs(child_node);
     }
 }
 
@@ -89,8 +89,19 @@ auto Renderer::set_world(World& world) -> Renderer& {
     ) {
         state::world_ptr = world_ptr;
         state::model_refs = state::build_model_refs(world);
-        tmp(state::world_ptr->root);
+        bufferVBOs(state::world_ptr->root);
+        
+        int i = 0;
+
         glEnableClientState(GL_VERTEX_ARRAY);
+        glGenBuffers(500,state::bind);
+        int tamanho = static_cast<int> (state::buffers.size());
+
+        for(int i = 0; i < tamanho;i++){
+            glBindBuffer(GL_ARRAY_BUFFER, state::bind[i]);
+            glBufferData(GL_ARRAY_BUFFER,sizeof(float) * state::buffers[i].size(),state::buffers[i].data(),GL_STATIC_DRAW);
+        }
+
     }
     return *this;
 }
