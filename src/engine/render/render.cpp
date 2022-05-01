@@ -1,13 +1,14 @@
+#include <GL/glew.h>
 #include "engine/render/render.hpp"
 
 #include "engine/config.hpp"
 #include "engine/render/layout/world/group/group.hpp"
 #include "engine/render/layout/world/group/model.hpp"
 #include "engine/render/layout/world/group/transform/transform.hpp"
+#include "engine/render/layout/world/group/transform/rotate.hpp"
 #include "engine/render/state.hpp"
 #include "generator/primitives/box.hpp"
 
-#include <GL/glew.h>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/vec3.hpp>
 
@@ -130,13 +131,33 @@ auto static render_group(Group const& root) noexcept -> void {
                 break;
 
             case ROTATE:
-                // TODO: FIX THIS, NOT WORKING WITH TIME!
-                glRotatef(
-                    transform.rotate.rotate[0],
-                    transform.rotate.rotate[1],
-                    transform.rotate.rotate[2],
-                    transform.rotate.rotate[3]
-                );
+                switch (transform.rotate.kind) {
+                    using enum Rotate::Kind;
+
+                    case Angle:
+                    {
+                        glRotatef(
+                        transform.rotate.rotate[0],
+                        transform.rotate.rotate[1],
+                        transform.rotate.rotate[2],
+                        transform.rotate.rotate[3]
+                        );
+                        break;
+                    }
+                    case Time:
+                    {
+                    float gt = glutGet(GLUT_ELAPSED_TIME);
+                        float timer = transform.rotate.rotate[0];
+                        float realt = gt / (timer * 1000);
+                        glRotatef(
+                            360 * realt, 
+                            transform.rotate.rotate[1],
+                            transform.rotate.rotate[2],
+                            transform.rotate.rotate[3]
+                        );
+                        break;
+                    }
+                }
                 break;
 
             case SCALE:

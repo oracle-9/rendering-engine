@@ -7,7 +7,7 @@ namespace engine::render {
 struct Rotate {
     enum class Kind {
         Angle,
-        Time,
+        Time
     } kind;
     glm::vec4 rotate;
 };
