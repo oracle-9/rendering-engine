@@ -10,14 +10,14 @@ namespace generator {
 using namespace brief_int;
 
 auto generate_box(float const side_len, u32 const num_divs) noexcept
-    -> cpp::result<std::vector<glm::vec3>, generator_err>
+    -> cpp::result<std::vector<glm::vec3>, GeneratorErr>
 try {
     using namespace brief_int::literals;
 
     if (num_divs == 0) {
         // A box cannot have zero divisions, otherwise the expression used to
         // calculate the division side length (side_len / num_divs) will fail.
-        return cpp::fail(generator_err::box_zero_divs);
+        return cpp::fail(GeneratorErr::BOX_ZERO_DIVS);
     }
 
     // We cache num_divs as a usize because we're going to use it in the next
@@ -280,16 +280,16 @@ try {
     return vertices;
 
 } catch (std::bad_alloc const&) {
-    return cpp::fail(generator_err::no_mem);
+    return cpp::fail(GeneratorErr::NO_MEM);
 } catch (std::length_error const&) {
-    return cpp::fail(generator_err::no_mem);
+    return cpp::fail(GeneratorErr::NO_MEM);
 }
 
 auto generate_and_print_box(
     float const side_len,
     u32 const num_divs,
     fmt::ostream& output_file
-) noexcept -> cpp::result<void, generator_err>
+) noexcept -> cpp::result<void, GeneratorErr>
 try {
     auto const& vertices = TRY_RESULT(generate_box(side_len, num_divs));
     output_file.print("{}\n", vertices.size());
@@ -298,7 +298,7 @@ try {
     }
     return {};
 } catch (...) {
-    return cpp::fail(generator_err::io_err);
+    return cpp::fail(GeneratorErr::IO_ERR);
 }
 
 } // namespace generator

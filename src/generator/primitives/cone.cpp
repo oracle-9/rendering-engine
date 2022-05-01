@@ -16,20 +16,20 @@ auto generate_cone(
     float const height,
     u32 const num_slices,
     u32 const num_stacks
-) noexcept -> cpp::result<std::vector<glm::vec3>, generator_err>
+) noexcept -> cpp::result<std::vector<glm::vec3>, GeneratorErr>
 try {
     using namespace brief_int::literals;
 
     if (num_slices <= 2) {
         // A cone needs at least 3 slices to be properly generated.
-        return cpp::fail(generator_err::cone_lt_three_slices);
+        return cpp::fail(GeneratorErr::CONE_LT_THREE_SLICES);
     }
 
     if (num_stacks == 0) {
         // A cone cannot have zero stacks, otherwise the expressions used to
         // calculate the radius factor (radius / num_stacks) and stack height
         // (height / num_stacks) will fail.
-        return cpp::fail(generator_err::cone_zero_stacks);
+        return cpp::fail(GeneratorErr::CONE_ZERO_STACKS);
     }
 
     // We cache num_stacks as a float because we're going to use it in some
@@ -185,9 +185,9 @@ try {
     return vertices;
 
 } catch (std::bad_alloc const&) {
-    return cpp::fail(generator_err::no_mem);
+    return cpp::fail(GeneratorErr::NO_MEM);
 } catch (std::length_error const&) {
-    return cpp::fail(generator_err::no_mem);
+    return cpp::fail(GeneratorErr::NO_MEM);
 }
 
 auto generate_and_print_cone(
@@ -196,7 +196,7 @@ auto generate_and_print_cone(
     u32 const num_slices,
     u32 const num_stacks,
     fmt::ostream& output_file
-) noexcept -> cpp::result<void, generator_err>
+) noexcept -> cpp::result<void, GeneratorErr>
 try {
     auto const& vertices = TRY_RESULT(
         generate_cone(radius, height, num_slices, num_stacks)
@@ -207,7 +207,7 @@ try {
     }
     return {};
 } catch (...) {
-    return cpp::fail(generator_err::io_err);
+    return cpp::fail(GeneratorErr::IO_ERR);
 }
 
 } // namespace generator

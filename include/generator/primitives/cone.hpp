@@ -15,7 +15,7 @@ auto generate_cone(
     float height,
     brief_int::u32 num_slices,
     brief_int::u32 num_stacks
-) noexcept -> cpp::result<std::vector<glm::vec3>, generator_err>;
+) noexcept -> cpp::result<std::vector<glm::vec3>, GeneratorErr>;
 
 auto generate_and_print_cone(
     float radius,
@@ -23,6 +23,6 @@ auto generate_and_print_cone(
     brief_int::u32 num_slices,
     brief_int::u32 num_stacks,
     fmt::ostream& output_file
-) noexcept -> cpp::result<void, generator_err>;
+) noexcept -> cpp::result<void, GeneratorErr>;
 
 } // namespace generator

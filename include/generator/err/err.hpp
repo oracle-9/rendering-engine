@@ -4,19 +4,19 @@
 
 namespace generator {
 
-enum class generator_err : brief_int::usize {
-    no_mem,
-    io_err,
+enum class GeneratorErr : brief_int::usize {
+    NO_MEM,
+    IO_ERR,
 
-    box_zero_divs,
+    BOX_ZERO_DIVS,
 
-    cone_lt_three_slices,
-    cone_zero_stacks,
+    CONE_LT_THREE_SLICES,
+    CONE_ZERO_STACKS,
 
-    plane_zero_divs,
+    PLANE_ZERO_DIVS,
 
-    sphere_lt_three_slices,
-    sphere_lt_two_stacks,
+    SPHERE_LT_THREE_SLICES,
+    SPHERE_LT_TWO_STACKS,
 };
 
 } // namespace generator
