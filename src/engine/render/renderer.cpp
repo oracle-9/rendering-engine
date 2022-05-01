@@ -17,7 +17,13 @@
 #include <iostream>
 #include <vector>
 
+double frames = 0;
+double timebase;
+double fps;
+
 namespace engine::render {
+
+auto framerate () -> void; 
 
 auto static display_info() -> void;
 
@@ -80,6 +86,7 @@ Renderer::Renderer() {
     );
     glPolygonMode(GL_FRONT, config::DEFAULT_POLYGON_MODE);
     glLineWidth(config::DEFAULT_LINE_WIDTH);
+    framerate();
     display_info();
 }
 
@@ -112,6 +119,26 @@ auto Renderer::set_camera(Camera& camera) -> Renderer& {
 
 auto Renderer::run() noexcept -> void {
     glutMainLoop();
+}
+
+auto framerate () -> void {
+
+    frames++;
+    double time = glutGet(GLUT_ELAPSED_TIME);
+    if (time - timebase > 1000) {
+        fps = frames * 1000.0 / (time - timebase);
+        timebase = time;
+        frames = 0;
+
+    }
+    spdlog::info(
+        "time: {}.",
+        time
+    );
+    spdlog::info(
+        "FPS: {}.",
+        fps
+    );
 }
 
 auto static display_info() -> void {
