@@ -146,8 +146,12 @@ target_include_directories(engine PRIVATE ${INCLUDE_PATH})
 ################################################################################
 # 3rd Party Libraries
 ################################################################################
+
 # brief_int
 set(BRIEF_INT_PATH "${LIB_PATH}/brief_int")
+
+# DevIL
+find_package(DevIL REQUIRED)
 
 # {fmt}
 set(FMT_PATH "${LIB_PATH}/fmt")
@@ -216,6 +220,7 @@ target_link_libraries(generator fmt::fmt spdlog::spdlog)
 # Engine linked libraries
 target_link_libraries(
     engine
+    DevIL::IL
     fmt::fmt
     GLEW::GLEW
     glm::glm
@@ -270,4 +275,17 @@ if(LTO_SUPPORTED)
 else()
     message(STATUS "LTO not supported: <${USE_LTO_ERROR}>")
 endif()
+################################################################################
+
+
+################################################################################
+# Compile-Time-Optimization with ccache
+################################################################################
+find_program(CCACHE_FOUND ccache)
+
+if(CCACHE_FOUND)
+    set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE ccache)
+    set_property(GLOBAL PROPERTY RULE_LAUNCH_LINK ccache)
+
+endif(CCACHE_FOUND)
 ################################################################################
