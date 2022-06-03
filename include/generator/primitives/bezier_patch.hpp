@@ -5,6 +5,7 @@
 #include <brief_int.hpp>
 #include <fmt/os.h>
 #include <glm/vec3.hpp>
+#include <glm/vec2.hpp>
 #include <iosfwd>
 #include <result.hpp>
 #include <vector>
