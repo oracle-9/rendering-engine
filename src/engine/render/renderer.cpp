@@ -76,6 +76,9 @@ Renderer::Renderer() {
     glEnable(GL_CULL_FACE);
 
     glewInit();
+    //glEnable(GL_LIGHTING);
+    //glEnable(GL_LIGHT0);
+	//glEnable(GL_RESCALE_NORMAL);
     glEnableClientState(GL_VERTEX_ARRAY);
 
     glClearColor(
@@ -100,12 +103,20 @@ auto Renderer::set_world(World& world) -> Renderer& {
         int i = 0;
 
         glEnableClientState(GL_VERTEX_ARRAY);
-        glGenBuffers(500,state::bind);
+        glGenBuffers(500,state::bind[0]);
         int tamanho = static_cast<int> (state::buffers.size());
 
         for(int i = 0; i < tamanho;i++){
-            glBindBuffer(GL_ARRAY_BUFFER, state::bind[i]);
+            glBindBuffer(GL_ARRAY_BUFFER, state::bind[i][0]);
             glBufferData(GL_ARRAY_BUFFER,sizeof(float) * state::buffers[i].size(),state::buffers[i].data(),GL_STATIC_DRAW);
+
+            //glGenBuffers(500,state::bind[1]);
+            //glBindBuffer(GL_ARRAY_BUFFER, state::normal[i]);
+            //glBufferData(GL_ARRAY_BUFFER,sizeof(float) * NORMAL DO MODELO.size(), NORMAL DO MODELO.data() ,GL_STATIC_DRAW);
+
+            //glGenBuffers(500,state::texture);
+            //glBindBuffer(GL_ARRAY_BUFFER, state::texture[i]);
+            //glBufferData(GL_ARRAY_BUFFER,sizeof(float) * TEXT DO MODELO.size(), TEXT DO MODELO.data() ,GL_STATIC_DRAW);
         }
 
     }

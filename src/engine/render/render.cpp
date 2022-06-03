@@ -274,10 +274,30 @@ auto static render_group(Group const& root) noexcept -> void {
     }
 
     for (auto const& model : root.models) {
-        glBindBuffer(GL_ARRAY_BUFFER, state::bind[iii]);
+
+        //glBindTexture(GL_TEXTURE_2D,ID DA TEXT DO MODEL);
+
+
+        //glMaterialfv(GL_FRONT, GL_AMBIENT, DO MODEL);
+        //glMaterialfv(GL_FRONT, GL_DIFFUSE, DO MODEL);
+        //glMaterialfv(GL_FRONT, GL_SPECULAR, DO MODEL);
+        //glMaterialf(GL_FRONT, GL_SHININESS, DO MODEL);
+
+        glBindBuffer(GL_ARRAY_BUFFER, state::bind[iii][0]);
         glVertexPointer(3,GL_FLOAT,0,0);
+
+        //Normal
+        //glBindBuffer(GL_ARRAY_BUFFER, state::normal[iii]);
+        //glNormalPointer(GL_FLOAT,0,0);
+
+        //Textura
+        //glBindBuffer(GL_ARRAY_BUFFER, state::normal[iii]);
+        //glTexCoordPointer(2,GL_FLOAT,0,0);
+
+
         glDrawArrays(GL_TRIANGLES,0,state::buffers[iii].size()/3);
         iii++;
+        //glBindTexture(GL_TEXTURE_2D,0);
     }
     for (auto const& child_node : root.children) {
         render_group(child_node);

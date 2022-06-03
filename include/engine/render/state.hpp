@@ -28,6 +28,6 @@ extern ptr::nonnull_ptr<Camera> camera_ptr;
 extern CameraMode camera_mode;
 
 extern std::vector<std::vector<float>> buffers;
-extern GLuint bind[500];
+extern GLuint bind[500][3];
 
 } // namespace engine::render::state
