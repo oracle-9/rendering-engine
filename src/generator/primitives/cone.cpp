@@ -153,8 +153,8 @@ try {
         normals.emplace_back(0.f, -1.f, 0.f);
 
         texcoord.emplace_back(0.5f, 0.5f);
-        texcoord.emplace_back(0.5f + cos(next_angle), 0.5f + sin(next_angle));
-        texcoord.emplace_back(0.5f + cos(curr_angle), 0.5f + sin(curr_angle));
+        texcoord.emplace_back(0.5f + 0.5f * cos(next_angle), 0.5f + 0.5f * sin(next_angle));
+        texcoord.emplace_back(0.5f + 0.5f * cos(curr_angle), 0.5f + 0.5f * sin(curr_angle));
         */
 
         // Next, we generate the "body" of the slice, that is, the "walls" of
@@ -184,7 +184,7 @@ try {
 
         n = normalize(res);
         */
-
+       
         // j represents the current stack.
         for (auto j = 0_u32; j < num_stacks_minus_one; ++j) {
             // We cache j as a float because we're going to use it more than
