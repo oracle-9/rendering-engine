@@ -103,6 +103,15 @@ auto Renderer::set_world(World& world) -> Renderer& {
         int i = 0;
 
         glEnableClientState(GL_VERTEX_ARRAY);
+        //glEnableClientState(GL_NORMAL_ARRAY);
+        //glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+        //glEnable(GL_TEXTURE_2D);
+
+        //TALVEZ FAZER AQUI A DEFINIÇÃO DAS LUZES???
+
+        //float amb[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
+	    //glLightModelfv(GL_LIGHT_MODEL_AMBIENT, amb);
+        
         glGenBuffers(500,state::bind[0]);
         int tamanho = static_cast<int> (state::buffers.size());
 
