@@ -116,15 +116,15 @@ auto Renderer::set_world(World& world) -> Renderer& {
         int tamanho = static_cast<int> (state::buffers.size());
 
         for(int i = 0; i < tamanho;i++){
-            glBindBuffer(GL_ARRAY_BUFFER, state::bind[i][0]);
+            glBindBuffer(GL_ARRAY_BUFFER, state::bind[0][i]);
             glBufferData(GL_ARRAY_BUFFER,sizeof(float) * state::buffers[i].size(),state::buffers[i].data(),GL_STATIC_DRAW);
 
             //glGenBuffers(500,state::bind[1]);
-            //glBindBuffer(GL_ARRAY_BUFFER, state::normal[i]);
+            //glBindBuffer(GL_ARRAY_BUFFER, state::bind[1][i]);
             //glBufferData(GL_ARRAY_BUFFER,sizeof(float) * NORMAL DO MODELO.size(), NORMAL DO MODELO.data() ,GL_STATIC_DRAW);
 
-            //glGenBuffers(500,state::texture);
-            //glBindBuffer(GL_ARRAY_BUFFER, state::texture[i]);
+            //glGenBuffers(500,state::bind[2]);
+            //glBindBuffer(GL_ARRAY_BUFFER, state::bind[2][i]);
             //glBufferData(GL_ARRAY_BUFFER,sizeof(float) * TEXT DO MODELO.size(), TEXT DO MODELO.data() ,GL_STATIC_DRAW);
         }
 

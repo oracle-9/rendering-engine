@@ -22,6 +22,6 @@ enum CameraMode camera_mode;
 
 std::vector<std::vector<float>> buffers;
 
-GLuint bind[500][3];
+GLuint bind[3][500];
 
 } // namespace engine::render::state

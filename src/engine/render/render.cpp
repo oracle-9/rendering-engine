@@ -283,15 +283,15 @@ auto static render_group(Group const& root) noexcept -> void {
         //glMaterialfv(GL_FRONT, GL_SPECULAR, DO MODEL);
         //glMaterialf(GL_FRONT, GL_SHININESS, DO MODEL);
 
-        glBindBuffer(GL_ARRAY_BUFFER, state::bind[iii][0]);
+        glBindBuffer(GL_ARRAY_BUFFER, state::bind[0][iii]);
         glVertexPointer(3,GL_FLOAT,0,0);
 
         //Normal
-        //glBindBuffer(GL_ARRAY_BUFFER, state::normal[iii]);
+        //glBindBuffer(GL_ARRAY_BUFFER, state::bind[1][iii]);
         //glNormalPointer(GL_FLOAT,0,0);
 
         //Textura
-        //glBindBuffer(GL_ARRAY_BUFFER, state::normal[iii]);
+        //glBindBuffer(GL_ARRAY_BUFFER, state::bind[2][iii]);
         //glTexCoordPointer(2,GL_FLOAT,0,0);
 
 
