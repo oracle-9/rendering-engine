@@ -276,12 +276,15 @@ auto static render_group(Group const& root) noexcept -> void {
     for (auto const& model : root.models) {
 
         //glBindTexture(GL_TEXTURE_2D,ID DA TEXT DO MODEL);
+        /*
+        glMaterialfv(GL_FRONT, GL_AMBIENT, model->ambient);
+        glMaterialfv(GL_FRONT, GL_DIFFUSE, model->difuse);
+        glMaterialfv(GL_FRONT, GL_SPECULAR, model->specular);
+        glMaterialf(GL_FRONT, GL_SHININESS, model->shininess);
+        glMaterialf(GL_FRONT, GL_EMISSION, model->emession);
 
+        */
 
-        //glMaterialfv(GL_FRONT, GL_AMBIENT, DO MODEL);
-        //glMaterialfv(GL_FRONT, GL_DIFFUSE, DO MODEL);
-        //glMaterialfv(GL_FRONT, GL_SPECULAR, DO MODEL);
-        //glMaterialf(GL_FRONT, GL_SHININESS, DO MODEL);
 
         glBindBuffer(GL_ARRAY_BUFFER, state::bind[0][iii]);
         glVertexPointer(3,GL_FLOAT,0,0);
@@ -291,8 +294,9 @@ auto static render_group(Group const& root) noexcept -> void {
         //glNormalPointer(GL_FLOAT,0,0);
 
         //Textura
-        //glBindBuffer(GL_ARRAY_BUFFER, state::bind[2][iii]);
-        //glTexCoordPointer(2,GL_FLOAT,0,0);
+        //if(modelo tem textura){
+        //      glBindBuffer(GL_ARRAY_BUFFER, state::bind[2][iii]);
+        //      glTexCoordPointer(2,GL_FLOAT,0,0);}
 
 
         glDrawArrays(GL_TRIANGLES,0,state::buffers[iii].size()/3);

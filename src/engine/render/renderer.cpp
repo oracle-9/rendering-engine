@@ -136,6 +136,28 @@ auto Renderer::set_camera(Camera& camera) -> Renderer& {
     state::camera_ptr = &camera;
     return *this;
 }
+/*
+auto Renderer::set_lights(Lights& l) -> Renderer& {
+    int luzes = 0 ;
+    GLfloat white[4] = { 1.0, 1.0, 1.0, 1.0 };
+    for (auto const& luz : l) {
+        glLightfv(GL_LIGHT0+luzes, GL_DIFFUSE, white);
+        glLightfv(GL_LIGHT0+luzes, GL_SPECULAR, white);
+
+        if (type == point){
+            glLightfv(GL_LIGHT0,GL_POSITION,luz->pos);
+        }
+        if (type == direct){
+            glLightfv(GL_LIGHT0,GL_SPOT_DIRECTION,luz->dirct);
+        }
+        if (type == spot){
+            glLightfv(GL_LIGHT0,GL_POSITION,luz->pos);
+            glLightfv(GL_LIGHT0,GL_SPOT_DIRECTION,luz->dirct);
+            glLightfv(GL_LIGHT0,GL_SPOT_CUTOFF,luz->cutoff);
+        } 
+    }
+}
+*/
 
 auto Renderer::run() noexcept -> void {
     glutMainLoop();
