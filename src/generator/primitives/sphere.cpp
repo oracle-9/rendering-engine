@@ -7,13 +7,13 @@
 #include <new>
 #include <stdexcept>
 
+auto normals_sphere = std::vector<glm::vec3>{};
+auto texcoord_sphere = std::vector<glm::vec2>{};
+
 namespace generator {
 
 using namespace brief_int;
-/*
-auto normals = std::vector<glm::vec3>{};
-auto texcoord = std::vector<glm::vec2>{};
-*/
+
 auto generate_sphere(
     float const radius,
     u32 const num_slices,
@@ -45,10 +45,9 @@ try {
 
     auto vertices = std::vector<glm::vec3>{};
     vertices.reserve(total_vertex_count);
-    /*
-    normals.reserve(total_vertex_count);
-    texcoord.reserve(total_vertex_count);
-    */
+
+    normals_sphere.reserve(total_vertex_count);
+    texcoord_sphere.reserve(total_vertex_count);
 
     for (auto i = 0_u32; i < num_stacks; ++i) {
         auto static constexpr half_pi = glm::pi<float>() / 2.f;
@@ -85,36 +84,36 @@ try {
                     radius * sin(next_stack_angle),
                     radius * cos(next_stack_angle) * cos(next_slice_angle)
                 );
-                /*
-                normals.emplace_back(
+
+                normals_sphere.emplace_back(
                     cos(curr_stack_angle) * sin(curr_slice_angle),
                     sin(curr_stack_angle),
                     cos(curr_stack_angle) * cos(curr_slice_angle)
                 );
-                normals.emplace_back(
+                normals_sphere.emplace_back(
                     cos(next_stack_angle) * sin(curr_slice_angle),
                     sin(next_stack_angle),
                     cos(next_stack_angle) * cos(curr_slice_angle)
                 );
-                normals.emplace_back(
+                normals_sphere.emplace_back(
                     cos(next_stack_angle) * sin(next_slice_angle),
                     sin(next_stack_angle),
                     cos(next_stack_angle) * cos(next_slice_angle)
                 );
                 
-                texcoord.emplace_back(
+                texcoord_sphere.emplace_back(
                     (curr_slice_angle * 180.0f / M_PI) / 360.0f,
                     ((curr_stack_angle * 180.0f / M_PI) + 90.f) / 180.0f
                 );
-                texcoord.emplace_back(
+                texcoord_sphere.emplace_back(
                     (curr_slice_angle * 180.0f / M_PI) / 360.0f,
                     ((next_stack_angle * 180.0f / M_PI) + 90.f) / 180.0f
                 );
-                texcoord.emplace_back(
+                texcoord_sphere.emplace_back(
                     (next_slice_angle * 180.0f / M_PI) / 360.0f,
                     ((next_stack_angle * 180.0f / M_PI) + 90.f) / 180.0f
                 );
-                */
+
             } else {
                 vertices.emplace_back(
                     radius * cos(next_stack_angle) * sin(next_slice_angle),
@@ -131,36 +130,35 @@ try {
                     radius * sin(curr_stack_angle),
                     radius * cos(curr_stack_angle) * cos(curr_slice_angle)
                 );
-                /*
-                normals.emplace_back(
+
+                normals_sphere.emplace_back(
                     cos(next_stack_angle) * sin(next_slice_angle),
                     sin(next_stack_angle),
                     cos(next_stack_angle) * cos(next_slice_angle)
                 );
-                normals.emplace_back(
+                normals_sphere.emplace_back(
                     cos(curr_stack_angle) * sin(next_slice_angle),
                     sin(curr_stack_angle),
                     cos(curr_stack_angle) * cos(next_slice_angle)
                 );
-                normals.emplace_back(
+                normals_sphere.emplace_back(
                     cos(curr_stack_angle) * sin(curr_slice_angle),
                     sin(curr_stack_angle),
                     cos(curr_stack_angle) * cos(curr_slice_angle)
                 );
                 
-                texcoord.emplace_back(
+                texcoord_sphere.emplace_back(
                     (next_slice_angle * 180.0f / M_PI) / 360.0f,
                     ((next_stack_angle * 180.0f / M_PI) + 90.f) / 180.0f
                 );
-                texcoord.emplace_back(
+                texcoord_sphere.emplace_back(
                     (next_slice_angle * 180.0f / M_PI) / 360.0f,
                     ((curr_stack_angle * 180.0f / M_PI) + 90.f) / 180.0f
                 );
-                texcoord.emplace_back(
+                texcoord_sphere.emplace_back(
                     (curr_slice_angle * 180.0f / M_PI) / 360.0f,
                     ((curr_stack_angle * 180.0f / M_PI) + 90.f) / 180.0f
                 );
-                */
             }
 
             if (i > 0 && i < num_stacks - 1) {
@@ -179,36 +177,35 @@ try {
                     radius * sin(curr_stack_angle),
                     radius * cos(curr_stack_angle) * cos(curr_slice_angle)
                 );
-                /*
-                normals.emplace_back(
+
+                normals_sphere.emplace_back(
                     cos(next_stack_angle) * sin(next_slice_angle),
                     sin(next_stack_angle),
                     cos(next_stack_angle) * cos(next_slice_angle)
                 );
-                normals.emplace_back(
+                normals_sphere.emplace_back(
                     cos(curr_stack_angle) * sin(next_slice_angle),
                     sin(curr_stack_angle),
                     cos(curr_stack_angle) * cos(next_slice_angle)
                 );
-                normals.emplace_back(
+                normals_sphere.emplace_back(
                     cos(curr_stack_angle) * sin(curr_slice_angle),
                     sin(curr_stack_angle),
                     cos(curr_stack_angle) * cos(curr_slice_angle)
                 );
                 
-                texcoord.emplace_back(
+                texcoord_sphere.emplace_back(
                     (next_slice_angle * 180.0f / M_PI) / 360.0f,
                     ((next_stack_angle * 180.0f / M_PI) + 90.f) / 180.0f
                 );
-                texcoord.emplace_back(
+                texcoord_sphere.emplace_back(
                     (next_slice_angle * 180.0f / M_PI) / 360.0f,
                     ((curr_stack_angle * 180.0f / M_PI) + 90.f) / 180.0f
                 );
-                texcoord.emplace_back(
+                texcoord_sphere.emplace_back(
                     (curr_slice_angle * 180.0f / M_PI) / 360.0f,
                     ((curr_stack_angle * 180.0f / M_PI) + 90.f) / 180.0f
                 );
-                */
             }
         }
     }
@@ -235,16 +232,14 @@ try {
     for (auto const& vertex : vertices) {
         output_file.print("{} {} {}\n", vertex.x, vertex.y, vertex.z);
     }
-    /*
     output_file.print("\n");
-    for (auto const& vertex : normals) {
+    for (auto const& vertex : normals_sphere) {
         output_file.print("{} {} {}\n", vertex.x, vertex.y, vertex.z);
     }
     output_file.print("\n");
-    for (auto const& vertex : texcoord) {
+    for (auto const& vertex : texcoord_sphere) {
         output_file.print("{} {}\n", vertex.x, vertex.y);
     }
-    */
     return {};
 } catch (...) {
     return cpp::fail(GeneratorErr::IO_ERR);

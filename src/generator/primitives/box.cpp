@@ -5,6 +5,9 @@
 #include <new>
 #include <stdexcept>
 
+auto normals_box = std::vector<glm::vec3>{};
+auto texcoord_box = std::vector<glm::vec2>{};
+
 namespace generator {
 
 using namespace brief_int;
@@ -44,11 +47,9 @@ try {
     //   * The generated triangles follow the CCW (counter-clockwise)
     //     convention.
     auto vertices = std::vector<glm::vec3>{};
-    auto normals = std::vector<glm::vec3>{};
-    auto texcoord = std::vector<glm::vec2>{};
     vertices.reserve(total_vertex_count);
-    normals.reserve(total_vertex_count);
-    texcoord.reserve(total_vertex_count);
+    normals_box.reserve(total_vertex_count);
+    texcoord_box.reserve(total_vertex_count);
 
     // Stores the side length of a box side division.
     auto const div_side_len = side_len / static_cast<float>(num_divs);
@@ -90,25 +91,25 @@ try {
             vertices.emplace_back(lo_x, hi_y, side_len);
             vertices.emplace_back(lo_x, lo_y, side_len);
             vertices.emplace_back(hi_x, hi_y, side_len);
-            normals.emplace_back(0.f, 0.f, 1.f);
-            normals.emplace_back(0.f, 0.f, 1.f);
-            normals.emplace_back(0.f, 0.f, 1.f);
+            normals_box.emplace_back(0.f, 0.f, 1.f);
+            normals_box.emplace_back(0.f, 0.f, 1.f);
+            normals_box.emplace_back(0.f, 0.f, 1.f);
 
-            texcoord.emplace_back(lo_x_text_coord, hi_y_text_coord);
-            texcoord.emplace_back(lo_x_text_coord, lo_y_text_coord);
-            texcoord.emplace_back(hi_x_text_coord, hi_y_text_coord);
+            texcoord_box.emplace_back(lo_x_text_coord, hi_y_text_coord);
+            texcoord_box.emplace_back(lo_x_text_coord, lo_y_text_coord);
+            texcoord_box.emplace_back(hi_x_text_coord, hi_y_text_coord);
 
             // Then we generate the second.
             vertices.emplace_back(hi_x, hi_y, side_len);
             vertices.emplace_back(lo_x, lo_y, side_len);
             vertices.emplace_back(hi_x, lo_y, side_len);
-            normals.emplace_back(0.f, 0.f, 1.f);
-            normals.emplace_back(0.f, 0.f, 1.f);
-            normals.emplace_back(0.f, 0.f, 1.f);
+            normals_box.emplace_back(0.f, 0.f, 1.f);
+            normals_box.emplace_back(0.f, 0.f, 1.f);
+            normals_box.emplace_back(0.f, 0.f, 1.f);
      
-            texcoord.emplace_back(hi_x_text_coord, hi_y_text_coord);
-            texcoord.emplace_back(lo_x_text_coord, lo_y_text_coord);
-            texcoord.emplace_back(hi_x_text_coord, lo_y_text_coord);
+            texcoord_box.emplace_back(hi_x_text_coord, hi_y_text_coord);
+            texcoord_box.emplace_back(lo_x_text_coord, lo_y_text_coord);
+            texcoord_box.emplace_back(hi_x_text_coord, lo_y_text_coord);
         }
     }
 
@@ -145,25 +146,25 @@ try {
             vertices.emplace_back(lo_x, hi_y, 0.f);
             vertices.emplace_back(hi_x, lo_y, 0.f);
             vertices.emplace_back(lo_x, lo_y, 0.f);
-            normals.emplace_back(0.f, 0.f, -1.f);
-            normals.emplace_back(0.f, 0.f, -1.f);
-            normals.emplace_back(0.f, 0.f, -1.f);
+            normals_box.emplace_back(0.f, 0.f, -1.f);
+            normals_box.emplace_back(0.f, 0.f, -1.f);
+            normals_box.emplace_back(0.f, 0.f, -1.f);
 
-            texcoord.emplace_back(lo_x_text_coord, hi_y_text_coord);
-            texcoord.emplace_back(hi_x_text_coord, lo_y_text_coord);
-            texcoord.emplace_back(lo_x_text_coord, lo_y_text_coord);
+            texcoord_box.emplace_back(lo_x_text_coord, hi_y_text_coord);
+            texcoord_box.emplace_back(hi_x_text_coord, lo_y_text_coord);
+            texcoord_box.emplace_back(lo_x_text_coord, lo_y_text_coord);
 
             // Then we generate the second.
             vertices.emplace_back(hi_x, hi_y, 0.f);
             vertices.emplace_back(hi_x, lo_y, 0.f);
             vertices.emplace_back(lo_x, hi_y, 0.f);
-            normals.emplace_back(0.f, 0.f, -1.f);
-            normals.emplace_back(0.f, 0.f, -1.f);
-            normals.emplace_back(0.f, 0.f, -1.f);
+            normals_box.emplace_back(0.f, 0.f, -1.f);
+            normals_box.emplace_back(0.f, 0.f, -1.f);
+            normals_box.emplace_back(0.f, 0.f, -1.f);
 
-            texcoord.emplace_back(hi_x_text_coord, hi_y_text_coord);
-            texcoord.emplace_back(hi_x_text_coord, lo_y_text_coord);
-            texcoord.emplace_back(lo_x_text_coord, hi_y_text_coord);
+            texcoord_box.emplace_back(hi_x_text_coord, hi_y_text_coord);
+            texcoord_box.emplace_back(hi_x_text_coord, lo_y_text_coord);
+            texcoord_box.emplace_back(lo_x_text_coord, hi_y_text_coord);
         }
     }
 
@@ -202,25 +203,25 @@ try {
             vertices.emplace_back(0.f, hi_y, lo_z);
             vertices.emplace_back(0.f, lo_y, lo_z);
             vertices.emplace_back(0.f, hi_y, hi_z);
-            normals.emplace_back(-1.f, 0.f, 0.f);
-            normals.emplace_back(-1.f, 0.f, 0.f);
-            normals.emplace_back(-1.f, 0.f, 0.f);
+            normals_box.emplace_back(-1.f, 0.f, 0.f);
+            normals_box.emplace_back(-1.f, 0.f, 0.f);
+            normals_box.emplace_back(-1.f, 0.f, 0.f);
 
-            texcoord.emplace_back(lo_x_text_coord, hi_y_text_coord);
-            texcoord.emplace_back(lo_x_text_coord, lo_y_text_coord);
-            texcoord.emplace_back(hi_x_text_coord, hi_y_text_coord);
+            texcoord_box.emplace_back(lo_x_text_coord, hi_y_text_coord);
+            texcoord_box.emplace_back(lo_x_text_coord, lo_y_text_coord);
+            texcoord_box.emplace_back(hi_x_text_coord, hi_y_text_coord);
 
             // Then we generate the second.
             vertices.emplace_back(0.f, hi_y, hi_z);
             vertices.emplace_back(0.f, lo_y, lo_z);
             vertices.emplace_back(0.f, lo_y, hi_z);
-            normals.emplace_back(-1.f, 0.f, 0.f);
-            normals.emplace_back(-1.f, 0.f, 0.f);
-            normals.emplace_back(-1.f, 0.f, 0.f);
+            normals_box.emplace_back(-1.f, 0.f, 0.f);
+            normals_box.emplace_back(-1.f, 0.f, 0.f);
+            normals_box.emplace_back(-1.f, 0.f, 0.f);
 
-            texcoord.emplace_back(hi_x_text_coord, hi_y_text_coord);
-            texcoord.emplace_back(lo_x_text_coord, lo_y_text_coord);
-            texcoord.emplace_back(hi_x_text_coord, lo_y_text_coord);
+            texcoord_box.emplace_back(hi_x_text_coord, hi_y_text_coord);
+            texcoord_box.emplace_back(lo_x_text_coord, lo_y_text_coord);
+            texcoord_box.emplace_back(hi_x_text_coord, lo_y_text_coord);
         }
     }
 
@@ -254,26 +255,26 @@ try {
             vertices.emplace_back(side_len, hi_y, hi_z);
             vertices.emplace_back(side_len, lo_y, hi_z);
             vertices.emplace_back(side_len, hi_y, lo_z);
-            normals.emplace_back(1.f, 0.f, 0.f);
-            normals.emplace_back(1.f, 0.f, 0.f);
-            normals.emplace_back(1.f, 0.f, 0.f);
+            normals_box.emplace_back(1.f, 0.f, 0.f);
+            normals_box.emplace_back(1.f, 0.f, 0.f);
+            normals_box.emplace_back(1.f, 0.f, 0.f);
 
-            texcoord.emplace_back(hi_x_text_coord, hi_y_text_coord);
-            texcoord.emplace_back(hi_x_text_coord, lo_y_text_coord);
-            texcoord.emplace_back(lo_x_text_coord, hi_y_text_coord);
+            texcoord_box.emplace_back(hi_x_text_coord, hi_y_text_coord);
+            texcoord_box.emplace_back(hi_x_text_coord, lo_y_text_coord);
+            texcoord_box.emplace_back(lo_x_text_coord, hi_y_text_coord);
 
 
             // Then we generate the second.
             vertices.emplace_back(side_len, hi_y, lo_z);
             vertices.emplace_back(side_len, lo_y, hi_z);
             vertices.emplace_back(side_len, lo_y, lo_z);
-            normals.emplace_back(1.f, 0.f, 0.f);
-            normals.emplace_back(1.f, 0.f, 0.f);
-            normals.emplace_back(1.f, 0.f, 0.f);
+            normals_box.emplace_back(1.f, 0.f, 0.f);
+            normals_box.emplace_back(1.f, 0.f, 0.f);
+            normals_box.emplace_back(1.f, 0.f, 0.f);
 
-            texcoord.emplace_back(lo_x_text_coord, hi_y_text_coord);
-            texcoord.emplace_back(hi_x_text_coord, lo_y_text_coord);
-            texcoord.emplace_back(lo_x_text_coord, lo_y_text_coord);
+            texcoord_box.emplace_back(lo_x_text_coord, hi_y_text_coord);
+            texcoord_box.emplace_back(hi_x_text_coord, lo_y_text_coord);
+            texcoord_box.emplace_back(lo_x_text_coord, lo_y_text_coord);
         }
     }
 
@@ -307,26 +308,26 @@ try {
             vertices.emplace_back(lo_x, side_len, lo_z);
             vertices.emplace_back(lo_x, side_len, hi_z);
             vertices.emplace_back(hi_x, side_len, lo_z);
-            normals.emplace_back(0.f, 1.f, 0.f);
-            normals.emplace_back(0.f, 1.f, 0.f);
-            normals.emplace_back(0.f, 1.f, 0.f);
+            normals_box.emplace_back(0.f, 1.f, 0.f);
+            normals_box.emplace_back(0.f, 1.f, 0.f);
+            normals_box.emplace_back(0.f, 1.f, 0.f);
 
             
-            texcoord.emplace_back(lo_x_text_coord, lo_y_text_coord);
-            texcoord.emplace_back(lo_x_text_coord, hi_y_text_coord);
-            texcoord.emplace_back(hi_x_text_coord, lo_y_text_coord);
+            texcoord_box.emplace_back(lo_x_text_coord, lo_y_text_coord);
+            texcoord_box.emplace_back(lo_x_text_coord, hi_y_text_coord);
+            texcoord_box.emplace_back(hi_x_text_coord, lo_y_text_coord);
 
             // Then we generate the second.
             vertices.emplace_back(hi_x, side_len, lo_z);
             vertices.emplace_back(lo_x, side_len, hi_z);
             vertices.emplace_back(hi_x, side_len, hi_z);
-            normals.emplace_back(0.f, 1.f, 0.f);
-            normals.emplace_back(0.f, 1.f, 0.f);
-            normals.emplace_back(0.f, 1.f, 0.f);
+            normals_box.emplace_back(0.f, 1.f, 0.f);
+            normals_box.emplace_back(0.f, 1.f, 0.f);
+            normals_box.emplace_back(0.f, 1.f, 0.f);
 
-            texcoord.emplace_back(hi_x_text_coord, lo_y_text_coord);
-            texcoord.emplace_back(lo_x_text_coord, hi_y_text_coord);
-            texcoord.emplace_back(hi_x_text_coord, hi_y_text_coord);
+            texcoord_box.emplace_back(hi_x_text_coord, lo_y_text_coord);
+            texcoord_box.emplace_back(lo_x_text_coord, hi_y_text_coord);
+            texcoord_box.emplace_back(hi_x_text_coord, hi_y_text_coord);
         }
     }
 
@@ -363,26 +364,26 @@ try {
             vertices.emplace_back(lo_x, 0.f, hi_z);
             vertices.emplace_back(lo_x, 0.f, lo_z);
             vertices.emplace_back(hi_x, 0.f, hi_z);
-            normals.emplace_back(0.f, -1.f, 0.f);
-            normals.emplace_back(0.f, -1.f, 0.f);
-            normals.emplace_back(0.f, -1.f, 0.f);
+            normals_box.emplace_back(0.f, -1.f, 0.f);
+            normals_box.emplace_back(0.f, -1.f, 0.f);
+            normals_box.emplace_back(0.f, -1.f, 0.f);
 
-            texcoord.emplace_back(lo_x_text_coord, hi_y_text_coord);
-            texcoord.emplace_back(lo_x_text_coord, lo_y_text_coord);
-            texcoord.emplace_back(hi_x_text_coord, hi_y_text_coord);
+            texcoord_box.emplace_back(lo_x_text_coord, hi_y_text_coord);
+            texcoord_box.emplace_back(lo_x_text_coord, lo_y_text_coord);
+            texcoord_box.emplace_back(hi_x_text_coord, hi_y_text_coord);
             
 
             // Then we generate the second.
             vertices.emplace_back(hi_x, 0.f, hi_z);
             vertices.emplace_back(lo_x, 0.f, lo_z);
             vertices.emplace_back(hi_x, 0.f, lo_z);
-            normals.emplace_back(0.f, -1.f, 0.f);
-            normals.emplace_back(0.f, -1.f, 0.f);
-            normals.emplace_back(0.f, -1.f, 0.f);
+            normals_box.emplace_back(0.f, -1.f, 0.f);
+            normals_box.emplace_back(0.f, -1.f, 0.f);
+            normals_box.emplace_back(0.f, -1.f, 0.f);
             
-            texcoord.emplace_back(hi_x_text_coord, hi_y_text_coord);
-            texcoord.emplace_back(lo_x_text_coord, lo_y_text_coord);
-            texcoord.emplace_back(hi_x_text_coord, lo_y_text_coord);
+            texcoord_box.emplace_back(hi_x_text_coord, hi_y_text_coord);
+            texcoord_box.emplace_back(lo_x_text_coord, lo_y_text_coord);
+            texcoord_box.emplace_back(hi_x_text_coord, lo_y_text_coord);
         }
     }
 
@@ -416,11 +417,11 @@ try {
         output_file.print("{} {} {}\n", vertex.x, vertex.y, vertex.z);
     }
         output_file.print("\n");
-    for (auto const& vertex : normals) {
+    for (auto const& vertex : normals_box) {
         output_file.print("{} {} {}\n", vertex.x, vertex.y, vertex.z);
     }
     output_file.print("\n");
-    for (auto const& vertex : texcoord) {
+    for (auto const& vertex : texcoord_box) {
         output_file.print("{} {}\n", vertex.x, vertex.y);
     }
     return {};

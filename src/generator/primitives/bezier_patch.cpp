@@ -9,6 +9,9 @@
 #include <stdexcept>
 #include <utility>
 
+auto normals_bezier = std::vector<glm::vec3>{};
+auto texcoord_bezier = std::vector<glm::vec2>{};
+
 namespace generator {
 
 using namespace brief_int;
@@ -17,9 +20,6 @@ struct BezierPatch {
     std::vector<std::array<usize, 16>> indices;
     std::vector<glm::vec3> ctrl_points;
 };
-
-//auto normals = std::vector<glm::vec3>{};
-//auto texcoord = std::vector<glm::vec2>{};
 
 void multMatrixVector(float *m, float *v, float *res) {
 
@@ -31,7 +31,7 @@ void multMatrixVector(float *m, float *v, float *res) {
     }
 
 }
-/*
+
 void multMatrixMatrix(float* m1, float* m2, float* res) {
     for (int j = 0; j < 4; ++j) {
         res[j] = 0;
@@ -62,7 +62,6 @@ void normalize(float *a) {
     a[2] = a[2]/l;
 }
 
-*/
 glm::vec3 calcBenzierCurve(float t, glm::vec3 p0, glm::vec3 p1, glm::vec3 p2, glm::vec3 p3) {
     glm::vec3 res;
     float A[3][4];
@@ -79,7 +78,7 @@ glm::vec3 calcBenzierCurve(float t, glm::vec3 p0, glm::vec3 p1, glm::vec3 p2, gl
     }
     return res;
 }
-/*
+
 void derivsBenzierCurve(float u, float v, float* x, float* y, float* z, float* n) {
     float U[4] = {u*u*u,u*u,u,1};
     float dU[4] = {3*u*u,2*u,1,0};
@@ -110,7 +109,7 @@ void derivsBenzierCurve(float u, float v, float* x, float* y, float* z, float* n
     cross(realu,realv,n);
     normalize(n);
 }
-*/
+
 auto static parse_patch_file(std::ifstream& patch_file) noexcept
     -> cpp::result<BezierPatch, GeneratorErr>;
 
@@ -125,22 +124,20 @@ try {
     float tess = tesselation;
     float step = 1 / tess;
     glm::vec3 pa, pb, pc, pd;
-    //float pan[3], pbn[3], pcn[3], pdn[3];
+    float pan[3], pbn[3], pcn[3], pdn[3];
 
     auto points = bezier_patch.ctrl_points;
     auto vertices = std::vector<glm::vec3>{};
-    /*
+
     float tmpx[4][4],tmpy[4][4],tmpz[4][4];
     float resx[4][4],resy[4][4],resz[4][4];
     float m[4][4] = { {-1,  3, -3, 1},
                       { 3, -6,  3, 0},
                       {-3,  3,  0,  0},
                       { 1,  0,  0,  0} };
-    */
 
     for (auto const& patch : bezier_patch.indices)
     {
-        /*
         float x[4][4] = { {points[patch[0]].x, points[patch[1]].x, points[patch[2]].x, points[patch[3]].x},
                       { points[patch[4]].x, points[patch[5]].x, points[patch[6]].x, points[patch[7]].x},
                       {points[patch[8]].x, points[patch[9]].x, points[patch[10]].x, points[patch[11]].x},
@@ -161,7 +158,7 @@ try {
         multMatrixMatrix(*tmpx,*m,*resx);
         multMatrixMatrix(*tmpy,*m,*resy);
         multMatrixMatrix(*tmpz,*m,*resz);
-        */
+
 
     for (float i = 0; i < 1; i += step)
     {
@@ -181,12 +178,12 @@ try {
             pb = calcBenzierCurve(j, pp0, pp1, pp2, pp3);
             pc = calcBenzierCurve(j + step, p0, p1, p2, p3);
             pd = calcBenzierCurve(j + step, pp0, pp1, pp2, pp3);
-            /*
+
             derivsBenzierCurve(i,j,*resx,*resy,*resz,pan);
             derivsBenzierCurve(i + step,j,*resx,*resy,*resz,pbn);
             derivsBenzierCurve(i,j + step,*resx,*resy,*resz,pcn);
             derivsBenzierCurve(i + step,j + step,*resx,*resy,*resz,pdn);
-            */
+
             vertices.emplace_back(pa[0],pa[1],pa[2]);
             vertices.emplace_back(pb[0], pb[1], pb[2]);
             vertices.emplace_back(pc[0], pc[1], pc[2]);
@@ -194,23 +191,22 @@ try {
             vertices.emplace_back(pb[0], pb[1], pb[2]);
             vertices.emplace_back(pd[0], pd[1], pd[2]);
             vertices.emplace_back(pc[0], pc[1], pc[2]);
-            /*
-            normals.emplace_back(pan[0],pan[1],pan[2]);
-            normals.emplace_back(pbn[0], pbn[1], pbn[2]);
-            normals.emplace_back(pcn[0], pcn[1], pcn[2]);
 
-            normals.emplace_back(pbn[0], pbn[1], pbn[2]);
-            normals.emplace_back(pdn[0], pdn[1], pdn[2]);
-            normals.emplace_back(pcn[0], pcn[1], pcn[2]);
+            normals_bezier.emplace_back(pan[0],pan[1],pan[2]);
+            normals_bezier.emplace_back(pbn[0], pbn[1], pbn[2]);
+            normals_bezier.emplace_back(pcn[0], pcn[1], pcn[2]);
 
-            texcoord.emplace_back(i,j);
-            texcoord.emplace_back(i + step,j);
-            texcoord.emplace_back(i,j + step);
+            normals_bezier.emplace_back(pbn[0], pbn[1], pbn[2]);
+            normals_bezier.emplace_back(pdn[0], pdn[1], pdn[2]);
+            normals_bezier.emplace_back(pcn[0], pcn[1], pcn[2]);
 
-            texcoord.emplace_back(i + step,j);
-            texcoord.emplace_back(i + step,j + step);
-            texcoord.emplace_back(i,j + step);
-            */
+            texcoord_bezier.emplace_back(i,j);
+            texcoord_bezier.emplace_back(i + step,j);
+            texcoord_bezier.emplace_back(i,j + step);
+
+            texcoord_bezier.emplace_back(i + step,j);
+            texcoord_bezier.emplace_back(i + step,j + step);
+            texcoord_bezier.emplace_back(i,j + step);
         }
     }
     }
@@ -234,16 +230,14 @@ try {
     for (auto const& vertex : vertices) {
         output_file.print("{} {} {}\n", vertex.x, vertex.y, vertex.z);
     }
-    /*
     output_file.print("\n");
-    for (auto const& vertex : normals) {
+    for (auto const& vertex : normals_bezier) {
         output_file.print("{} {} {}\n", vertex.x, vertex.y, vertex.z);
     }
     output_file.print("\n");
-    for (auto const& vertex : texcoord) {
+    for (auto const& vertex : texcoord_bezier) {
         output_file.print("{} {}\n", vertex.x, vertex.y);
     }
-    */
     return {};
 } catch (...) {
     return cpp::fail(GeneratorErr::IO_ERR);

@@ -7,11 +7,10 @@
 #include <new>
 #include <stdexcept>
 
-namespace generator {
+auto normals_cone = std::vector<glm::vec3>{};
+auto texcoord_cone = std::vector<glm::vec2>{};
 
-/*
-auto normals = std::vector<glm::vec3>{};
-auto texcoord = std::vector<glm::vec2>{};
+namespace generator {
 
 glm::vec3 cross(glm::vec3 a, glm::vec3 b) {
     glm::vec3 res;
@@ -29,7 +28,6 @@ glm::vec3 normalize(glm::vec3 a) {
     res[2] = a[2]/l;
     return res;
 }
-*/
 
 using namespace brief_int;
 
@@ -82,8 +80,8 @@ try {
     // than 1, which we have asserted already.
     auto const num_stacks_minus_one = num_stacks - 1;
 
-    //auto const texstack = 1.0f / static_cast<float>(num_stacks);
-    //auto const texslice = 1.0f / static_cast<float>(num_slices);
+    auto const texstack = 1.0f / static_cast<float>(num_stacks);
+    auto const texslice = 1.0f / static_cast<float>(num_slices);
 
     // Stores the distance from the base of the cone to the last stack
     // separator.
@@ -123,13 +121,13 @@ try {
     auto vertices = std::vector<glm::vec3>{};
     vertices.reserve(total_vertex_count);
 
-    //glm::vec3 n;
+    glm::vec3 n;
 
     // We iterate slice by slice, stack by stack.
     // i represents the current slice.
     for (auto i = 0_u32; i < num_slices; ++i) {
 
-        //auto const i_f = static_cast<float>(i);
+        auto const i_f = static_cast<float>(i);
 
         // Stores the accumulated angle, i.e. the sum of all angles from the
         // first slice up until this slice.
@@ -147,15 +145,14 @@ try {
         vertices.emplace_back(0.f, 0.f, 0.f);
         vertices.emplace_back(radius, 0.f, next_angle);
         vertices.emplace_back(radius, 0.f, curr_angle);
-        /*
-        normals.emplace_back(0.f, -1.f, 0.f);
-        normals.emplace_back(0.f, -1.f, 0.f);
-        normals.emplace_back(0.f, -1.f, 0.f);
 
-        texcoord.emplace_back(0.5f, 0.5f);
-        texcoord.emplace_back(0.5f + 0.5f * cos(next_angle), 0.5f + 0.5f * sin(next_angle));
-        texcoord.emplace_back(0.5f + 0.5f * cos(curr_angle), 0.5f + 0.5f * sin(curr_angle));
-        */
+        normals_cone.emplace_back(0.f, -1.f, 0.f);
+        normals_cone.emplace_back(0.f, -1.f, 0.f);
+        normals_cone.emplace_back(0.f, -1.f, 0.f);
+
+        texcoord_cone.emplace_back(0.5f, 0.5f);
+        texcoord_cone.emplace_back(0.5f + 0.5f * cos(next_angle), 0.5f + 0.5f * sin(next_angle));
+        texcoord_cone.emplace_back(0.5f + 0.5f * cos(curr_angle), 0.5f + 0.5f * sin(curr_angle));
 
         // Next, we generate the "body" of the slice, that is, the "walls" of
         // the slice that constitute the "walls" of the cone.
@@ -167,7 +164,6 @@ try {
         // 2 triangles joined, while the last (upper) walls of the cone are
         // simply triangles.
         
-        /*
         glm::vec3 a = {radius,0,curr_angle};
         glm::vec3 b = {radius,0,next_angle};
         glm::vec3 c = {radius - radius_factor,stack_height,curr_angle};
@@ -183,7 +179,6 @@ try {
         res = cross(vec1,vec2);
 
         n = normalize(res);
-        */
        
         // j represents the current stack.
         for (auto j = 0_u32; j < num_stacks_minus_one; ++j) {
@@ -222,23 +217,22 @@ try {
             vertices.emplace_back(curr_radius, curr_height, curr_angle);
             vertices.emplace_back(curr_radius, curr_height, next_angle);
             vertices.emplace_back(next_radius, next_height, curr_angle);
-            /*
-            normals.emplace_back(n[0], n[1], n[2]);
-            normals.emplace_back(n[0], n[1], n[2]);
-            normals.emplace_back(n[0], n[1], n[2]);
 
-            normals.emplace_back(n[0], n[1], n[2]);
-            normals.emplace_back(n[0], n[1], n[2]);
-            normals.emplace_back(n[0], n[1], n[2]);
+            normals_cone.emplace_back(n[0], n[1], n[2]);
+            normals_cone.emplace_back(n[0], n[1], n[2]);
+            normals_cone.emplace_back(n[0], n[1], n[2]);
 
-            texcoord.emplace_back((i_f+1) * texslice, j_plus_1_f * texstack);
-            texcoord.emplace_back(i_f * texslice, j_plus_1_f * texstack);
-            texcoord.emplace_back((i_f+1) * texslice, j_f * texstack);
+            normals_cone.emplace_back(n[0], n[1], n[2]);
+            normals_cone.emplace_back(n[0], n[1], n[2]);
+            normals_cone.emplace_back(n[0], n[1], n[2]);
 
-            texcoord.emplace_back(i_f * texslice, j_f * texstack);
-            texcoord.emplace_back((i_f+1) * texslice, j_f * texstack);
-            texcoord.emplace_back(i_f * texslice, j_plus_1_f * texstack);
-            */
+            texcoord_cone.emplace_back((i_f+1) * texslice, j_plus_1_f * texstack);
+            texcoord_cone.emplace_back(i_f * texslice, j_plus_1_f * texstack);
+            texcoord_cone.emplace_back((i_f+1) * texslice, j_f * texstack);
+
+            texcoord_cone.emplace_back(i_f * texslice, j_f * texstack);
+            texcoord_cone.emplace_back((i_f+1) * texslice, j_f * texstack);
+            texcoord_cone.emplace_back(i_f * texslice, j_plus_1_f * texstack);
         }
 
         // Finally, we generate the upper wall of the slice.
@@ -248,15 +242,14 @@ try {
         vertices.push_back(apex);
         vertices.emplace_back(radius_factor, top_height, curr_angle);
         vertices.emplace_back(radius_factor, top_height, next_angle);
-        /*
-        normals.emplace_back(n[0], n[1], n[2]);
-        normals.emplace_back(n[0], n[1], n[2]);
-        normals.emplace_back(n[0], n[1], n[2]);
 
-        texcoord.emplace_back(i_f * texslice,1.0f);
-        texcoord.emplace_back(i_f * texslice, texstack*static_cast<float>(num_stacks_minus_one));
-        texcoord.emplace_back((i_f+1) * texslice, texstack*static_cast<float>(num_stacks_minus_one));
-        */
+        normals_cone.emplace_back(n[0], n[1], n[2]);
+        normals_cone.emplace_back(n[0], n[1], n[2]);
+        normals_cone.emplace_back(n[0], n[1], n[2]);
+
+        texcoord_cone.emplace_back(i_f * texslice,1.0f);
+        texcoord_cone.emplace_back(i_f * texslice, texstack*static_cast<float>(num_stacks_minus_one));
+        texcoord_cone.emplace_back((i_f+1) * texslice, texstack*static_cast<float>(num_stacks_minus_one));
     }
 
     // We need to make sure the vertices are represented in a cartesian
@@ -288,16 +281,14 @@ try {
     for (auto const& vertex : vertices) {
         output_file.print("{} {} {}\n", vertex.x, vertex.y, vertex.z);
     }
-    /*
     output_file.print("\n");
-    for (auto const& vertex : normals) {
+    for (auto const& vertex : normals_cone) {
         output_file.print("{} {} {}\n", vertex.x, vertex.y, vertex.z);
     }
     output_file.print("\n");
-    for (auto const& vertex : texcoord) {
+    for (auto const& vertex : texcoord_cone) {
         output_file.print("{} {}\n", vertex.x, vertex.y);
     }
-    */
     return {};
 } catch (...) {
     return cpp::fail(GeneratorErr::IO_ERR);

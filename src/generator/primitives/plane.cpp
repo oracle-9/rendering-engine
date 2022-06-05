@@ -5,6 +5,9 @@
 #include <new>
 #include <stdexcept>
 
+auto normals_plane = std::vector<glm::vec3>{};
+auto texcoord_plane = std::vector<glm::vec2>{};
+
 namespace generator {
 
 using namespace brief_int;
@@ -44,11 +47,9 @@ try {
     //   * The generated triangles follow the CCW (counter-clockwise)
     //     convention.
     auto vertices = std::vector<glm::vec3>{};
-    auto normals = std::vector<glm::vec3>{};
-    auto texcoord = std::vector<glm::vec2>{};
     vertices.reserve(total_vertex_count);
-    normals.reserve(total_vertex_count);
-    texcoord.reserve(total_vertex_count);
+    normals_plane.reserve(total_vertex_count);
+    texcoord_plane.reserve(total_vertex_count);
 
     // Stores the side length of a plane division.
     auto const div_side_len = side_len / static_cast<float>(num_divs);
@@ -84,26 +85,28 @@ try {
             vertices.emplace_back(lo_x, 0.f, lo_z);
             vertices.emplace_back(lo_x, 0.f, hi_z);
             vertices.emplace_back(hi_x, 0.f, lo_z);
-            normals.emplace_back(0.f, 1.f, 0.f);
-            normals.emplace_back(0.f, 1.f, 0.f);
-            normals.emplace_back(0.f, 1.f, 0.f);
 
-            texcoord.emplace_back(lo_x_text_coord, lo_y_text_coord);
-            texcoord.emplace_back(lo_x_text_coord, hi_y_text_coord);
-            texcoord.emplace_back(hi_x_text_coord, lo_y_text_coord);
+            normals_plane.emplace_back(0.f, 1.f, 0.f);
+            normals_plane.emplace_back(0.f, 1.f, 0.f);
+            normals_plane.emplace_back(0.f, 1.f, 0.f);
+
+            texcoord_plane.emplace_back(lo_x_text_coord, lo_y_text_coord);
+            texcoord_plane.emplace_back(lo_x_text_coord, hi_y_text_coord);
+            texcoord_plane.emplace_back(hi_x_text_coord, lo_y_text_coord);
             
 
             // Then we generate the second.
             vertices.emplace_back(hi_x, 0.f, lo_z);
             vertices.emplace_back(lo_x, 0.f, hi_z);
             vertices.emplace_back(hi_x, 0.f, hi_z);
-            normals.emplace_back(0.f, 1.f, 0.f);
-            normals.emplace_back(0.f, 1.f, 0.f);
-            normals.emplace_back(0.f, 1.f, 0.f);
 
-            texcoord.emplace_back(hi_x_text_coord, lo_y_text_coord);
-            texcoord.emplace_back(lo_x_text_coord, hi_y_text_coord);
-            texcoord.emplace_back(hi_x_text_coord, hi_y_text_coord);
+            normals_plane.emplace_back(0.f, 1.f, 0.f);
+            normals_plane.emplace_back(0.f, 1.f, 0.f);
+            normals_plane.emplace_back(0.f, 1.f, 0.f);
+
+            texcoord_plane.emplace_back(hi_x_text_coord, lo_y_text_coord);
+            texcoord_plane.emplace_back(lo_x_text_coord, hi_y_text_coord);
+            texcoord_plane.emplace_back(hi_x_text_coord, hi_y_text_coord);
         }
     }
 
@@ -140,11 +143,11 @@ try {
         output_file.print("{} {} {}\n", vertex.x, vertex.y, vertex.z);
     }
     output_file.print("\n");
-    for (auto const& vertex : normals) {
+    for (auto const& vertex : normals_plane) {
         output_file.print("{} {} {}\n", vertex.x, vertex.y, vertex.z);
     }
     output_file.print("\n");
-    for (auto const& vertex : texcoord) {
+    for (auto const& vertex : texcoord_plane) {
         output_file.print("{} {}\n", vertex.x, vertex.y);
     }
     return {};
