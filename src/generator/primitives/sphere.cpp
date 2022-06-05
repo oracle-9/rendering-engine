@@ -91,12 +91,12 @@ try {
                     sin(curr_stack_angle),
                     cos(curr_stack_angle) * cos(curr_slice_angle)
                 );
-                vertices.emplace_back(
+                normals.emplace_back(
                     cos(next_stack_angle) * sin(curr_slice_angle),
                     sin(next_stack_angle),
                     cos(next_stack_angle) * cos(curr_slice_angle)
                 );
-                vertices.emplace_back(
+                normals.emplace_back(
                     cos(next_stack_angle) * sin(next_slice_angle),
                     sin(next_stack_angle),
                     cos(next_stack_angle) * cos(next_slice_angle)
